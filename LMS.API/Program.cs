@@ -6,6 +6,10 @@ using LMS.Application.Extensions;
 using LMS.Identity.Extensions;
 using LMS.Identity.Data;
 using LMS.Identity.Permissions;
+using LMS.Identity.Roles;
+using Microsoft.AspNetCore.Identity;
+using LMS.Identity.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -103,6 +107,13 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<ApplicationIdentityDbContext>();
 
     await PermissionSeeder.SeedAsync(db);
+    
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<ApplicationRole>>();
+
+    await RolePermissionSeeder.SeedAsync(
+        db,
+        roleManager);
 }
 
 // =======================================
