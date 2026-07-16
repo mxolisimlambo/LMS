@@ -80,4 +80,11 @@ public async Task<IActionResult> ResetPassword(
 
     return Ok(result);
 }
+[HttpGet("current-user/{userId}")]
+public async Task<IActionResult> GetCurrentUser(string userId)
+{
+    var result = await _identityService.GetCurrentUserAsync(userId);
+
+    return Ok(result);
+}
 }

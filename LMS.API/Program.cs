@@ -4,7 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LMS.Application.Extensions;
 using LMS.Identity.Extensions;
-
+using LMS.Identity.Data;
+using LMS.Identity.Permissions;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -96,7 +97,13 @@ builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider
+        .GetRequiredService<ApplicationIdentityDbContext>();
 
+    await PermissionSeeder.SeedAsync(db);
+}
 
 // =======================================
 // HTTP PIPELINE

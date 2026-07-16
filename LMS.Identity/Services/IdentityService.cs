@@ -204,10 +204,28 @@ public async Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
         "Password reset successfully.");
 }
 
+public async Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
+    string userId)
+{
+    var user = await _userManager.FindByIdAsync(userId);
 
-    public Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
-        string userId)
+    if (user == null)
     {
-        throw new NotImplementedException();
+        return ApiResponse<CurrentUserDto>.Fail("User not found.");
     }
+
+    var roles = await _userManager.GetRolesAsync(user);
+
+    var dto = new CurrentUserDto
+    {
+        UserId = user.Id,
+        Email = user.Email ?? "",
+        FullName = $"{user.FirstName} {user.LastName}".Trim(),
+        Roles = roles.ToList()
+    };
+
+    return ApiResponse<CurrentUserDto>.Success(
+        dto,
+        "User retrieved successfully.");
+}
 }
