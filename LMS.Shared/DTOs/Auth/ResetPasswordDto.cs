@@ -7,6 +7,8 @@ public class ResetPasswordDto
 {
     [Required]
     public string UserId { get; set; } = string.Empty;
+     [EmailAddress]
+    public string Email { get; set; } = string.Empty;
 
 
     [Required]
@@ -20,4 +22,8 @@ public class ResetPasswordDto
     [Required]
     [Compare("NewPassword")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+
+
+    
 }

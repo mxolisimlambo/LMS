@@ -178,12 +178,31 @@ public async Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
 }
 
 
-    public Task<ApiResponse<bool>> ResetPasswordAsync(
-        ResetPasswordDto request)
+    public async Task<ApiResponse<bool>> ResetPasswordAsync(
+    ResetPasswordDto request)
+{
+    var user = await _userManager.FindByEmailAsync(request.Email);
+
+    if (user == null)
     {
-        throw new NotImplementedException();
+        return ApiResponse<bool>.Fail("User not found.");
     }
 
+    var result = await _userManager.ResetPasswordAsync(
+        user,
+        request.Token,
+        request.NewPassword);
+
+    if (!result.Succeeded)
+    {
+        return ApiResponse<bool>.Fail(
+            string.Join(", ", result.Errors.Select(e => e.Description)));
+    }
+
+    return ApiResponse<bool>.Success(
+        true,
+        "Password reset successfully.");
+}
 
 
     public Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(

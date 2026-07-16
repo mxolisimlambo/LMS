@@ -71,4 +71,13 @@ public async Task<IActionResult> ForgotPassword(
 
     return Ok(response);
 }
+
+[HttpPost("reset-password")]
+public async Task<IActionResult> ResetPassword(
+    ResetPasswordDto request)
+{
+    var result = await _identityService.ResetPasswordAsync(request);
+
+    return Ok(result);
+}
 }
