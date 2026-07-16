@@ -1,0 +1,74 @@
+using LMS.Application.Interfaces;
+using LMS.Shared.DTOs.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace LMS.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
+{
+    private readonly IIdentityService _identityService;
+
+    public AuthController(IIdentityService identityService)
+    {
+        _identityService = identityService;
+    }
+
+    // ============================================
+    // REGISTER
+    // ============================================
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(RegisterRequestDto model)
+    {
+        var result = await _identityService.RegisterAsync(model);
+
+        if (!result.success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    // ============================================
+    // LOGIN
+    // ============================================
+
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(LoginRequestDto model)
+    {
+        var result = await _identityService.LoginAsync(model);
+
+        if (!result.success)
+            return Unauthorized(result);
+
+        return Ok(result);
+    }
+
+    [HttpPost("change-password")]
+     public async Task<IActionResult> ChangePassword(
+    ChangePasswordDto request)
+     {
+    var response = await _identityService.ChangePasswordAsync(request);
+
+    if (!response.success)
+        return BadRequest(response);
+
+    return Ok(response);
+} 
+    [HttpPost("forgot-password")]
+public async Task<IActionResult> ForgotPassword(
+    ForgotPasswordDto request)
+{
+    var response =
+        await _identityService.ForgotPasswordAsync(request);
+
+    if (!response.success)
+        return BadRequest(response);
+
+    return Ok(response);
+}
+}

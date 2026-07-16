@@ -1,0 +1,22 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace LMS.Shared.DTOs.Auth;
+
+public class ChangePasswordDto
+{
+    [Required]
+    public string UserId { get; set; } = string.Empty;
+
+
+    [Required]
+    public string CurrentPassword { get; set; } = string.Empty;
+
+
+    [Required]
+    public string NewPassword { get; set; } = string.Empty;
+
+
+    [Required]
+    [Compare("NewPassword")]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
