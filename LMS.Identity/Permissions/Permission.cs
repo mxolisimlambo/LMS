@@ -15,4 +15,9 @@ public class Permission
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    public virtual ICollection<RolePermission> RolePermissions
+{
+    get;
+    set;
+} = new List<RolePermission>();
 }

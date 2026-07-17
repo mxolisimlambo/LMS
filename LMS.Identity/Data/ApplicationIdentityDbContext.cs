@@ -46,12 +46,12 @@ builder.Entity<RolePermission>(entity =>
     entity.HasKey(x => x.Id);
 
     entity.HasOne(x => x.Role)
-          .WithMany()
+          .WithMany(r => r.RolePermissions)
           .HasForeignKey(x => x.RoleId)
           .OnDelete(DeleteBehavior.Cascade);
 
     entity.HasOne(x => x.Permission)
-          .WithMany()
+        .WithMany(p => p.RolePermissions)
           .HasForeignKey(x => x.PermissionId)
           .OnDelete(DeleteBehavior.Cascade);
 
