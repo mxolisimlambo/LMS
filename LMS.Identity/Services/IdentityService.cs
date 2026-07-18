@@ -3,6 +3,9 @@ using LMS.Identity.Models;
 using LMS.Shared.DTOs.Auth;
 using LMS.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
+using LMS.Shared.DTOs.Roles;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LMS.Identity.Services;
 
@@ -228,4 +231,5 @@ public async Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
         dto,
         "User retrieved successfully.");
 }
+
 }

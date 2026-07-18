@@ -36,8 +36,9 @@ public static class IdentityServiceRegistration
             .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddScoped<IIdentityService, IdentityService>();
-        services.AddScoped<JwtTokenService>();
+       services.AddScoped<IIdentityService, IdentityService>();
+       services.AddScoped<IRoleService, RoleService>();
+       services.AddScoped<JwtTokenService>();
 
         return services;
     }

@@ -23,13 +23,4 @@ public interface IIdentityService
     Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
         string userId);
 
-        Task<List<RoleDto>> GetRolesAsync();
-
-Task<RoleDto?> GetRoleByIdAsync(string id);
-
-Task<bool> CreateRoleAsync(CreateRoleDto dto);
-
-Task<bool> UpdateRoleAsync(UpdateRoleDto dto);
-
-Task<bool> DeleteRoleAsync(string id);
 }
