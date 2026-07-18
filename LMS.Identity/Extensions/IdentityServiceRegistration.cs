@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using LMS.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using LMS.Identity.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Identity.Extensions;
 
@@ -36,11 +38,21 @@ public static class IdentityServiceRegistration
             .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
             .AddDefaultTokenProviders();
 
-      services.AddScoped<IIdentityService, IdentityService>();
-      services.AddScoped<IRoleService, RoleService>();
-      services.AddScoped<IPermissionService, PermissionService>();
-      services.AddScoped<IUserRoleService, UserRoleService>();
-      services.AddScoped<JwtTokenService>();
+     services.AddScoped<IIdentityService, IdentityService>();
+
+services.AddScoped<IRoleService, RoleService>();
+
+services.AddScoped<IPermissionService, PermissionService>();
+
+services.AddScoped<IUserRoleService, UserRoleService>();
+
+services.AddScoped<JwtTokenService>();
+
+services.AddSingleton<IAuthorizationPolicyProvider,
+    PermissionPolicyProvider>();
+
+services.AddScoped<IAuthorizationHandler,
+    PermissionAuthorizationHandler>();
 
         return services;
     }
