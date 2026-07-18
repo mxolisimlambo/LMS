@@ -37,7 +37,8 @@ public static class IdentityServiceRegistration
             .AddDefaultTokenProviders();
 
        services.AddScoped<IIdentityService, IdentityService>();
-       services.AddScoped<IRoleService, RoleService>();
+      services.AddScoped<IRoleService, RoleService>();
+      services.AddScoped<IPermissionService, PermissionService>();
        services.AddScoped<JwtTokenService>();
 
         return services;
