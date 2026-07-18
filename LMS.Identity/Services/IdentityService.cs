@@ -65,9 +65,9 @@ public class IdentityService : IIdentityService
             .GetRolesAsync(user);
 
 
-        var token =
-            _jwtTokenService
-            .GenerateToken(user, roles);
+      var token = await _jwtTokenService.GenerateTokenAsync(
+          user,
+          roles);
 
 
 
