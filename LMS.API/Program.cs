@@ -9,6 +9,7 @@ using LMS.Identity.Permissions;
 using LMS.Identity.Roles;
 using Microsoft.AspNetCore.Identity;
 using LMS.Identity.Models;
+using LMS.API.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +24,9 @@ builder.Services.AddControllers();
 
 
 // Swagger
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen();
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerDocumentation();
 
 
 // JWT Settings
@@ -124,9 +125,9 @@ using (var scope = app.Services.CreateScope())
 // Swagger
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
+     app.UseSwaggerDocumentation();
 }
 
 

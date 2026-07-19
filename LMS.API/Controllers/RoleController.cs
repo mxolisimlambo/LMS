@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LMS.API.Controllers;
 
 [ApiController]
+[ApiExplorerSettings(GroupName = "students")]
 [Route("api/[controller]")]
 public class RoleController : ControllerBase
 {

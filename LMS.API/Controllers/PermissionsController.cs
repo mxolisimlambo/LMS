@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LMS.API.Controllers.Permissions;
 
 [ApiController]
+[ApiExplorerSettings(GroupName = "students")]
 [Route("api/[controller]")]
 public class PermissionController : ControllerBase
 {

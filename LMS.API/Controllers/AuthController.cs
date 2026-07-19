@@ -2,9 +2,11 @@ using LMS.Application.Interfaces;
 using LMS.Shared.DTOs.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using LMS.Identity.Permissions;
 
 namespace LMS.API.Controllers;
-
+[Authorize(Policy = PermissionConstants.Users.Create)]
+[ApiExplorerSettings(GroupName = "identity")]
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
