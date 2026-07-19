@@ -12,17 +12,31 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // ============================
-    // Students
-    // ============================
+    // ==========================================
+    // Student Module
+    // ==========================================
 
     public DbSet<StudentProfile> StudentProfiles => Set<StudentProfile>();
+
+    public DbSet<StudentAddress> StudentAddresses => Set<StudentAddress>();
+
+    public DbSet<StudentSubscription> StudentSubscriptions => Set<StudentSubscription>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // Student
         modelBuilder.ApplyConfiguration(
             new StudentProfileConfiguration());
+
+        modelBuilder.ApplyConfiguration(
+            new StudentAddressConfiguration());
+
+        modelBuilder.ApplyConfiguration(
+            new StudentSubscriptionConfiguration());
+            
+        modelBuilder.ApplyConfiguration(
+            new StudentPreferenceConfiguration());
     }
 }
