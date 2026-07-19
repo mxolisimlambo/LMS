@@ -10,6 +10,9 @@ using LMS.Identity.Roles;
 using Microsoft.AspNetCore.Identity;
 using LMS.Identity.Models;
 using LMS.API.Swagger;
+using LMS.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
+using LMS.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,9 +94,14 @@ builder.Services
 
 // Authorization
 builder.Services.AddAuthorization();
+
+// Application Layer
 builder.Services.AddApplicationServices();
 
-//builder.Services.AddIdentityServices();
+// Persistence Layer
+builder.Services.AddPersistenceServices(builder.Configuration);
+
+// Identity Layer
 builder.Services.AddIdentityServices(builder.Configuration);
 
 // =======================================
