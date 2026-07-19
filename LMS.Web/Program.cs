@@ -1,6 +1,6 @@
 using LMS.Identity.Data;
 using LMS.Identity.Models;
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LMS.Identity.Seed;
 
