@@ -21,6 +21,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<StudentAddress> StudentAddresses => Set<StudentAddress>();
 
     public DbSet<StudentSubscription> StudentSubscriptions => Set<StudentSubscription>();
+    public DbSet<StudentPreference> StudentPreferences => Set<StudentPreference>();
+    public DbSet<StudentEmergencyContact> StudentEmergencyContacts => Set<StudentEmergencyContact>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,8 +37,10 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(
             new StudentSubscriptionConfiguration());
-            
+
         modelBuilder.ApplyConfiguration(
             new StudentPreferenceConfiguration());
+        modelBuilder.ApplyConfiguration(
+           new StudentEmergencyContactConfiguration());
     }
 }
