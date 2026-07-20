@@ -17,14 +17,13 @@ public class ApplicationDbContext : DbContext
     // ==========================================
 
     public DbSet<StudentProfile> StudentProfiles => Set<StudentProfile>();
-
     public DbSet<StudentAddress> StudentAddresses => Set<StudentAddress>();
-
     public DbSet<StudentSubscription> StudentSubscriptions => Set<StudentSubscription>();
     public DbSet<StudentPreference> StudentPreferences => Set<StudentPreference>();
     public DbSet<StudentEmergencyContact> StudentEmergencyContacts => Set<StudentEmergencyContact>();
-
+    public DbSet<StudentWishlist> StudentWishlists => Set<StudentWishlist>();
     public DbSet<StudentDocument> StudentDocuments => Set<StudentDocument>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -44,8 +43,10 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(
            new StudentEmergencyContactConfiguration());
-           
+
         modelBuilder.ApplyConfiguration(
             new StudentDocumentConfiguration());
+        modelBuilder.ApplyConfiguration(
+           new StudentWishlistConfiguration());
     }
 }
