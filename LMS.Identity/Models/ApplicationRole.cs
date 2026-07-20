@@ -7,8 +7,8 @@ public class ApplicationRole : IdentityRole
     public string Description { get; set; } = string.Empty;
 
     public bool IsActive { get; set; } = true;
-    
-     public virtual ICollection<ApplicationUser> Users
+
+    public virtual ICollection<ApplicationUser> Users
     {
         get;
         set;

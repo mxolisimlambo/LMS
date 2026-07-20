@@ -38,21 +38,21 @@ public static class IdentityServiceRegistration
             .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
             .AddDefaultTokenProviders();
 
-     services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IIdentityService, IdentityService>();
 
-services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IRoleService, RoleService>();
 
-services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IPermissionService, PermissionService>();
 
-services.AddScoped<IUserRoleService, UserRoleService>();
+        services.AddScoped<IUserRoleService, UserRoleService>();
 
-services.AddScoped<JwtTokenService>();
+        services.AddScoped<JwtTokenService>();
 
-services.AddSingleton<IAuthorizationPolicyProvider,
-    PermissionPolicyProvider>();
+        services.AddSingleton<IAuthorizationPolicyProvider,
+            PermissionPolicyProvider>();
 
-services.AddScoped<IAuthorizationHandler,
-    PermissionAuthorizationHandler>();
+        services.AddScoped<IAuthorizationHandler,
+            PermissionAuthorizationHandler>();
 
         return services;
     }

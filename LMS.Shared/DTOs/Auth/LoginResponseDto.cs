@@ -1,4 +1,4 @@
- namespace LMS.Shared.DTOs.Auth;
+namespace LMS.Shared.DTOs.Auth;
 
 public class LoginResponseDto
 {

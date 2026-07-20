@@ -41,26 +41,26 @@ public class ApplicationIdentityDbContext
         .HasMaxLength(500);
 });
 
-builder.Entity<RolePermission>(entity =>
-{
-    entity.HasKey(x => x.Id);
+        builder.Entity<RolePermission>(entity =>
+        {
+            entity.HasKey(x => x.Id);
 
-    entity.HasOne(x => x.Role)
-          .WithMany(r => r.RolePermissions)
-          .HasForeignKey(x => x.RoleId)
-          .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.Role)
+                  .WithMany(r => r.RolePermissions)
+                  .HasForeignKey(x => x.RoleId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
-    entity.HasOne(x => x.Permission)
-        .WithMany(p => p.RolePermissions)
-          .HasForeignKey(x => x.PermissionId)
-          .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(x => x.Permission)
+                .WithMany(p => p.RolePermissions)
+                  .HasForeignKey(x => x.PermissionId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
-    entity.HasIndex(x => new
-    {
-        x.RoleId,
-        x.PermissionId
-    }).IsUnique();
-});
+            entity.HasIndex(x => new
+            {
+                x.RoleId,
+                x.PermissionId
+            }).IsUnique();
+        });
         base.OnModelCreating(builder);
     }
 }

@@ -1,4 +1,4 @@
- 
+
 using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Shared.DTOs.Auth;
@@ -7,7 +7,7 @@ public class ResetPasswordDto
 {
     [Required]
     public string UserId { get; set; } = string.Empty;
-     [EmailAddress]
+    [EmailAddress]
     public string Email { get; set; } = string.Empty;
 
 
@@ -25,5 +25,5 @@ public class ResetPasswordDto
 
 
 
-    
+
 }

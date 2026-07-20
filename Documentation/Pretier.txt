@@ -1,0 +1,286 @@
+Complete Code Formatting Setup for ASP.NET Core (.NET 8) + Prettier + VS Code
+
+This guide configures automatic code formatting for your entire LMS solution.
+
+Features:
+
+HTML formatting
+CSS formatting
+JavaScript formatting
+JSON formatting
+Markdown formatting
+C# formatting
+Format on Save
+Format on Paste
+Format while Typing
+Format entire solution
+Solution Structure
+LMS
+│
+├── LMS.API
+├── LMS.Web
+├── LMS.Application
+├── LMS.Domain
+├── LMS.Identity
+├── LMS.Infrastructure
+├── LMS.Persistence
+├── LMS.Shared
+├── LMS.Tests
+│
+├── .vscode
+├── .editorconfig
+├── .prettierrc
+├── .prettierignore
+├── package.json
+└── package-lock.json
+STEP 1 - Open the Solution
+cd C:\Users\user\LMS
+
+code .
+STEP 2 - Initialize Node
+npm init -y
+STEP 3 - Install Prettier
+npm install --save-dev prettier
+
+Verify installation.
+
+npx prettier --version
+STEP 4 - Install VS Code Extensions
+
+Install these extensions.
+
+1. Prettier
+Prettier - Code formatter
+Publisher: Prettier
+
+Extension ID
+
+esbenp.prettier-vscode
+2. C#
+C#
+Publisher: Microsoft
+3. C# Dev Kit (Recommended)
+C# Dev Kit
+Publisher: Microsoft
+STEP 5 - Create .prettierrc
+
+Create
+
+.prettierrc
+
+Paste
+
+{
+    "printWidth": 120,
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "arrowParens": "always"
+}
+STEP 6 - Create .prettierignore
+
+Create
+
+.prettierignore
+
+Paste
+
+bin
+obj
+node_modules
+wwwroot/lib
+dist
+STEP 7 - Create .editorconfig
+
+Create
+
+.editorconfig
+
+Paste
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+csharp_new_line_before_open_brace = all
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_indent_labels = one_less_than_current
+
+csharp_prefer_braces = true:suggestion
+
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+
+dotnet_style_require_accessibility_modifiers = always:suggestion
+
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+
+csharp_style_var_for_built_in_types = false
+csharp_style_var_when_type_is_apparent = false
+csharp_style_var_elsewhere = false
+STEP 8 - Create VS Code Settings
+
+Create
+
+.vscode/settings.json
+
+Paste
+
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    }
+}
+STEP 9 - Format All Web Files
+npx prettier . --write
+STEP 10 - Format Entire .NET Solution
+
+From the LMS root folder.
+
+dotnet format
+
+Or format a specific project.
+
+dotnet format LMS.API
+STEP 11 - Verify
+
+Open any file.
+
+HTML
+
+Press
+
+Ctrl + S
+
+The file should format automatically.
+
+CSS
+
+Press
+
+Ctrl + S
+
+The file should format automatically.
+
+JavaScript
+
+Press
+
+Ctrl + S
+
+The file should format automatically.
+
+JSON
+
+Press
+
+Ctrl + S
+
+The file should format automatically.
+
+C#
+
+Press
+
+Ctrl + S
+
+The C# extension will format the file according to your .editorconfig. You can also run dotnet format to apply the rules across the entire solution.
+
+Useful Commands
+
+Check Prettier version
+
+npx prettier --version
+
+Format one file
+
+npx prettier index.html --write
+
+Format all supported files
+
+npx prettier . --write
+
+Format the solution
+
+dotnet format
+
+Build solution
+
+dotnet build
+
+Restore packages
+
+dotnet restore
+Final Folder Structure
+LMS
+│
+├── .editorconfig
+├── .prettierrc
+├── .prettierignore
+├── package.json
+├── package-lock.json
+├── .vscode
+│     └── settings.json
+│
+├── LMS.API
+├── LMS.Web
+├── LMS.Application
+├── LMS.Domain
+├── LMS.Identity
+├── LMS.Infrastructure
+├── LMS.Persistence
+├── LMS.Shared
+└── LMS.Tests

@@ -116,7 +116,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<ApplicationIdentityDbContext>();
 
     await PermissionSeeder.SeedAsync(db);
-    
+
     var roleManager = scope.ServiceProvider
         .GetRequiredService<RoleManager<ApplicationRole>>();
 
@@ -135,7 +135,7 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseSwagger();
     //app.UseSwaggerUI();
-     app.UseSwaggerDocumentation();
+    app.UseSwaggerDocumentation();
 }
 
 

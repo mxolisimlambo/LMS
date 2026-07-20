@@ -65,9 +65,9 @@ public class IdentityService : IIdentityService
             .GetRolesAsync(user);
 
 
-      var token = await _jwtTokenService.GenerateTokenAsync(
-          user,
-          roles);
+        var token = await _jwtTokenService.GenerateTokenAsync(
+            user,
+            roles);
 
 
 
@@ -89,147 +89,147 @@ public class IdentityService : IIdentityService
 
 
 
-  public async Task<ApiResponse<bool>> RegisterAsync(
-    RegisterRequestDto request)
-{
-    // Check if email already exists
-    var existingUser = await _userManager.FindByEmailAsync(request.Email);
-
-    if (existingUser != null)
+    public async Task<ApiResponse<bool>> RegisterAsync(
+      RegisterRequestDto request)
     {
-        return ApiResponse<bool>.Fail("Email address already exists.");
+        // Check if email already exists
+        var existingUser = await _userManager.FindByEmailAsync(request.Email);
+
+        if (existingUser != null)
+        {
+            return ApiResponse<bool>.Fail("Email address already exists.");
+        }
+
+        // Create user
+        var user = new ApplicationUser
+        {
+            UserName = request.Email,
+            Email = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            EmailConfirmed = true,
+            IsActive = true
+        };
+
+        // Create Identity user
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded)
+        {
+            return ApiResponse<bool>.Fail(
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        // Assign default role
+        if (await _roleManager.RoleExistsAsync("Student"))
+        {
+            await _userManager.AddToRoleAsync(user, "Student");
+        }
+
+        return ApiResponse<bool>.Success(true, "Registration successful.");
     }
 
-    // Create user
-    var user = new ApplicationUser
-    {
-        UserName = request.Email,
-        Email = request.Email,
-        FirstName = request.FirstName,
-        LastName = request.LastName,
-        EmailConfirmed = true,
-        IsActive = true
-    };
 
-    // Create Identity user
-    var result = await _userManager.CreateAsync(user, request.Password);
-
-    if (!result.Succeeded)
+    public async Task<ApiResponse<bool>> ChangePasswordAsync(
+        ChangePasswordDto request)
     {
-        return ApiResponse<bool>.Fail(
-            string.Join(", ", result.Errors.Select(e => e.Description)));
+        var user = await _userManager.FindByIdAsync(request.UserId);
+
+        if (user == null)
+        {
+            return ApiResponse<bool>.Fail("User not found.");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(
+            user,
+            request.CurrentPassword,
+            request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            return ApiResponse<bool>.Fail(
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        return ApiResponse<bool>.Success(
+            true,
+            "Password changed successfully.");
     }
 
-    // Assign default role
-    if (await _roleManager.RoleExistsAsync("Student"))
+    public async Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
+        ForgotPasswordDto request)
     {
-        await _userManager.AddToRoleAsync(user, "Student");
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+        {
+            return ApiResponse<ForgotPasswordResponseDto>.Fail(
+                "User not found.");
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        var response = new ForgotPasswordResponseDto
+        {
+            EmailSent = false,
+            ResetToken = token
+        };
+
+        return ApiResponse<ForgotPasswordResponseDto>.Success(
+            response,
+            "Password reset token generated successfully.");
     }
-
-    return ApiResponse<bool>.Success(true, "Registration successful.");
-}
-
-
-public async Task<ApiResponse<bool>> ChangePasswordAsync(
-    ChangePasswordDto request)
-{
-    var user = await _userManager.FindByIdAsync(request.UserId);
-
-    if (user == null)
-    {
-        return ApiResponse<bool>.Fail("User not found.");
-    }
-
-    var result = await _userManager.ChangePasswordAsync(
-        user,
-        request.CurrentPassword,
-        request.NewPassword);
-
-    if (!result.Succeeded)
-    {
-        return ApiResponse<bool>.Fail(
-            string.Join(", ", result.Errors.Select(e => e.Description)));
-    }
-
-    return ApiResponse<bool>.Success(
-        true,
-        "Password changed successfully.");
-}
-
-public async Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
-    ForgotPasswordDto request)
-{
-    var user = await _userManager.FindByEmailAsync(request.Email);
-
-    if (user == null)
-    {
-        return ApiResponse<ForgotPasswordResponseDto>.Fail(
-            "User not found.");
-    }
-
-    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-    var response = new ForgotPasswordResponseDto
-    {
-        EmailSent = false,
-        ResetToken = token
-    };
-
-    return ApiResponse<ForgotPasswordResponseDto>.Success(
-        response,
-        "Password reset token generated successfully.");
-}
 
 
     public async Task<ApiResponse<bool>> ResetPasswordAsync(
     ResetPasswordDto request)
-{
-    var user = await _userManager.FindByEmailAsync(request.Email);
-
-    if (user == null)
     {
-        return ApiResponse<bool>.Fail("User not found.");
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+        {
+            return ApiResponse<bool>.Fail("User not found.");
+        }
+
+        var result = await _userManager.ResetPasswordAsync(
+            user,
+            request.Token,
+            request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            return ApiResponse<bool>.Fail(
+                string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        return ApiResponse<bool>.Success(
+            true,
+            "Password reset successfully.");
     }
 
-    var result = await _userManager.ResetPasswordAsync(
-        user,
-        request.Token,
-        request.NewPassword);
-
-    if (!result.Succeeded)
+    public async Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
+        string userId)
     {
-        return ApiResponse<bool>.Fail(
-            string.Join(", ", result.Errors.Select(e => e.Description)));
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return ApiResponse<CurrentUserDto>.Fail("User not found.");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var dto = new CurrentUserDto
+        {
+            UserId = user.Id,
+            Email = user.Email ?? "",
+            FullName = $"{user.FirstName} {user.LastName}".Trim(),
+            Roles = roles.ToList()
+        };
+
+        return ApiResponse<CurrentUserDto>.Success(
+            dto,
+            "User retrieved successfully.");
     }
-
-    return ApiResponse<bool>.Success(
-        true,
-        "Password reset successfully.");
-}
-
-public async Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
-    string userId)
-{
-    var user = await _userManager.FindByIdAsync(userId);
-
-    if (user == null)
-    {
-        return ApiResponse<CurrentUserDto>.Fail("User not found.");
-    }
-
-    var roles = await _userManager.GetRolesAsync(user);
-
-    var dto = new CurrentUserDto
-    {
-        UserId = user.Id,
-        Email = user.Email ?? "",
-        FullName = $"{user.FirstName} {user.LastName}".Trim(),
-        Roles = roles.ToList()
-    };
-
-    return ApiResponse<CurrentUserDto>.Success(
-        dto,
-        "User retrieved successfully.");
-}
 
 }

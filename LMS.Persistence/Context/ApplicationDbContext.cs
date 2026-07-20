@@ -50,11 +50,11 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(
            new StudentWishlistConfiguration());
-           
+
         modelBuilder.ApplyConfiguration(
             new StudentNotificationPreferenceConfiguration());
         modelBuilder.ApplyConfiguration(
             new StudentSettingsConfiguration());
-        
+
     }
 }

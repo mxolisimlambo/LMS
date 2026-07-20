@@ -14,8 +14,8 @@ public interface IIdentityService
     Task<ApiResponse<bool>> ChangePasswordAsync(
         ChangePasswordDto request);
 
-   Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
-    ForgotPasswordDto request);
+    Task<ApiResponse<ForgotPasswordResponseDto>> ForgotPasswordAsync(
+     ForgotPasswordDto request);
 
     Task<ApiResponse<bool>> ResetPasswordAsync(
         ResetPasswordDto request);

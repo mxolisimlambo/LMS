@@ -16,8 +16,8 @@ public class Permission
 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public virtual ICollection<RolePermission> RolePermissions
-{
-    get;
-    set;
-} = new List<RolePermission>();
+    {
+        get;
+        set;
+    } = new List<RolePermission>();
 }

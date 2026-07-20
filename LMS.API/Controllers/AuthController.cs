@@ -51,42 +51,42 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("change-password")]
-     public async Task<IActionResult> ChangePassword(
+    public async Task<IActionResult> ChangePassword(
     ChangePasswordDto request)
-     {
-    var response = await _identityService.ChangePasswordAsync(request);
+    {
+        var response = await _identityService.ChangePasswordAsync(request);
 
-    if (!response.success)
-        return BadRequest(response);
+        if (!response.success)
+            return BadRequest(response);
 
-    return Ok(response);
-} 
+        return Ok(response);
+    }
     [HttpPost("forgot-password")]
-public async Task<IActionResult> ForgotPassword(
+    public async Task<IActionResult> ForgotPassword(
     ForgotPasswordDto request)
-{
-    var response =
-        await _identityService.ForgotPasswordAsync(request);
+    {
+        var response =
+            await _identityService.ForgotPasswordAsync(request);
 
-    if (!response.success)
-        return BadRequest(response);
+        if (!response.success)
+            return BadRequest(response);
 
-    return Ok(response);
-}
+        return Ok(response);
+    }
 
-[HttpPost("reset-password")]
-public async Task<IActionResult> ResetPassword(
-    ResetPasswordDto request)
-{
-    var result = await _identityService.ResetPasswordAsync(request);
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(
+        ResetPasswordDto request)
+    {
+        var result = await _identityService.ResetPasswordAsync(request);
 
-    return Ok(result);
-}
-[HttpGet("current-user/{userId}")]
-public async Task<IActionResult> GetCurrentUser(string userId)
-{
-    var result = await _identityService.GetCurrentUserAsync(userId);
+        return Ok(result);
+    }
+    [HttpGet("current-user/{userId}")]
+    public async Task<IActionResult> GetCurrentUser(string userId)
+    {
+        var result = await _identityService.GetCurrentUserAsync(userId);
 
-    return Ok(result);
-}
+        return Ok(result);
+    }
 }
