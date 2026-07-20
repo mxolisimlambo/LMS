@@ -23,7 +23,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<StudentEmergencyContact> StudentEmergencyContacts => Set<StudentEmergencyContact>();
     public DbSet<StudentWishlist> StudentWishlists => Set<StudentWishlist>();
     public DbSet<StudentDocument> StudentDocuments => Set<StudentDocument>();
-public DbSet<StudentNotificationPreference> StudentNotificationPreferences => Set<StudentNotificationPreference>();
+    public DbSet<StudentNotificationPreference> StudentNotificationPreferences => Set<StudentNotificationPreference>();
+    public DbSet<StudentSettings> StudentSettings => Set<StudentSettings>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -52,6 +53,8 @@ public DbSet<StudentNotificationPreference> StudentNotificationPreferences => Se
            
         modelBuilder.ApplyConfiguration(
             new StudentNotificationPreferenceConfiguration());
+        modelBuilder.ApplyConfiguration(
+            new StudentSettingsConfiguration());
         
     }
 }
