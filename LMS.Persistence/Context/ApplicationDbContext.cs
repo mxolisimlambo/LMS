@@ -53,6 +53,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(
             new StudentNotificationPreferenceConfiguration());
+            
         modelBuilder.ApplyConfiguration(
             new StudentSettingsConfiguration());
 

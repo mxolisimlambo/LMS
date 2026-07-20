@@ -53,22 +53,23 @@ public class StudentProfileConfiguration
         builder.HasIndex(x => x.IsDeleted);
 
         builder.HasOne(x => x.StudentPreference)
-    .WithOne(x => x.StudentProfile)
-    .HasForeignKey<StudentPreference>(
-        x => x.StudentProfileId)
-    .OnDelete(DeleteBehavior.Cascade);
+        .WithOne(x => x.StudentProfile)
+        .HasForeignKey<StudentPreference>(
+           x => x.StudentProfileId)
+        .OnDelete(DeleteBehavior.Cascade);
 
-    builder.HasOne(x => x.StudentSettings)
-    .WithOne(x => x.StudentProfile)
-    .HasForeignKey<StudentSettings>(
-        x => x.StudentProfileId)
-    .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.StudentSettings)
+        .WithOne(x => x.StudentProfile)
+        .HasForeignKey<StudentSettings>(
+            x => x.StudentProfileId)
+        .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasOne(x => x.StudentNotificationPreference)
         .WithOne(x => x.StudentProfile)
         .HasForeignKey<StudentNotificationPreference>(
             x => x.StudentProfileId)
         .OnDelete(DeleteBehavior.Cascade);
-    
+
         builder.HasOne(x => x.StudentSubscription)
         .WithOne(x => x.StudentProfile)
         .HasForeignKey<StudentSubscription>(
@@ -84,13 +85,15 @@ public class StudentProfileConfiguration
         .WithOne(x => x.StudentProfile)
         .HasForeignKey(x => x.StudentProfileId)
         .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(x => x.StudentEmergencyContacts)
         .WithOne(x => x.StudentProfile)
         .HasForeignKey(x => x.StudentProfileId)
         .OnDelete(DeleteBehavior.Restrict);
-    builder.HasMany(x => x.StudentWishlists)
-    .WithOne(x => x.StudentProfile)
-    .HasForeignKey(x => x.StudentProfileId)
-    .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.StudentWishlists)
+        .WithOne(x => x.StudentProfile)
+        .HasForeignKey(x => x.StudentProfileId)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

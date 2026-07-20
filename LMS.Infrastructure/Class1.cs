@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure;
+namespace LMS.Infrastructure;
 
 public class Class1
 {

@@ -1,14 +1,13 @@
 using LMS.Application.Interfaces;
+using LMS.Identity.Authorization;
+using LMS.Identity.Data;
 using LMS.Identity.Models;
 using LMS.Identity.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-
-using LMS.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using LMS.Identity.Authorization;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LMS.Identity.Extensions;
 

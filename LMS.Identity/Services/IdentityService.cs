@@ -1,9 +1,9 @@
 using LMS.Application.Interfaces;
 using LMS.Identity.Models;
 using LMS.Shared.DTOs.Auth;
+using LMS.Shared.DTOs.Roles;
 using LMS.Shared.Responses;
 using Microsoft.AspNetCore.Identity;
-using LMS.Shared.DTOs.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 

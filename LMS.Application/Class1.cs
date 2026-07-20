@@ -1,4 +1,4 @@
-﻿namespace LMS.Application;
+namespace LMS.Application;
 
 public class Class1
 {

@@ -1,8 +1,8 @@
 using LMS.Application.Interfaces;
+using LMS.Identity.Permissions;
 using LMS.Shared.DTOs.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LMS.Identity.Permissions;
 
 namespace LMS.API.Controllers;
 [Authorize(Policy = PermissionConstants.Users.Create)]

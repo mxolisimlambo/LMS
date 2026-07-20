@@ -1,6 +1,6 @@
 using LMS.Shared.DTOs.Auth;
-using LMS.Shared.Responses;
 using LMS.Shared.DTOs.Roles;
+using LMS.Shared.Responses;
 namespace LMS.Application.Interfaces;
 
 public interface IIdentityService

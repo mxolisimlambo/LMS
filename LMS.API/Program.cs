@@ -1,18 +1,18 @@
-using LMS.Shared.JWT;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LMS.API.Swagger;
 using LMS.Application.Extensions;
-using LMS.Identity.Extensions;
 using LMS.Identity.Data;
+using LMS.Identity.Extensions;
+using LMS.Identity.Models;
 using LMS.Identity.Permissions;
 using LMS.Identity.Roles;
-using Microsoft.AspNetCore.Identity;
-using LMS.Identity.Models;
-using LMS.API.Swagger;
 using LMS.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
 using LMS.Persistence.Extensions;
+using LMS.Shared.JWT;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 

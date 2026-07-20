@@ -1,7 +1,7 @@
 using LMS.Identity.Models;
+using LMS.Identity.Permissions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LMS.Identity.Permissions;
 namespace LMS.Identity.Data;
 
 public class ApplicationIdentityDbContext

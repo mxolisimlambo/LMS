@@ -56,6 +56,6 @@ public class StudentPreferenceConfiguration
         builder.HasIndex(x => x.StudentProfileId);
 
         builder.HasIndex(x => x.IsDeleted);
-        
+
     }
 }

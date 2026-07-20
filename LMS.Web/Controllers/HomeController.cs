@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using LMS.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Web.Controllers;
 

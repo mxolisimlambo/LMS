@@ -1,8 +1,8 @@
 using LMS.Identity.Data;
 using LMS.Identity.Models;
+using LMS.Identity.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using LMS.Identity.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
@@ -11,18 +11,18 @@ builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
 builder.Services
 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
-options.Password.RequiredLength = 8;
-options.Password.RequireDigit = true;
-options.Password.RequireUppercase = true;
-options.Password.RequireLowercase = true;
-options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
 
-options.Lockout.MaxFailedAccessAttempts = 5;
-options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
-options.User.RequireUniqueEmail = true;
+    options.User.RequireUniqueEmail = true;
 
-options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedEmail = false;
 })
 .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
 .AddDefaultTokenProviders();
