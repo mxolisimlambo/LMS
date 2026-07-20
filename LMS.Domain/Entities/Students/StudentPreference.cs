@@ -5,7 +5,6 @@ public class StudentPreference
     public long StudentPreferenceId { get; set; }
 
     public long StudentProfileId { get; set; }
-
     public string Language { get; set; } = "en";
 
     public string TimeZone { get; set; } = "Africa/Johannesburg";
@@ -27,4 +26,5 @@ public class StudentPreference
     public DateTime? UpdatedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }

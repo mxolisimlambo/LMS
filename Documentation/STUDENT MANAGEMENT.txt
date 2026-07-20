@@ -1,0 +1,341 @@
+==========================================================================
+MIIT ONLINE LEARNING MARKETPLACE (LMS)
+MODULE 2 - STUDENT MANAGEMENT
+PHASE 2 - ENTITY RELATIONSHIPS
+==========================================================================
+Status:
+✓ Authentication Completed
+✓ Authorization Completed
+✓ Roles & Permissions Completed
+✓ Student Database Entities Completed
+
+Current Phase:
+Entity Relationships before First Migration
+
+==========================================================================
+
+WHY WE DID NOT CREATE RELATIONSHIPS EARLIER
+
+The Student module contains multiple entities.
+
+Instead of creating relationships one by one and generating many migrations,
+we first completed every entity.
+
+Now we connect everything once.
+
+Advantages
+
+• Cleaner migrations
+• Easier debugging
+• Easier ERD review
+• Professional EF Core architecture
+• Less migration conflicts
+
+==========================================================================
+
+CURRENT STUDENT TABLES
+
+1. StudentProfile
+2. StudentAddress
+3. StudentSubscription
+4. StudentPreference
+5. StudentEmergencyContact
+6. StudentDocument
+7. StudentWishlist
+8. StudentNotificationPreference
+9. StudentSettings
+
+==========================================================================
+
+FINAL RELATIONSHIP DIAGRAM
+
+                    AspNetUsers
+                         │
+                         │ UserId
+                         │
+                         ▼
+                  StudentProfile
+                         │
+      ┌──────────────────┼────────────────────┐
+      │                  │                    │
+      ▼                  ▼                    ▼
+StudentPreference   StudentSettings   StudentSubscription
+
+                         │
+                         ▼
+StudentNotificationPreference
+
+                         │
+        ┌───────────────┼───────────────┬───────────────┐
+        ▼               ▼               ▼               ▼
+StudentAddress  StudentDocument StudentEmergency StudentWishlist
+                                 Contact
+
+==========================================================================
+
+ONE TO ONE RELATIONSHIPS
+
+StudentProfile
+        │
+        ├── StudentPreference
+        │
+        ├── StudentSettings
+        │
+        ├── StudentNotificationPreference
+        │
+        └── StudentSubscription
+
+Reason
+
+These tables extend StudentProfile.
+
+Only ONE record exists for each student.
+
+Example
+
+Student John
+
+StudentPreference
+StudentSettings
+StudentSubscription
+
+Only one of each.
+
+==========================================================================
+
+ONE TO MANY RELATIONSHIPS
+
+StudentProfile
+        │
+        ├── StudentAddresses
+        ├── StudentDocuments
+        ├── StudentEmergencyContacts
+        └── StudentWishlists
+
+Reason
+
+A student may have
+
+Many addresses
+
+Many uploaded documents
+
+Many emergency contacts
+
+Many wishlist courses
+
+==========================================================================
+
+NAVIGATION PROPERTIES
+
+StudentProfile will contain
+
+StudentPreference
+
+StudentSettings
+
+StudentNotificationPreference
+
+StudentSubscription
+
+StudentAddresses
+
+StudentDocuments
+
+StudentEmergencyContacts
+
+StudentWishlists
+
+Every child entity contains
+
+StudentProfile
+
+==========================================================================
+
+CONFIGURATION ORDER
+
+Step 1
+
+Update StudentProfile
+
+Add parent navigation collections.
+
+------------------------------------------------------------
+
+Step 2
+
+Update every child entity.
+
+StudentPreference
+
+StudentSettings
+
+StudentSubscription
+
+StudentAddress
+
+StudentDocument
+
+StudentEmergencyContact
+
+StudentWishlist
+
+StudentNotificationPreference
+
+------------------------------------------------------------
+
+Step 3
+
+Update Configuration Classes
+
+StudentProfileConfiguration
+
+StudentPreferenceConfiguration
+
+StudentSettingsConfiguration
+
+StudentSubscriptionConfiguration
+
+StudentAddressConfiguration
+
+StudentDocumentConfiguration
+
+StudentEmergencyContactConfiguration
+
+StudentWishlistConfiguration
+
+StudentNotificationPreferenceConfiguration
+
+Add
+
+HasOne()
+
+WithOne()
+
+WithMany()
+
+HasForeignKey()
+
+OnDelete()
+
+==========================================================================
+
+DELETE BEHAVIOUR
+
+Recommended
+
+One-to-One
+
+DeleteBehavior.Cascade
+
+One-to-Many
+
+DeleteBehavior.Restrict
+
+Reason
+
+Students should never accidentally lose
+
+Documents
+
+Addresses
+
+Wishlist
+
+Emergency Contacts
+
+unless intentionally removed.
+
+==========================================================================
+
+AFTER RELATIONSHIPS
+
+Only AFTER all relationships are complete
+
+We create
+
+Migration
+
+Update Database
+
+Review generated SQL
+
+Review ERD
+
+==========================================================================
+
+NEXT PHASE
+
+After Student Module database is complete
+
+Student DTOs
+
+↓
+
+Student Repository
+
+↓
+
+Student Service
+
+↓
+
+Student API
+
+↓
+
+Student MVC
+
+↓
+
+Student jQuery
+
+↓
+
+Student Dashboard
+
+Only then
+
+Instructor Module
+
+==========================================================================
+
+PROJECT STATUS
+
+PHASE 1
+Authentication
+Completed
+
+PHASE 2
+Authorization
+Completed
+
+PHASE 3
+Roles
+Completed
+
+PHASE 4
+Permissions
+Completed
+
+PHASE 5
+Student Database
+Completed
+
+PHASE 6
+Student Relationships
+(Current Phase)
+
+PHASE 7
+Student Migration
+
+PHASE 8
+Student API
+
+PHASE 9
+Student MVC
+
+PHASE 10
+Instructor Module
+
+==========================================================================

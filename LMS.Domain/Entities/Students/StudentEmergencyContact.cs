@@ -23,4 +23,5 @@ public class StudentEmergencyContact
     public DateTime? UpdatedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }

@@ -5,7 +5,6 @@ public class StudentSettings
     public long StudentSettingsId { get; set; }
 
     public long StudentProfileId { get; set; }
-
     public bool ProfileVisible { get; set; }
 
     public bool ShowEmail { get; set; }
@@ -25,4 +24,5 @@ public class StudentSettings
     public DateTime? UpdatedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }

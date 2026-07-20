@@ -27,4 +27,5 @@ public class StudentDocument
     public DateTime? VerifiedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }

@@ -11,4 +11,5 @@ public class StudentWishlist
     public DateTime AddedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }

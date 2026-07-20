@@ -5,7 +5,6 @@ public class StudentNotificationPreference
     public long StudentNotificationPreferenceId { get; set; }
 
     public long StudentProfileId { get; set; }
-
     public bool CourseAnnouncements { get; set; }
 
     public bool AssignmentReminders { get; set; }
@@ -25,4 +24,5 @@ public class StudentNotificationPreference
     public DateTime? UpdatedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+    public StudentProfile? StudentProfile { get; set; }
 }
