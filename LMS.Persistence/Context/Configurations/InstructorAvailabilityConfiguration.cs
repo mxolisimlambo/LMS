@@ -4,28 +4,34 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LMS.Persistence.Context.Configurations;
 
-public class InstructorSkillConfiguration
-    : IEntityTypeConfiguration<InstructorSkill>
+public class InstructorAvailabilityConfiguration
+    : IEntityTypeConfiguration<InstructorAvailability>
 {
     public void Configure(
-        EntityTypeBuilder<InstructorSkill> builder)
+        EntityTypeBuilder<InstructorAvailability> builder)
     {
-        builder.ToTable("InstructorSkills");
+        builder.ToTable("InstructorAvailabilities");
 
-        builder.HasKey(x => x.InstructorSkillId);
+        builder.HasKey(x => x.InstructorAvailabilityId);
 
-        builder.Property(x => x.InstructorSkillId)
+        builder.Property(x => x.InstructorAvailabilityId)
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.InstructorProfileId)
             .IsRequired();
 
-        builder.Property(x => x.SkillName)
-            .HasMaxLength(150)
+        builder.Property(x => x.DayOfWeek)
+            .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(x => x.YearsExperience)
+        builder.Property(x => x.StartTime)
             .IsRequired();
+
+        builder.Property(x => x.EndTime)
+            .IsRequired();
+
+        builder.Property(x => x.IsAvailable)
+            .HasDefaultValue(true);
 
         builder.Property(x => x.CreatedDate)
             .HasDefaultValueSql("GETUTCDATE()");
@@ -35,7 +41,7 @@ public class InstructorSkillConfiguration
 
         builder.HasIndex(x => x.InstructorProfileId);
 
-        builder.HasIndex(x => x.SkillName);
+        builder.HasIndex(x => x.DayOfWeek);
 
         builder.HasIndex(x => x.IsDeleted);
     }
