@@ -22,8 +22,8 @@ public static class SwaggerExtensions
                 "Course API");
 
             options.SwaggerEndpoint(
-                "/swagger/payments/swagger.json",
-                "Payment API");
+                "/swagger/instructors/swagger.json",
+                "Instructor API");
         });
 
         return app;
