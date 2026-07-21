@@ -1,0 +1,171 @@
+MODULE 3
+INSTRUCTOR MANAGEMENT
+
+PART 1
+Business Analysis
+──────────────────────────────
+• Marketplace workflow
+• Instructor life cycle
+• Admin approval process
+• Premium subscription
+• Revenue ownership
+• Course ownership
+• Instructor dashboard
+
+PART 2
+Database Design (4NF)
+──────────────────────────────
+• InstructorProfile
+• InstructorQualification
+• InstructorExperience
+• InstructorSkill
+• InstructorSocialLink
+• InstructorAddress
+• InstructorDocument
+• InstructorBankAccount
+• InstructorTaxProfile
+• InstructorSubscription
+• InstructorVerification
+• InstructorSettings
+• InstructorNotificationPreference
+
+Including:
+• PK
+• FK
+• Unique Keys
+• Indexes
+• Constraints
+• Cascade Rules
+• Relationship diagrams
+
+PART 3
+Domain Layer
+──────────────────────────────
+Complete Entities
+
+PART 4
+Persistence Layer
+──────────────────────────────
+Configurations
+
+DbContext
+
+Relationships
+
+Migration
+
+Database Update
+
+PART 5
+Shared Layer
+──────────────────────────────
+DTOs
+
+Create
+
+Update
+
+Details
+
+Summary
+
+Response Models
+
+PART 6
+Application Layer
+──────────────────────────────
+Interfaces
+
+IInstructorService
+
+PART 7
+Persistence Services
+──────────────────────────────
+InstructorService
+
+Every CRUD Method
+
+LINQ
+
+DTO Mapping
+
+Soft Delete
+
+Validation
+
+PART 8
+Dependency Injection
+──────────────────────────────
+Registration
+
+PART 9
+API Layer
+──────────────────────────────
+InstructorController
+
+All Endpoints
+
+Permissions
+
+Swagger Groups
+
+Response Codes
+
+PART 10
+Swagger Testing
+──────────────────────────────
+Every endpoint
+
+Sample JSON
+
+Expected Responses
+
+Error Cases
+
+PART 11
+Git Checkpoints
+──────────────────────────────
+Commands after each milestone
+
+PART 12
+MVC Preparation
+──────────────────────────────
+Folder structure
+
+Controllers
+
+Views
+
+ViewModels
+
+jQuery folders
+
+PART 13
+Marketplace Integration
+──────────────────────────────
+How Instructor connects to
+
+Courses
+
+Lessons
+
+Payments
+
+Certificates
+
+Orders
+
+Reviews
+
+Analytics
+
+Revenue
+
+Subscriptions
+
+Admin Approval
+
+PART 14
+Future Modules
+──────────────────────────────
+What the Instructor module exposes to the Course module

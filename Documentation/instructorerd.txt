@@ -1,0 +1,56 @@
+AspNetUsers
+      │
+      │ 1 : 1
+      ▼
+InstructorProfile
+      │
+      ├──────────────┐
+      │              │
+      │              │
+      ▼              ▼
+InstructorSettings   InstructorPreference
+      │
+      ▼
+InstructorNotificationPreference
+
+      │
+      ├───────────────────────────────┐
+      │                               │
+      ▼                               ▼
+InstructorQualification         InstructorExperience
+
+      │                               │
+      ▼                               ▼
+InstructorSkill               InstructorCertification
+
+      │
+      ▼
+InstructorSocialLink
+
+      │
+      ▼
+InstructorAddress
+
+      │
+      ▼
+InstructorDocument
+
+      │
+      ▼
+InstructorVerification
+
+      │
+      ▼
+InstructorSubscription
+
+      │
+      ▼
+InstructorBankAccount
+
+      │
+      ▼
+InstructorTaxProfile
+
+      │
+      ▼
+Courses (Module 4)
