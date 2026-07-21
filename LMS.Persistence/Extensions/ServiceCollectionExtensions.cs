@@ -16,8 +16,9 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection")));
-                      // Marketplace Services
+        // Marketplace Services
         services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IInstructorService,InstructorService>();
 
         return services;
     }

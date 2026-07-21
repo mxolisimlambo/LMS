@@ -30,9 +30,9 @@ public static class SwaggerConfiguration
                 Version = "v1"
             });
 
-            options.SwaggerDoc("payments", new OpenApiInfo
+            options.SwaggerDoc("instructors", new OpenApiInfo
             {
-                Title = "Payment API",
+                Title = "Instructors API",
                 Version = "v1"
             });
 
