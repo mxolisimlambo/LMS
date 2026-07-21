@@ -1,4 +1,6 @@
 using LMS.Persistence.Context;
+using LMS.Application.Interfaces;
+using LMS.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,8 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection")));
+                      // Marketplace Services
+        services.AddScoped<IStudentService, StudentService>();
 
         return services;
     }
