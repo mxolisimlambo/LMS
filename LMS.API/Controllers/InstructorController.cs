@@ -61,7 +61,7 @@ public class InstructorController : ControllerBase
     // ==========================================
 
     [HttpGet]
-    [Authorize(Policy = PermissionConstants.Instructors.View)]
+    //[Authorize(Policy = PermissionConstants.Instructors.View)]
     public async Task<IActionResult> GetAllInstructors()
     {
         var instructors = await _instructorService
@@ -75,7 +75,7 @@ public class InstructorController : ControllerBase
     // ==========================================
 
     [HttpPost]
-    [Authorize(Policy = PermissionConstants.Instructors.Create)]
+   // [Authorize(Policy = PermissionConstants.Instructors.Create)]
     public async Task<IActionResult> CreateInstructor(
         CreateInstructorProfileDto dto)
     {

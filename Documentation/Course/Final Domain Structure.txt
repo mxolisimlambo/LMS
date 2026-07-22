@@ -1,0 +1,45 @@
+LMS.Domain
+└── Entities
+    └── Courses
+        ├── Catalog
+        │   ├── Course.cs
+        │   ├── CourseCategory.cs
+        │   ├── CourseSubCategory.cs
+        │   ├── CourseLevel.cs
+        │   ├── CourseLanguage.cs
+        │   ├── CourseStatus.cs
+        │   └── CourseTag.cs
+        │
+        ├── Content
+        │   ├── CourseModule.cs
+        │   ├── CourseLesson.cs
+        │   ├── CourseVideo.cs
+        │   ├── CourseDocument.cs
+        │   ├── CourseAttachment.cs
+        │   └── CourseResource.cs
+        │
+        ├── Information
+        │   ├── CourseRequirement.cs
+        │   ├── CourseOutcome.cs
+        │   ├── CourseTargetAudience.cs
+        │   └── CourseFAQ.cs
+        │
+        ├── Commerce
+        │   ├── CoursePrice.cs
+        │   ├── CourseDiscount.cs
+        │   └── CourseCoupon.cs
+        │
+        ├── Publishing
+        │   ├── CourseApproval.cs
+        │   ├── CoursePublishing.cs
+        │   ├── CourseVisibility.cs
+        │   └── CourseAnnouncement.cs
+        │
+        ├── Reviews
+        │   ├── CourseReview.cs
+        │   └── CourseRating.cs
+        │
+        └── Analytics
+            ├── CourseStatistics.cs
+            ├── CourseView.cs
+            └── CourseWishlist.cs

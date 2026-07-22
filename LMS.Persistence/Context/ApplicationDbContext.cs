@@ -1,6 +1,14 @@
 using LMS.Domain.Entities.Students;
 using LMS.Domain.Entities.Instructors;
-using LMS.Persistence.Context.Configurations;
+using LMS.Domain.Entities.Courses.Catalog;
+using LMS.Domain.Entities.Courses.Content;
+using LMS.Domain.Entities.Courses.Information;
+using LMS.Domain.Entities.Courses.Commerce;
+using LMS.Domain.Entities.Courses.Publishing;
+using LMS.Domain.Entities.Courses.Reviews;
+using LMS.Domain.Entities.Courses.Analytics;
+using LMS.Persistence.Context.Configurations.Student;
+using LMS.Persistence.Context.Configurations.Instructor;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Persistence.Context;
@@ -31,7 +39,7 @@ public class ApplicationDbContext : DbContext
     // Instructor Module
     // ==========================================
 
-    public DbSet<InstructorProfile> InstructorProfiles => Set<InstructorProfile>();
+public DbSet<InstructorProfile> InstructorProfiles => Set<InstructorProfile>();
 public DbSet<InstructorQualification> InstructorQualifications => Set<InstructorQualification>();
 public DbSet<InstructorExperience> InstructorExperiences => Set<InstructorExperience>();
 public DbSet<InstructorSkill> InstructorSkills => Set<InstructorSkill>();
@@ -48,39 +56,24 @@ public DbSet<InstructorNotificationPreference> InstructorNotificationPreferences
 public DbSet<InstructorSocialLink> InstructorSocialLinks => Set<InstructorSocialLink>();
 public DbSet<InstructorAvailability> InstructorAvailabilities => Set<InstructorAvailability>();
 public DbSet<InstructorApproval> InstructorApprovals => Set<InstructorApproval>();
-    public DbSet<InstructorWallet> InstructorWallets => Set<InstructorWallet>();
+public DbSet<InstructorWallet> InstructorWallets => Set<InstructorWallet>();
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         // Student
-        modelBuilder.ApplyConfiguration(
-            new StudentProfileConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentAddressConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentSubscriptionConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentPreferenceConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-           new StudentEmergencyContactConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentDocumentConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-           new StudentWishlistConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentNotificationPreferenceConfiguration());
-
-        modelBuilder.ApplyConfiguration(
-            new StudentSettingsConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentProfileConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentAddressConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentSubscriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentPreferenceConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentEmergencyContactConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentDocumentConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentWishlistConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentNotificationPreferenceConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentSettingsConfiguration());
 
 // Instuctor
 

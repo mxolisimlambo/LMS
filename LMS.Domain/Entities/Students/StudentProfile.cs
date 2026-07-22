@@ -1,3 +1,5 @@
+using LMS.Domain.Entities.Courses.Catalog;
+
 namespace LMS.Domain.Entities.Students;
 
 public class StudentProfile
@@ -22,6 +24,11 @@ public class StudentProfile
 
     public ICollection<StudentWishlist> StudentWishlists { get; set; }
         = new List<StudentWishlist>();
+        public ICollection<CourseView> CourseViews { get; set; }
+    = new List<CourseView>();
+
+public ICollection<CourseWishlist> CourseWishlists { get; set; }
+    = new List<CourseWishlist>();
     public string UserId { get; set; } = string.Empty;
 
     public string StudentNumber { get; set; } = string.Empty;
