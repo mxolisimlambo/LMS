@@ -1,0 +1,2 @@
+dotnet ef migrations add AddCourseCommerceMigration --context ApplicationDbContext --project LMS.Persistence --startup-project LMS.Web
+dotnet ef database update --context ApplicationDbContext --project LMS.Persistence --startup-project LMS.Web

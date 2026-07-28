@@ -14,162 +14,162 @@ public class StudentService : IStudentService
     {
         _context = context;
     }
-public async Task<StudentProfileDto?> GetStudentByIdAsync(
-    long studentProfileId)
-{
-    return await _context.StudentProfiles
-        .Where(x => x.StudentProfileId == studentProfileId)
-        .Select(x => new StudentProfileDto
-        {
-            StudentProfileId = x.StudentProfileId,
-            UserId = x.UserId,
-            StudentNumber = x.StudentNumber,
-            Occupation = x.Occupation,
-            Company = x.Company,
-            ProfilePhoto = x.ProfilePhoto,
-            IsPremium = x.IsPremium,
-            CreatedDate = x.CreatedDate,
-            UpdatedDate = x.UpdatedDate,
-            IsDeleted = x.IsDeleted
-        })
-        .FirstOrDefaultAsync();
-}
-public async Task<StudentProfileDto?> GetStudentByUserIdAsync(
-    string userId)
-{
-    return await _context.StudentProfiles
-        .Where(x => x.UserId == userId)
-        .Select(x => new StudentProfileDto
-        {
-            StudentProfileId = x.StudentProfileId,
-            UserId = x.UserId,
-            StudentNumber = x.StudentNumber,
-            Occupation = x.Occupation,
-            Company = x.Company,
-            ProfilePhoto = x.ProfilePhoto,
-            IsPremium = x.IsPremium,
-            CreatedDate = x.CreatedDate,
-            UpdatedDate = x.UpdatedDate,
-            IsDeleted = x.IsDeleted
-        })
-        .FirstOrDefaultAsync();
-}
-public async Task<List<StudentSummaryDto>> GetAllStudentsAsync()
-{
-    return await _context.StudentProfiles
-        .OrderBy(x => x.StudentNumber)
-        .Select(x => new StudentSummaryDto
-        {
-            StudentProfileId = x.StudentProfileId,
-            StudentNumber = x.StudentNumber,
-            UserId = x.UserId,
-            Occupation = x.Occupation,
-            Company = x.Company,
-            IsPremium = x.IsPremium,
-            IsDeleted = x.IsDeleted
-        })
-        .ToListAsync();
-}
-public async Task<bool> CreateStudentProfileAsync(
-    CreateStudentProfileDto dto)
-{
-    var exists = await _context.StudentProfiles
-        .AnyAsync(x => x.UserId == dto.UserId);
-
-    if (exists)
-        return false;
-
-    var student = new StudentProfile
+    public async Task<StudentProfileDto?> GetStudentByIdAsync(
+        long studentProfileId)
     {
-        UserId = dto.UserId,
-        StudentNumber = $"STU{DateTime.UtcNow.Ticks}",
-        Occupation = dto.Occupation,
-        Company = dto.Company,
-        ProfilePhoto = dto.ProfilePhoto,
-        IsPremium = dto.IsPremium,
-        CreatedDate = DateTime.UtcNow,
-        IsDeleted = false
-    };
+        return await _context.StudentProfiles
+            .Where(x => x.StudentProfileId == studentProfileId)
+            .Select(x => new StudentProfileDto
+            {
+                StudentProfileId = x.StudentProfileId,
+                UserId = x.UserId,
+                StudentNumber = x.StudentNumber,
+                Occupation = x.Occupation,
+                Company = x.Company,
+                ProfilePhoto = x.ProfilePhoto,
+                IsPremium = x.IsPremium,
+                CreatedDate = x.CreatedDate,
+                UpdatedDate = x.UpdatedDate,
+                IsDeleted = x.IsDeleted
+            })
+            .FirstOrDefaultAsync();
+    }
+    public async Task<StudentProfileDto?> GetStudentByUserIdAsync(
+        string userId)
+    {
+        return await _context.StudentProfiles
+            .Where(x => x.UserId == userId)
+            .Select(x => new StudentProfileDto
+            {
+                StudentProfileId = x.StudentProfileId,
+                UserId = x.UserId,
+                StudentNumber = x.StudentNumber,
+                Occupation = x.Occupation,
+                Company = x.Company,
+                ProfilePhoto = x.ProfilePhoto,
+                IsPremium = x.IsPremium,
+                CreatedDate = x.CreatedDate,
+                UpdatedDate = x.UpdatedDate,
+                IsDeleted = x.IsDeleted
+            })
+            .FirstOrDefaultAsync();
+    }
+    public async Task<List<StudentSummaryDto>> GetAllStudentsAsync()
+    {
+        return await _context.StudentProfiles
+            .OrderBy(x => x.StudentNumber)
+            .Select(x => new StudentSummaryDto
+            {
+                StudentProfileId = x.StudentProfileId,
+                StudentNumber = x.StudentNumber,
+                UserId = x.UserId,
+                Occupation = x.Occupation,
+                Company = x.Company,
+                IsPremium = x.IsPremium,
+                IsDeleted = x.IsDeleted
+            })
+            .ToListAsync();
+    }
+    public async Task<bool> CreateStudentProfileAsync(
+        CreateStudentProfileDto dto)
+    {
+        var exists = await _context.StudentProfiles
+            .AnyAsync(x => x.UserId == dto.UserId);
 
-    _context.StudentProfiles.Add(student);
+        if (exists)
+            return false;
 
-    await _context.SaveChangesAsync();
+        var student = new StudentProfile
+        {
+            UserId = dto.UserId,
+            StudentNumber = $"STU{DateTime.UtcNow.Ticks}",
+            Occupation = dto.Occupation,
+            Company = dto.Company,
+            ProfilePhoto = dto.ProfilePhoto,
+            IsPremium = dto.IsPremium,
+            CreatedDate = DateTime.UtcNow,
+            IsDeleted = false
+        };
 
-    return true;
-}
+        _context.StudentProfiles.Add(student);
 
-   public async Task<bool> UpdateStudentProfileAsync(
-    UpdateStudentProfileDto dto)
-{
-    var student = await _context.StudentProfiles
-        .FirstOrDefaultAsync(x =>
-            x.StudentProfileId == dto.StudentProfileId);
+        await _context.SaveChangesAsync();
 
-    if (student == null)
-        return false;
+        return true;
+    }
 
-    student.Occupation = dto.Occupation;
-    student.Company = dto.Company;
-    student.ProfilePhoto = dto.ProfilePhoto;
-    student.IsPremium = dto.IsPremium;
-    student.UpdatedDate = DateTime.UtcNow;
+    public async Task<bool> UpdateStudentProfileAsync(
+     UpdateStudentProfileDto dto)
+    {
+        var student = await _context.StudentProfiles
+            .FirstOrDefaultAsync(x =>
+                x.StudentProfileId == dto.StudentProfileId);
 
-    await _context.SaveChangesAsync();
+        if (student == null)
+            return false;
 
-    return true;
-}
+        student.Occupation = dto.Occupation;
+        student.Company = dto.Company;
+        student.ProfilePhoto = dto.ProfilePhoto;
+        student.IsPremium = dto.IsPremium;
+        student.UpdatedDate = DateTime.UtcNow;
 
-   public async Task<bool> DeleteStudentProfileAsync(
-    long studentProfileId)
-{
-    var student = await _context.StudentProfiles
-        .FirstOrDefaultAsync(x =>
-            x.StudentProfileId == studentProfileId);
+        await _context.SaveChangesAsync();
 
-    if (student == null)
-        return false;
+        return true;
+    }
 
-    student.IsDeleted = true;
-    student.UpdatedDate = DateTime.UtcNow;
+    public async Task<bool> DeleteStudentProfileAsync(
+     long studentProfileId)
+    {
+        var student = await _context.StudentProfiles
+            .FirstOrDefaultAsync(x =>
+                x.StudentProfileId == studentProfileId);
 
-    await _context.SaveChangesAsync();
+        if (student == null)
+            return false;
 
-    return true;
-}
+        student.IsDeleted = true;
+        student.UpdatedDate = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
 
     public async Task<bool> ActivateStudentAsync(
     long studentProfileId)
-{
-    var student = await _context.StudentProfiles
-        .FirstOrDefaultAsync(x =>
-            x.StudentProfileId == studentProfileId);
+    {
+        var student = await _context.StudentProfiles
+            .FirstOrDefaultAsync(x =>
+                x.StudentProfileId == studentProfileId);
 
-    if (student == null)
-        return false;
+        if (student == null)
+            return false;
 
-    student.IsDeleted = false;
-    student.UpdatedDate = DateTime.UtcNow;
+        student.IsDeleted = false;
+        student.UpdatedDate = DateTime.UtcNow;
 
-    await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-    return true;
-}
+        return true;
+    }
 
     public async Task<bool> DeactivateStudentAsync(
     long studentProfileId)
-{
-    var student = await _context.StudentProfiles
-        .FirstOrDefaultAsync(x =>
-            x.StudentProfileId == studentProfileId);
+    {
+        var student = await _context.StudentProfiles
+            .FirstOrDefaultAsync(x =>
+                x.StudentProfileId == studentProfileId);
 
-    if (student == null)
-        return false;
+        if (student == null)
+            return false;
 
-    student.IsDeleted = true;
-    student.UpdatedDate = DateTime.UtcNow;
+        student.IsDeleted = true;
+        student.UpdatedDate = DateTime.UtcNow;
 
-    await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-    return true;
-}
+        return true;
+    }
 }

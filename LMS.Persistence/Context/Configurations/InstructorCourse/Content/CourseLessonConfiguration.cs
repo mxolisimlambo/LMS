@@ -75,6 +75,6 @@ public class CourseLessonConfiguration
             .HasForeignKey(x => x.CourseLessonId)
             .OnDelete(DeleteBehavior.Restrict);
 
-       
+
     }
 }

@@ -1,11 +1,11 @@
 using LMS.Application.Interfaces;
-using LMS.Persistence.Context;
 using LMS.Domain.Entities.Instructors;
+using LMS.Persistence.Context;
 using LMS.Shared.DTOs.Instructors;
 using Microsoft.EntityFrameworkCore;
 
 
- 
+
 public class InstructorService : IInstructorService
 {
     private readonly ApplicationDbContext _context;
@@ -133,8 +133,8 @@ public class InstructorService : IInstructorService
 
         return true;
     }
-        public async Task<bool> UpdateInstructorProfileAsync(
-        UpdateInstructorProfileDto dto)
+    public async Task<bool> UpdateInstructorProfileAsync(
+    UpdateInstructorProfileDto dto)
     {
         var instructor = await _context.InstructorProfiles
             .FirstOrDefaultAsync(x =>

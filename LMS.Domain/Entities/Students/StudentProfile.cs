@@ -1,5 +1,7 @@
+using LMS.Domain.Entities.Commerce.ShoppingCard;
 using LMS.Domain.Entities.Courses.Catalog;
-
+using LMS.Domain.Entities.Commerce.Orders;
+using LMS.Domain.Entities.Payments;
 namespace LMS.Domain.Entities.Students;
 
 public class StudentProfile
@@ -12,6 +14,7 @@ public class StudentProfile
     public StudentNotificationPreference? StudentNotificationPreference { get; set; }
 
     public StudentSubscription? StudentSubscription { get; set; }
+    public ShoppingCart? ShoppingCart { get; set; }
 
     public ICollection<StudentAddress> StudentAddresses { get; set; }
         = new List<StudentAddress>();
@@ -24,11 +27,24 @@ public class StudentProfile
 
     public ICollection<StudentWishlist> StudentWishlists { get; set; }
         = new List<StudentWishlist>();
-        public ICollection<CourseView> CourseViews { get; set; }
-    = new List<CourseView>();
+    public ICollection<CourseView> CourseViews { get; set; }
+= new List<CourseView>();
 
-public ICollection<CourseWishlist> CourseWishlists { get; set; }
-    = new List<CourseWishlist>();
+    public ICollection<CourseWishlist> CourseWishlists { get; set; }
+        = new List<CourseWishlist>();
+    public ICollection<Payment> Payments { get; set; }
+= new List<Payment>();
+
+    public ICollection<PaymentTransaction> PaymentTransactions { get; set; }
+        = new List<PaymentTransaction>();
+
+    public ICollection<Invoice> Invoices { get; set; }
+        = new List<Invoice>();
+
+    public ICollection<Refund> Refunds { get; set; }
+        = new List<Refund>();
+        public ICollection<Order> Orders { get; set; }
+    = new List<Order>();
     public string UserId { get; set; } = string.Empty;
 
     public string StudentNumber { get; set; } = string.Empty;

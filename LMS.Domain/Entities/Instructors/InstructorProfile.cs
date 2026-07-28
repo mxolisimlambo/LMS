@@ -64,9 +64,9 @@ public class InstructorProfile
 
     public InstructorAvailability? InstructorAvailability { get; set; }
 
-public InstructorApproval? InstructorApproval { get; set; }
+    public InstructorApproval? InstructorApproval { get; set; }
 
-public InstructorWallet? InstructorWallet { get; set; }
+    public InstructorWallet? InstructorWallet { get; set; }
 
 
     //==========================

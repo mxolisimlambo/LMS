@@ -20,7 +20,7 @@ public class CourseResource
 
     // Navigation Property
 
-  public long CourseLessonId { get; set; }
+    public long CourseLessonId { get; set; }
 
-public CourseLesson? CourseLesson { get; set; }
+    public CourseLesson? CourseLesson { get; set; }
 }

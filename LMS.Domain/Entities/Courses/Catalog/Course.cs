@@ -1,10 +1,12 @@
-using LMS.Domain.Entities.Instructors;
-using LMS.Domain.Entities.Courses.Information;
-using LMS.Domain.Entities.Courses.Commerce;
-using LMS.Domain.Entities.Courses.Content;
+using LMS.Domain.Entities.Commerce.ShoppingCard;
 using LMS.Domain.Entities.Courses.Analytics;
+using LMS.Domain.Entities.Courses.Commerce;
+using LMS.Domain.Entities.Commerce.Orders;
+using LMS.Domain.Entities.Courses.Content;
+using LMS.Domain.Entities.Courses.Information;
 using LMS.Domain.Entities.Courses.Publishing;
 using LMS.Domain.Entities.Courses.Reviews;
+using LMS.Domain.Entities.Instructors;
 
 namespace LMS.Domain.Entities.Courses.Catalog;
 
@@ -116,5 +118,9 @@ public class Course
     public ICollection<CourseWishlist> CourseWishlists { get; set; }
         = new List<CourseWishlist>();
 
+    public ICollection<ShoppingCartItem> ShoppingCartItems
+= new List<ShoppingCartItem>();
+public ICollection<OrderItem> OrderItems { get; set; }
+    = new List<OrderItem>();
 
 }
