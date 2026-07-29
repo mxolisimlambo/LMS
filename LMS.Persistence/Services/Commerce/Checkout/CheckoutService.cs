@@ -13,7 +13,8 @@ private readonly IEnrollmentService _enrollmentService;
 private readonly IShoppingCartItemService _shoppingCartItemService;
 private readonly IOrderService _orderService;
 private readonly IOrderItemService _orderItemService;
-private readonly IPaymentService _paymentService;
+    private readonly IPaymentService _paymentService;
+private readonly IInvoiceService _invoiceService;
 
 public CheckoutService(
     IShoppingCartService shoppingCartService,
@@ -21,7 +22,8 @@ public CheckoutService(
     IShoppingCartItemService shoppingCartItemService,
     IOrderService orderService,
     IOrderItemService orderItemService,
-    IPaymentService paymentService)
+    IPaymentService paymentService,
+    IInvoiceService invoiceService)
 {
     _shoppingCartService = shoppingCartService;
     _enrollmentService = enrollmentService;
@@ -29,6 +31,7 @@ public CheckoutService(
     _orderService = orderService;
     _orderItemService = orderItemService;
     _paymentService = paymentService;
+    _invoiceService = invoiceService;
 }
 
 // ======================================================
@@ -165,13 +168,17 @@ if (!validPaymentMethod)
             dto.StudentProfileId,
            order.OrderId);
 
-    // ==================================================
-    // CLEAR SHOPPING CART ITEMS
-    // ==================================================
+var invoice =
+    await _invoiceService
+        .CreateInvoiceAsync(
+            payment.PaymentId);
+        // ==================================================
+        // CLEAR SHOPPING CART ITEMS
+        // ==================================================
 
-    await _shoppingCartItemService
-        .ClearShoppingCartItemsAsync(
-            shoppingCart.ShoppingCartId);
+        await _shoppingCartItemService
+            .ClearShoppingCartItemsAsync(
+                shoppingCart.ShoppingCartId);
 
     // ==================================================
     // CLOSE SHOPPING CART
@@ -208,7 +215,13 @@ if (!validPaymentMethod)
             payment.TotalAmount,
 
         Currency =
-            payment.Currency
+            payment.Currency,
+
+InvoiceId =
+    invoice.InvoiceId,
+
+InvoiceNumber =
+    invoice.InvoiceNumber,
     };
 }
 

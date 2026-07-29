@@ -75,6 +75,7 @@ services.AddScoped<IRefundService, RefundService>();
 // ======================================================
    services.AddScoped<IEnrollmentService,EnrollmentService>();
 
+services.AddScoped<ICheckoutService, CheckoutService>();
         return services;
     }
 }

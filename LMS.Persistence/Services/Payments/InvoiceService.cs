@@ -15,49 +15,54 @@ public class InvoiceService : IInvoiceService
     {
         _context = context;
     }
+public async Task<Invoice> CreateInvoiceAsync(
+    long paymentId)
+{
+    var payment = await _context.Payments
+        .Include(x => x.Order)
+        .FirstOrDefaultAsync(x =>
+            x.PaymentId == paymentId &&
+            !x.IsDeleted);
 
-    public async Task<bool> CreateInvoiceAsync(
-        CreateInvoiceDto dto)
+    if (payment == null)
+        throw new Exception("Payment not found.");
+
+    var invoice = new Invoice
     {
-        var invoice = new Invoice
-        {
-            PaymentId = dto.PaymentId,
-            StudentProfileId = dto.StudentProfileId,
+        PaymentId = payment.PaymentId,
 
-            InvoiceNumber = $"INV{DateTime.UtcNow.Ticks}",
+        InvoiceNumber =
+            $"INV-{DateTime.UtcNow:yyyyMMddHHmmss}",
 
-            InvoiceDate = DateTime.UtcNow,
+        InvoiceDate =
+            DateTime.UtcNow,
 
-            SubTotal = dto.SubTotal,
-            DiscountAmount = dto.DiscountAmount,
-            TaxAmount = dto.TaxAmount,
-            TotalAmount = dto.TotalAmount,
+        TotalAmount =
+            payment.TotalAmount,
 
-            Currency = dto.Currency,
+        Currency =
+            payment.Currency,
 
-            BillingName = dto.BillingName,
-            BillingEmail = dto.BillingEmail,
-            BillingPhoneNumber = dto.BillingPhoneNumber,
-            BillingAddress = dto.BillingAddress,
-            CompanyName = dto.CompanyName,
-            TaxNumber = dto.TaxNumber,
+       // InvoiceStatus =
+         //   "Issued",
 
-            PdfPath = string.Empty,
+        CreatedDate =
+            DateTime.UtcNow,
 
-            IsPaid = false,
+        UpdatedDate =
+            null,
 
-            CreatedDate = DateTime.UtcNow,
-            UpdatedDate = null,
+        IsDeleted =
+            false
+    };
 
-            IsDeleted = false
-        };
+    _context.Invoices.Add(
+        invoice);
 
-        _context.Invoices.Add(invoice);
+    await _context.SaveChangesAsync();
 
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
+    return invoice;
+}
 
     public async Task<bool> UpdateInvoiceAsync(
         UpdateInvoiceDto dto)

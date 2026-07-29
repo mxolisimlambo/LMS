@@ -1,11 +1,11 @@
 using LMS.Shared.DTOs.Payments.Invoice;
-
+using LMS.Domain.Entities.Payments;   
 namespace LMS.Application.Interfaces.Payments;
 
 public interface IInvoiceService
 {
-    Task<bool> CreateInvoiceAsync(
-        CreateInvoiceDto dto);
+    Task<Invoice> CreateInvoiceAsync(
+    long paymentId);
 
     Task<bool> UpdateInvoiceAsync(
         UpdateInvoiceDto dto);

@@ -35,7 +35,11 @@ public string PaymentStatus { get; set; }
 
 public decimal TotalAmount { get; set; }
 
-public string Currency { get; set; }
-    = string.Empty;
+    public string Currency { get; set; }
+        = string.Empty;
+    
+    public long InvoiceId { get; set; }
+
+public string InvoiceNumber { get; set; } = string.Empty;
 
 }
