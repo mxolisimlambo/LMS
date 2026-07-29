@@ -152,21 +152,27 @@ if (!validPaymentMethod)
         // CREATE PAYMENT
         // ==================================================
 
-        var payment =
-            await _paymentService
-                .CreatePaymentAsync(
-                    order.OrderId,
-                    dto.StudentProfileId,
-                    dto.PaymentMethodId,
-                    subTotalAmount,
-                    discountAmount,
-                    0m,
-                    totalAmount,
-                    dto.Currency);
-
-            await _enrollmentService.CreateEnrollmentsAsync(
+       var payment =
+    await _paymentService
+        .CreatePaymentAsync(
+            order.OrderId,
             dto.StudentProfileId,
-           order.OrderId);
+            dto.PaymentMethodId,
+            subTotalAmount,
+            discountAmount,
+            0m,
+            totalAmount,
+            dto.Currency);
+
+payment =
+    await _paymentService
+        .ProcessPaymentAsync(
+            payment.PaymentId);
+
+
+        await _enrollmentService.CreateEnrollmentsAsync(
+        dto.StudentProfileId,
+       order.OrderId);
 
 var invoice =
     await _invoiceService

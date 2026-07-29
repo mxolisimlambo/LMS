@@ -207,24 +207,27 @@ public async Task<Payment> CreatePaymentAsync(
             .ToListAsync();
     }
 
-    public async Task<bool> ProcessPaymentAsync(
-        long paymentId)
-    {
-        var payment = await _context.Payments
-            .FirstOrDefaultAsync(x =>
-                x.PaymentId == paymentId);
+  public async Task<Payment> ProcessPaymentAsync(
+    long paymentId)
+{
+    var payment = await _context.Payments
+        .FirstOrDefaultAsync(x =>
+            x.PaymentId == paymentId &&
+            !x.IsDeleted);
 
-        if (payment == null)
-            return false;
+    if (payment == null)
+        throw new Exception("Payment not found.");
 
-        payment.PaymentStatus = "Completed";
-        payment.PaymentDate = DateTime.UtcNow;
-        payment.UpdatedDate = DateTime.UtcNow;
+    payment.PaymentStatus = "Completed";
 
-        await _context.SaveChangesAsync();
+    payment.PaymentDate = DateTime.UtcNow;
 
-        return true;
-    }
+    payment.UpdatedDate = DateTime.UtcNow;
+
+    await _context.SaveChangesAsync();
+
+    return payment;
+}
 
     public async Task<bool> CancelPaymentAsync(
         long paymentId)

@@ -32,8 +32,9 @@ public interface IPaymentService
 
     Task<IEnumerable<PaymentSummaryDto>> GetAllPaymentsAsync();
 
-    Task<bool> ProcessPaymentAsync(long paymentId);
-
+  
+Task<Payment> ProcessPaymentAsync(
+    long paymentId);
     Task<bool> CancelPaymentAsync(long paymentId);
 
     Task<bool> ExistsAsync(long paymentId);
