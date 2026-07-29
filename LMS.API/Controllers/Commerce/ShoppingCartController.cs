@@ -53,22 +53,7 @@ public class ShoppingCartController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateShoppingCart(
-        [FromBody] CreateShoppingCartDto dto)
-    {
-        var result = await _shoppingCartService
-            .CreateShoppingCartAsync(dto);
-
-        if (!result)
-        {
-            return BadRequest(
-                "The shopping cart could not be created. " +
-                "The student may not exist or may already have an active cart.");
-        }
-
-        return Ok(result);
-    }
+   
 
     [HttpPut]
     public async Task<IActionResult> UpdateShoppingCart(

@@ -16,45 +16,35 @@ public class ShoppingCartService : IShoppingCartService
         _context = context;
     }
 
-    public async Task<bool> CreateShoppingCartAsync(
-        CreateShoppingCartDto dto)
+   // ======================================================
+// CREATE SHOPPING CART
+// ======================================================
+
+public async Task<ShoppingCart> CreateShoppingCartAsync(
+    long studentProfileId)
+{
+    var shoppingCart = new ShoppingCart
     {
-        var studentExists = await _context.StudentProfiles
-            .AnyAsync(x =>
-                x.StudentProfileId == dto.StudentProfileId &&
-                !x.IsDeleted);
+        StudentProfileId = studentProfileId,
 
-        if (!studentExists)
-            return false;
+        TotalAmount = 0m,
 
-        var existingCart = await _context.ShoppingCarts
-            .AnyAsync(x =>
-                x.StudentProfileId == dto.StudentProfileId &&
-                !x.IsDeleted);
+        TotalItems = 0,
 
-        if (existingCart)
-            return false;
+        CreatedDate = DateTime.UtcNow,
 
-        var shoppingCart = new ShoppingCart
-        {
-            StudentProfileId = dto.StudentProfileId,
+        UpdatedDate = null,
 
-            TotalAmount = 0,
-            TotalItems = 0,
+        IsDeleted = false
+    };
 
-            CreatedDate = DateTime.UtcNow,
-            UpdatedDate = null,
+    _context.ShoppingCarts.Add(
+        shoppingCart);
 
-            IsDeleted = false
-        };
+    await _context.SaveChangesAsync();
 
-        _context.ShoppingCarts.Add(shoppingCart);
-
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
-
+    return shoppingCart;
+}
     public async Task<bool> UpdateShoppingCartAsync(
         UpdateShoppingCartDto dto)
     {
@@ -251,4 +241,63 @@ public class ShoppingCartService : IShoppingCartService
 
         await _context.SaveChangesAsync();
     }
+    // ======================================================
+    // GET ACTIVE SHOPPING CART
+    // ======================================================
+
+    public async Task<ShoppingCart?> GetActiveShoppingCartAsync(
+        long studentProfileId)
+    {
+        return await _context.ShoppingCarts
+            .FirstOrDefaultAsync(x =>
+                x.StudentProfileId == studentProfileId &&
+                !x.IsDeleted);
+    }
+    // ======================================================
+    // CLOSE SHOPPING CART
+    // ======================================================
+
+    public async Task<bool> CloseShoppingCartAsync(
+        long shoppingCartId)
+    {
+        var shoppingCart = await _context.ShoppingCarts
+            .FirstOrDefaultAsync(x =>
+                x.ShoppingCartId == shoppingCartId &&
+                !x.IsDeleted);
+
+        if (shoppingCart == null)
+            return false;
+
+        shoppingCart.TotalAmount = 0m;
+
+        shoppingCart.TotalItems = 0;
+
+        shoppingCart.UpdatedDate = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+// ======================================================
+// VALIDATE SHOPPING CART
+// ======================================================
+
+public async Task<bool> ValidateShoppingCartAsync(
+    long studentProfileId)
+{
+    var studentExists = await _context.StudentProfiles
+        .AnyAsync(x =>
+            x.StudentProfileId == studentProfileId &&
+            !x.IsDeleted);
+
+    if (!studentExists)
+        return false;
+
+    var shoppingCart = await _context.ShoppingCarts
+        .AnyAsync(x =>
+            x.StudentProfileId == studentProfileId &&
+            !x.IsDeleted);
+
+    return shoppingCart;
+}
 }

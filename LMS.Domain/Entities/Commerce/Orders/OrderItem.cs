@@ -1,4 +1,5 @@
 using LMS.Domain.Entities.Courses.Catalog;
+using LMS.Domain.Entities.Enrollments;
 
 namespace LMS.Domain.Entities.Commerce.Orders;
 
@@ -27,4 +28,9 @@ public class OrderItem
     public Order? Order { get; set; }
 
     public Course? Course { get; set; }
+
+// ======================================================
+// ENROLMENT
+// ======================================================
+public Enrollment? Enrollment { get; set; }
 }

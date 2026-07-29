@@ -51,50 +51,6 @@ public async Task<IActionResult> GetOrderItemsByOrder(
 }
 
 // ======================================================
-// GET ORDER ITEM SUMMARIES BY ORDER
-// ======================================================
-
-[HttpGet("order/{orderId:long}/summary")]
-public async Task<IActionResult>
-    GetOrderItemSummariesByOrder(
-        long orderId)
-{
-    var result = await _orderItemService
-        .GetOrderItemSummariesByOrderAsync(
-            orderId);
-
-    return Ok(result);
-}
-
-// ======================================================
-// CREATE ORDER ITEM
-// ======================================================
-
-[HttpPost]
-public async Task<IActionResult> CreateOrderItem(
-    [FromBody] CreateOrderItemDto dto)
-{
-    var result = await _orderItemService
-        .CreateOrderItemAsync(dto);
-
-    if (!result)
-    {
-        return BadRequest(
-            "The order item could not be created. " +
-            "The order or course may not exist, the course may " +
-            "not be published, the order may be completed or " +
-            "cancelled, or the course may already exist in the order.");
-    }
-
-    return Ok(new
-    {
-        Message =
-            "The order item was created successfully.",
-        Success = true
-    });
-}
-
-// ======================================================
 // UPDATE ORDER ITEM
 // ======================================================
 

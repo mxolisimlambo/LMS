@@ -1,4 +1,6 @@
 using LMS.Domain.Entities.Students;
+using LMS.Domain.Entities.Payments;
+
 
 namespace LMS.Domain.Entities.Commerce.Orders;
 
@@ -27,7 +29,11 @@ public class Order
     public bool IsDeleted { get; set; }
 
     // Navigation properties
+// ======================================================
+// PAYMENT
+// ======================================================
 
+    public Payment? Payment { get; set; }
     public StudentProfile? StudentProfile { get; set; }
 
     public ICollection<OrderItem> OrderItems { get; set; }

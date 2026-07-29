@@ -1,4 +1,5 @@
 using LMS.Domain.Entities.Commerce.Orders;
+using LMS.Domain.Entities.Payments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -77,5 +78,13 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .WithOne(x => x.Order)
             .HasForeignKey(x => x.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
+            // ======================================================
+// PAYMENT RELATIONSHIP
+// ======================================================
+
+builder.HasOne(x => x.Payment)
+    .WithOne(x => x.Order)
+    .HasForeignKey<Payment>(x => x.OrderId)
+    .OnDelete(DeleteBehavior.Restrict);
     }
 }

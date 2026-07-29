@@ -2,6 +2,7 @@ using LMS.Application.Interfaces.Commerce;
 using LMS.Domain.Entities.Commerce.Orders;
 using LMS.Persistence.Context;
 using LMS.Shared.DTOs.Commerce.Orders.OrderItem;
+using LMS.Domain.Entities.Commerce.ShoppingCard;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Persistence.Services.Commerce;
@@ -16,88 +17,45 @@ public class OrderItemService : IOrderItemService
         _context = context;
     }
 
-    // ======================================================
-    // CREATE ORDER ITEM
-    // ======================================================
+  // ======================================================
+// CREATE ORDER ITEMS
+// ======================================================
 
-    public async Task<bool> CreateOrderItemAsync(
-        CreateOrderItemDto dto)
-    {
-        var order = await _context.Orders
-            .FirstOrDefaultAsync(x =>
-                x.OrderId == dto.OrderId &&
-                !x.IsDeleted);
-
-        if (order == null)
-            return false;
-
-        // Order items must not be added to completed
-        // or cancelled orders.
-        if (order.OrderStatus == "Completed" ||
-            order.OrderStatus == "Cancelled")
+public async Task CreateOrderItemsAsync(
+    long orderId,
+    IEnumerable<ShoppingCartItem> shoppingCartItems)
+{
+    var orderItems = shoppingCartItems
+        .Select(cartItem => new OrderItem
         {
-            return false;
-        }
+            OrderId = orderId,
 
-        var course = await _context.Courses
-            .Include(x => x.CoursePrice)
-            .FirstOrDefaultAsync(x =>
-                x.CourseId == dto.CourseId &&
-                !x.IsDeleted);
+            CourseId = cartItem.CourseId,
 
-        if (course == null)
-            return false;
+            CourseTitle =
+                cartItem.Course?.Title
+                ?? string.Empty,
 
-        if (!course.IsPublished)
-            return false;
+            UnitPrice =
+                cartItem.UnitPrice,
 
-        var duplicateExists = await _context.OrderItems
-            .AnyAsync(x =>
-                x.OrderId == dto.OrderId &&
-                x.CourseId == dto.CourseId &&
-                !x.IsDeleted);
+            DiscountAmount =
+                cartItem.DiscountAmount,
 
-        if (duplicateExists)
-            return false;
+            TotalPrice =
+                cartItem.TotalPrice,
 
-        var unitPrice =
-            course.CoursePrice?.Price ?? 0m;
-
-        var discountAmount = 0m;
-
-        var totalPrice =
-            unitPrice - discountAmount;
-
-        if (totalPrice < 0)
-            totalPrice = 0;
-
-        var orderItem = new OrderItem
-        {
-            OrderId = dto.OrderId,
-
-            CourseId = dto.CourseId,
-
-            CourseTitle = course.Title,
-
-            UnitPrice = unitPrice,
-
-            DiscountAmount = discountAmount,
-
-            TotalPrice = totalPrice,
-
-            CreatedDate = DateTime.UtcNow,
+            CreatedDate =
+                DateTime.UtcNow,
 
             IsDeleted = false
-        };
+        });
 
-        _context.OrderItems.Add(
-            orderItem);
+    await _context.OrderItems
+        .AddRangeAsync(orderItems);
 
-        await RecalculateOrderTotalsAsync(
-            dto.OrderId);
-
-        return true;
-    }
+    await _context.SaveChangesAsync();
+}
 
     // ======================================================
     // UPDATE ORDER ITEM

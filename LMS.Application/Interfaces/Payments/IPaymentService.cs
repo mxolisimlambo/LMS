@@ -1,10 +1,22 @@
 using LMS.Shared.DTOs.Payments.Payment;
+using LMS.Domain.Entities.Payments;
 
 namespace LMS.Application.Interfaces.Payments;
 
 public interface IPaymentService
-{
-    Task<bool> CreatePaymentAsync(CreatePaymentDto dto);
+{  // ======================================================
+    // CREATE PAYMENT
+    // ======================================================
+
+    Task<Payment> CreatePaymentAsync(
+        long orderId,
+        long studentProfileId,
+        long paymentMethodId,
+        decimal amount,
+        decimal discountAmount,
+        decimal taxAmount,
+        decimal totalAmount,
+        string currency);
 
     Task<bool> UpdatePaymentAsync(UpdatePaymentDto dto);
 
@@ -25,4 +37,10 @@ public interface IPaymentService
     Task<bool> CancelPaymentAsync(long paymentId);
 
     Task<bool> ExistsAsync(long paymentId);
+    // ======================================================
+// VALIDATE PAYMENT METHOD
+// ======================================================
+
+Task<bool> ValidatePaymentMethodAsync(
+    long paymentMethodId);
 }

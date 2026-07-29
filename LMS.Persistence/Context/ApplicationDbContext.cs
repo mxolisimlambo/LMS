@@ -10,6 +10,7 @@ using LMS.Domain.Entities.Instructors;
 using LMS.Domain.Entities.Payments;
 using LMS.Domain.Entities.Students;
 using LMS.Domain.Entities.Commerce.Orders;
+using LMS.Domain.Entities.Enrollments;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -142,6 +143,12 @@ public class ApplicationDbContext : DbContext
 
 public DbSet<Order> Orders { get; set; }
 public DbSet<OrderItem> OrderItems { get; set; }
+// ======================================================
+// ENROLMENTS
+// ======================================================
+
+public DbSet<Enrollment> Enrollments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 

@@ -58,18 +58,7 @@ public class PaymentController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreatePayment(
-        CreatePaymentDto dto)
-    {
-        var result = await _paymentService
-            .CreatePaymentAsync(dto);
-
-        if (!result)
-            return BadRequest();
-
-        return Ok(result);
-    }
+    
 
     [HttpPut]
     public async Task<IActionResult> UpdatePayment(

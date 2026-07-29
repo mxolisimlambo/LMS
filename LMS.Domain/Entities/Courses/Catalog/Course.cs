@@ -7,6 +7,7 @@ using LMS.Domain.Entities.Courses.Information;
 using LMS.Domain.Entities.Courses.Publishing;
 using LMS.Domain.Entities.Courses.Reviews;
 using LMS.Domain.Entities.Instructors;
+using LMS.Domain.Entities.Enrollments;
 
 namespace LMS.Domain.Entities.Courses.Catalog;
 
@@ -120,7 +121,13 @@ public class Course
 
     public ICollection<ShoppingCartItem> ShoppingCartItems
 = new List<ShoppingCartItem>();
-public ICollection<OrderItem> OrderItems { get; set; }
-    = new List<OrderItem>();
+    public ICollection<OrderItem> OrderItems { get; set; }
+        = new List<OrderItem>();
+    // ======================================================
+// ENROLMENTS
+// ======================================================
+
+public ICollection<Enrollment> Enrollments { get; set; }
+    = new List<Enrollment>();
 
 }

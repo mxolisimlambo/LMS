@@ -70,25 +70,7 @@ public class ShoppingCartItemController : ControllerBase
     // CREATE SHOPPING CART ITEM
     // ======================================================
 
-    [HttpPost]
-    public async Task<IActionResult>
-        CreateShoppingCartItem(
-            [FromBody] CreateShoppingCartItemDto dto)
-    {
-        var result = await _shoppingCartItemService
-            .CreateShoppingCartItemAsync(dto);
-
-        if (!result)
-        {
-            return BadRequest(
-                "The course could not be added to the shopping cart. " +
-                "The shopping cart or course may not exist, the course " +
-                "may not be published, or the course may already be in the cart.");
-        }
-
-        return Ok(result);
-    }
-
+    
     // ======================================================
     // UPDATE SHOPPING CART ITEM
     // ======================================================

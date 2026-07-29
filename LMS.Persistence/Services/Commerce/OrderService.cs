@@ -19,130 +19,50 @@ public class OrderService : IOrderService
     // ======================================================
     // CREATE ORDER FROM SHOPPING CART
     // ======================================================
+// ======================================================
+// CREATE ORDER
+// ======================================================
 
-    public async Task<bool> CreateOrderAsync(
-        CreateOrderDto dto)
-    {
-        var studentExists = await _context.StudentProfiles
-            .AnyAsync(x =>
-                x.StudentProfileId == dto.StudentProfileId &&
-                !x.IsDeleted);
+public async Task<Order> CreateOrderAsync(
+long studentProfileId,
+decimal subTotalAmount,
+decimal discountAmount,
+decimal totalAmount,
+string currency)
+{
+var order = new Order
+{
+StudentProfileId = studentProfileId,
 
-        if (!studentExists)
-            return false;
+    OrderNumber = GenerateOrderNumber(),
 
-        var shoppingCart = await _context.ShoppingCarts
-            .FirstOrDefaultAsync(x =>
-                x.StudentProfileId == dto.StudentProfileId &&
-                !x.IsDeleted);
+    SubTotalAmount = subTotalAmount,
 
-        if (shoppingCart == null)
-            return false;
+    DiscountAmount = discountAmount,
 
-        var cartItems = await _context.ShoppingCartItems
-            .Include(x => x.Course)
-            .Where(x =>
-                x.ShoppingCartId == shoppingCart.ShoppingCartId &&
-                !x.IsDeleted)
-            .ToListAsync();
+    TotalAmount = totalAmount,
 
-        if (!cartItems.Any())
-            return false;
+    Currency = string.IsNullOrWhiteSpace(currency)
+        ? "ZAR"
+        : currency.Trim().ToUpper(),
 
-        foreach (var cartItem in cartItems)
-        {
-            if (cartItem.Course == null)
-                return false;
+    OrderStatus = "Pending",
 
-            if (cartItem.Course.IsDeleted)
-                return false;
+    OrderDate = DateTime.UtcNow,
 
-            if (!cartItem.Course.IsPublished)
-                return false;
-        }
+    UpdatedDate = null,
 
-        var subTotalAmount = cartItems
-            .Sum(x => x.UnitPrice);
+    IsDeleted = false
+};
 
-        var discountAmount = cartItems
-            .Sum(x => x.DiscountAmount);
+_context.Orders.Add(order);
 
-        var totalAmount = cartItems
-            .Sum(x => x.TotalPrice);
+await _context.SaveChangesAsync();
 
-        var order = new Order
-        {
-            StudentProfileId = dto.StudentProfileId,
+return order;
 
-            OrderNumber = GenerateOrderNumber(),
+}
 
-            SubTotalAmount = subTotalAmount,
-
-            DiscountAmount = discountAmount,
-
-            TotalAmount = totalAmount,
-
-            Currency = string.IsNullOrWhiteSpace(
-                dto.Currency)
-                    ? "ZAR"
-                    : dto.Currency.ToUpper(),
-
-            OrderStatus = "Pending",
-
-            OrderDate = DateTime.UtcNow,
-
-            UpdatedDate = null,
-
-            IsDeleted = false
-        };
-
-        foreach (var cartItem in cartItems)
-        {
-            var orderItem = new OrderItem
-            {
-                CourseId = cartItem.CourseId,
-
-                CourseTitle =
-                    cartItem.Course?.Title
-                    ?? string.Empty,
-
-                UnitPrice =
-                    cartItem.UnitPrice,
-
-                DiscountAmount =
-                    cartItem.DiscountAmount,
-
-                TotalPrice =
-                    cartItem.TotalPrice,
-
-                CreatedDate =
-                    DateTime.UtcNow,
-
-                IsDeleted = false
-            };
-
-            order.OrderItems.Add(
-                orderItem);
-        }
-
-        _context.Orders.Add(order);
-
-        foreach (var cartItem in cartItems)
-        {
-            cartItem.IsDeleted = true;
-        }
-
-        shoppingCart.TotalItems = 0;
-
-        shoppingCart.TotalAmount = 0;
-
-        shoppingCart.UpdatedDate =
-            DateTime.UtcNow;
-
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
 
     // ======================================================
     // UPDATE ORDER STATUS

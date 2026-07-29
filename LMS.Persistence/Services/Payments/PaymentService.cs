@@ -16,42 +16,62 @@ public class PaymentService : IPaymentService
         _context = context;
     }
 
-    public async Task<bool> CreatePaymentAsync(
-        CreatePaymentDto dto)
+   // ======================================================
+// CREATE PAYMENT
+// ======================================================
+
+public async Task<Payment> CreatePaymentAsync(
+    long orderId,
+    long studentProfileId,
+    long paymentMethodId,
+    decimal amount,
+    decimal discountAmount,
+    decimal taxAmount,
+    decimal totalAmount,
+    string currency)
+{
+    var payment = new Payment
     {
-        var payment = new Payment
-        {
-            OrderId = dto.OrderId,
-            StudentProfileId = dto.StudentProfileId,
-            PaymentMethodId = dto.PaymentMethodId,
+        OrderId = orderId,
 
-            PaymentReference = $"PAY{DateTime.UtcNow.Ticks}",
+        StudentProfileId = studentProfileId,
 
-            Amount = dto.Amount,
-            DiscountAmount = dto.DiscountAmount,
-            TaxAmount = dto.TaxAmount,
-            TotalAmount = dto.TotalAmount,
+        PaymentMethodId = paymentMethodId,
 
-            Currency = dto.Currency,
+        PaymentReference =
+            $"PAY-{DateTime.UtcNow:yyyyMMddHHmmss}-" +
+            $"{Guid.NewGuid():N}"[..6]
+                .ToUpper(),
 
-            PaymentStatus = "Pending",
+        Amount = amount,
 
-            PaymentDate = DateTime.UtcNow,
+        DiscountAmount = discountAmount,
 
-            CreatedDate = DateTime.UtcNow,
+        TaxAmount = taxAmount,
 
-            UpdatedDate = null,
+        TotalAmount = totalAmount,
 
-            IsDeleted = false
-        };
+        Currency = string.IsNullOrWhiteSpace(currency)
+            ? "ZAR"
+            : currency.Trim().ToUpper(),
 
-        _context.Payments.Add(payment);
+        PaymentStatus = "Pending",
 
-        await _context.SaveChangesAsync();
+        PaymentDate = DateTime.UtcNow,
 
-        return true;
-    }
+        CreatedDate = DateTime.UtcNow,
 
+        UpdatedDate = null,
+
+        IsDeleted = false
+    };
+
+    _context.Payments.Add(payment);
+
+    await _context.SaveChangesAsync();
+
+    return payment;
+}
     public async Task<bool> UpdatePaymentAsync(
         UpdatePaymentDto dto)
     {
@@ -232,4 +252,17 @@ public class PaymentService : IPaymentService
                 x.PaymentId == paymentId &&
                 !x.IsDeleted);
     }
+    // ======================================================
+// VALIDATE PAYMENT METHOD
+// ======================================================
+
+public async Task<bool> ValidatePaymentMethodAsync(
+    long paymentMethodId)
+{
+    return await _context.PaymentMethods
+        .AnyAsync(x =>
+            x.PaymentMethodId == paymentMethodId &&
+            !x.IsDeleted &&
+            x.IsActive);
+}
 }

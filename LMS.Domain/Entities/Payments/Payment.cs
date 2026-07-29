@@ -1,5 +1,5 @@
 using LMS.Domain.Entities.Students;
-//using LMS.Domain.Entities.Shopping;
+using LMS.Domain.Entities.Commerce.Orders;
 
 namespace LMS.Domain.Entities.Payments;
 
@@ -37,7 +37,7 @@ public class Payment
 
     // Navigation Properties
 
-    // public Order? Order { get; set; }
+     public Order? Order { get; set; }
 
     public StudentProfile? StudentProfile { get; set; }
 

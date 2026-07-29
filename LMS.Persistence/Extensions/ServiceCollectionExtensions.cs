@@ -1,10 +1,16 @@
 using LMS.Application.Interfaces;
 using LMS.Application.Interfaces.Commerce;
 using LMS.Application.Interfaces.Courses;
+using LMS.Application.Interfaces.Payments;
+using LMS.Application.Interfaces.Enrollments;
+using LMS.Application.Interfaces.Commerce.Checkout;
 using LMS.Persistence.Context;
 using LMS.Persistence.Services;
 using LMS.Persistence.Services.Commerce;
 using LMS.Persistence.Services.Courses;
+using LMS.Persistence.Services.Payments;
+using LMS.Persistence.Services.Enrollments;
+using LMS.Persistence.Services.Commerce.Checkout;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,16 +35,45 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICourseLevelService, CourseLevelService>();
         services.AddScoped<ICourseLanguageService, CourseLanguageService>();
         // ======================================================
-        // SHOPPING CART SERVICES
-        // ======================================================
-        services.AddScoped<IShoppingCartService, ShoppingCartService>();
-        services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
+// COMMERCE - SHOPPING CART
+// ======================================================
+
+services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
 
 // ======================================================
-// ORDER SERVICES
+// COMMERCE - ORDERS
 // ======================================================
-      services.AddScoped<IOrderService, OrderService>();
-        services.AddScoped<IOrderItemService, OrderItemService>();
+
+services.AddScoped<IOrderService, OrderService>();
+
+services.AddScoped<IOrderItemService, OrderItemService>();
+
+// ======================================================
+// COMMERCE - CHECKOUT
+// ======================================================
+
+services.AddScoped<ICheckoutService, CheckoutService>();
+
+// ======================================================
+// PAYMENTS
+// ======================================================
+
+services.AddScoped<IPaymentService, PaymentService>();
+
+services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+
+services.AddScoped<IInvoiceService, InvoiceService>();
+
+services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
+
+services.AddScoped<IRefundService, RefundService>();
+
+        // ======================================================
+// ENROLLMENT SERVICES
+// ======================================================
+   services.AddScoped<IEnrollmentService,EnrollmentService>();
 
         return services;
     }

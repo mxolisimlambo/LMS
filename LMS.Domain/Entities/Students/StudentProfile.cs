@@ -2,6 +2,8 @@ using LMS.Domain.Entities.Commerce.ShoppingCard;
 using LMS.Domain.Entities.Courses.Catalog;
 using LMS.Domain.Entities.Commerce.Orders;
 using LMS.Domain.Entities.Payments;
+using LMS.Domain.Entities.Enrollments;
+
 namespace LMS.Domain.Entities.Students;
 
 public class StudentProfile
@@ -43,8 +45,15 @@ public class StudentProfile
 
     public ICollection<Refund> Refunds { get; set; }
         = new List<Refund>();
-        public ICollection<Order> Orders { get; set; }
-    = new List<Order>();
+    public ICollection<Order> Orders { get; set; }
+= new List<Order>();
+// ======================================================
+// ENROLMENTS
+// ======================================================
+
+public ICollection<Enrollment> Enrollments { get; set; }
+    = new List<Enrollment>();
+
     public string UserId { get; set; } = string.Empty;
 
     public string StudentNumber { get; set; } = string.Empty;

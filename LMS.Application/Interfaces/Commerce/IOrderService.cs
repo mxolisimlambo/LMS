@@ -1,11 +1,15 @@
 using LMS.Shared.DTOs.Commerce.Orders.Order;
-
+using LMS.Domain.Entities.Commerce.Orders;
 namespace LMS.Application.Interfaces.Commerce;
 
 public interface IOrderService
 {
-    Task<bool> CreateOrderAsync(
-        CreateOrderDto dto);
+   Task<Order> CreateOrderAsync(
+    long studentProfileId,
+    decimal subTotalAmount,
+    decimal discountAmount,
+    decimal totalAmount,
+    string currency);
 
     Task<bool> UpdateOrderAsync(
         UpdateOrderDto dto);

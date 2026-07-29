@@ -16,69 +16,70 @@ public class ShoppingCartItemService : IShoppingCartItemService
         _context = context;
     }
 
-    public async Task<bool> CreateShoppingCartItemAsync(
-        CreateShoppingCartItemDto dto)
+   // ======================================================
+// ADD COURSE TO SHOPPING CART
+// ======================================================
+
+public async Task<ShoppingCartItem?> AddCourseAsync(
+    long shoppingCartId,
+    long courseId)
+{
+    var shoppingCart = await _context.ShoppingCarts
+        .FirstOrDefaultAsync(x =>
+            x.ShoppingCartId == shoppingCartId &&
+            !x.IsDeleted);
+
+    if (shoppingCart == null)
+        return null;
+
+    var course = await _context.Courses
+        .Include(x => x.CoursePrice)
+        .FirstOrDefaultAsync(x =>
+            x.CourseId == courseId &&
+            !x.IsDeleted);
+
+    if (course == null)
+        return null;
+
+    if (!course.IsPublished)
+        return null;
+
+    var exists = await _context.ShoppingCartItems
+        .AnyAsync(x =>
+            x.ShoppingCartId == shoppingCartId &&
+            x.CourseId == courseId &&
+            !x.IsDeleted);
+
+    if (exists)
+        return null;
+
+    var shoppingCartItem = new ShoppingCartItem
     {
-        var shoppingCart = await _context.ShoppingCarts
-            .FirstOrDefaultAsync(x =>
-                x.ShoppingCartId == dto.ShoppingCartId &&
-                !x.IsDeleted);
+        ShoppingCartId = shoppingCartId,
 
-        if (shoppingCart == null)
-            return false;
+        CourseId = courseId,
 
-        var course = await _context.Courses
-            .Include(x => x.CoursePrice)
-            .FirstOrDefaultAsync(x =>
-                x.CourseId == dto.CourseId &&
-                !x.IsDeleted);
+        UnitPrice =
+            course.CoursePrice?.Price ?? 0m,
 
-        if (course == null)
-            return false;
+        DiscountAmount = 0m,
 
-        if (!course.IsPublished)
-            return false;
+        TotalPrice =
+            course.CoursePrice?.Price ?? 0m,
 
-        var alreadyInCart = await _context.ShoppingCartItems
-            .AnyAsync(x =>
-                x.ShoppingCartId == dto.ShoppingCartId &&
-                x.CourseId == dto.CourseId &&
-                !x.IsDeleted);
+        CreatedDate =
+            DateTime.UtcNow,
 
-        if (alreadyInCart)
-            return false;
+        IsDeleted = false
+    };
 
-        var unitPrice = course.CoursePrice?.Price ?? 0;
+    _context.ShoppingCartItems.Add(
+        shoppingCartItem);
 
-        var discountAmount = 0m;
+    await _context.SaveChangesAsync();
 
-        var totalPrice = unitPrice - discountAmount;
-
-        if (totalPrice < 0)
-            totalPrice = 0;
-
-        var shoppingCartItem = new ShoppingCartItem
-        {
-            ShoppingCartId = dto.ShoppingCartId,
-            CourseId = dto.CourseId,
-
-            UnitPrice = unitPrice,
-            DiscountAmount = discountAmount,
-            TotalPrice = totalPrice,
-
-            CreatedDate = DateTime.UtcNow,
-
-            IsDeleted = false
-        };
-
-        _context.ShoppingCartItems.Add(
-            shoppingCartItem);
-
-        await RecalculateCartAsync(
-            dto.ShoppingCartId);
-
-        return true;
-    }
+    return shoppingCartItem;
+}
 
     public async Task<bool> UpdateShoppingCartItemAsync(
         UpdateShoppingCartItemDto dto)
@@ -385,4 +386,39 @@ public class ShoppingCartItemService : IShoppingCartItemService
         await _context
             .SaveChangesAsync();
     }
+    // ======================================================
+    // GET CHECKOUT ITEMS
+    // ======================================================
+
+    public async Task<List<ShoppingCartItem>>
+        GetCheckoutItemsAsync(
+            long shoppingCartId)
+    {
+        return await _context.ShoppingCartItems
+            .Include(x => x.Course)
+            .Where(x =>
+                x.ShoppingCartId == shoppingCartId &&
+                !x.IsDeleted)
+            .ToListAsync();
+    }
+// ======================================================
+// CLEAR SHOPPING CART ITEMS
+// ======================================================
+
+public async Task ClearShoppingCartItemsAsync(
+    long shoppingCartId)
+{
+    var items = await _context.ShoppingCartItems
+        .Where(x =>
+            x.ShoppingCartId == shoppingCartId &&
+            !x.IsDeleted)
+        .ToListAsync();
+
+    foreach (var item in items)
+    {
+        item.IsDeleted = true;
+    }
+
+    await _context.SaveChangesAsync();
+}
 }

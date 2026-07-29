@@ -99,33 +99,7 @@ public async Task<IActionResult> GetOrdersByStatus(
     return Ok(result);
 }
 
-// ======================================================
-// CREATE ORDER FROM SHOPPING CART
-// ======================================================
 
-[HttpPost]
-public async Task<IActionResult> CreateOrder(
-    [FromBody] CreateOrderDto dto)
-{
-    var result = await _orderService
-        .CreateOrderAsync(dto);
-
-    if (!result)
-    {
-        return BadRequest(
-            "The order could not be created. " +
-            "The student may not exist, the shopping cart may " +
-            "not exist, the shopping cart may be empty, or one " +
-            "or more courses may no longer be available.");
-    }
-
-    return Ok(new
-    {
-        Message =
-            "The order was created successfully.",
-        Success = true
-    });
-}
 
 // ======================================================
 // UPDATE ORDER STATUS
