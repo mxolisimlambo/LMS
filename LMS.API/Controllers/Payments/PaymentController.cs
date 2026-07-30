@@ -93,7 +93,7 @@ public class PaymentController : ControllerBase
         var result = await _paymentService
             .ProcessPaymentAsync(paymentId);
 
-        if (!result)
+        if (result==null)
             return BadRequest();
 
         return Ok(result);

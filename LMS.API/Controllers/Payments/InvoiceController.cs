@@ -58,18 +58,15 @@ public class InvoiceController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateInvoice(
-        CreateInvoiceDto dto)
-    {
-        var result = await _invoiceService
-            .CreateInvoiceAsync(dto);
+   [HttpPost("{paymentId:long}")]
+public async Task<IActionResult> CreateInvoice(
+    long paymentId)
+{
+    var invoice = await _invoiceService
+        .CreateInvoiceAsync(paymentId);
 
-        if (!result)
-            return BadRequest();
-
-        return Ok(result);
-    }
+    return Ok(invoice);
+}
 
     [HttpPut]
     public async Task<IActionResult> UpdateInvoice(
