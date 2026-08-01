@@ -1,0 +1,381 @@
+10. Authentication
+
+Replace with:
+
+10. Authentication
+
+Authentication Flow
+
+Login Page
+
+↓
+
+AccountEvents
+
+↓
+
+Validation
+
+↓
+
+AccountService
+
+↓
+
+AccountApi
+
+↓
+
+LMS.API
+
+↓
+
+ApiResponse
+
+↓
+
+StorageService
+
+↓
+
+SecurityService
+
+↓
+
+Layout Refresh
+
+↓
+
+Dashboard
+
+Authentication Storage
+
+✔ Access Token
+
+✔ Refresh Token
+
+✔ Current User
+
+Authentication Features
+
+✔ Login
+
+✔ Logout
+
+✔ Register
+
+✔ Forgot Password
+
+✔ Reset Password
+
+✔ Change Password
+
+✔ Current User Retrieval
+
+✔ Role Detection
+
+✔ Permission Detection
+
+✔ Redirect After Login
+
+✔ Redirect To Login
+
+✔ Redirect If Authenticated
+
+✔ Redirect If Unauthorized
+
+Authentication is centralized inside SecurityService.
+
+Business logic is handled by AccountService.
+
+No page communicates directly with StorageService.
+12. Component Loader
+
+Replace with
+
+12. Component Loader
+
+Shared HTML is loaded dynamically.
+
+Supported Methods
+
+✔ load()
+
+✔ loadMany()
+
+✔ reload()
+
+✔ exists()
+
+✔ isCached()
+
+✔ clearCache()
+
+Components
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+
+Pages never duplicate HTML.
+
+Components are cached after first load to improve performance.
+
+Cache can be cleared when required.
+15. Infrastructure Completed
+
+Update to
+
+15. Infrastructure Completed
+
+Core
+
+✔ Configuration
+
+✔ Storage Service
+
+✔ Security Service
+
+✔ API Client
+
+✔ Component Loader
+
+✔ Layout Manager
+
+✔ Page Registry
+
+✔ Utilities
+
+Frontend
+
+✔ Shared Layout
+
+✔ Dynamic Components
+
+✔ Authentication
+
+✔ Authorization
+
+✔ Role Security
+
+✔ Permission Security
+
+✔ Current User
+
+✔ Logout
+
+✔ Refresh Token Storage
+
+✔ Centralized Startup
+
+✔ Component Caching
+NEW SECTION
+18. Testing Standard
+18. Testing Standard
+
+Every module must be tested immediately after completion.
+
+Testing is performed before development continues.
+
+Each module receives its own Test Plan document.
+
+Example
+
+SECTION 1
+
+Startup
+
+SECTION 2
+
+Core Modules
+
+SECTION 3
+
+Account
+
+SECTION 4
+
+Dashboard
+
+Every public method must have at least one test.
+
+Testing includes
+
+✔ Browser Console
+
+✔ Network Requests
+
+✔ Storage
+
+✔ UI
+
+✔ Authorization
+
+✔ Error Handling
+
+No module is considered complete until all tests pass.
+Current Progress
+
+Update to
+
+Current Progress
+
+Foundation
+
+✔ Complete
+
+Authentication
+
+✔ Complete
+
+Authorization
+
+✔ Complete
+
+Shared Components
+
+✔ Complete
+
+JavaScript Architecture
+
+✔ Complete
+
+Dynamic Component Loader
+
+✔ Complete
+
+Component Caching
+
+✔ Complete
+
+Page Registration
+
+✔ Complete
+
+Application Startup
+
+✔ Complete
+
+Storage Service
+
+✔ Complete
+
+Security Service
+
+✔ Complete
+
+API Client
+
+✔ Complete
+
+Logout
+
+✔ Complete
+
+Current User
+
+✔ Complete
+
+Account Module
+
+✔ Complete
+
+API Communication
+
+✔ Complete
+
+Testing Framework
+
+✔ In Progress
+
+Frontend Status
+
+Version 1.3
+NEW SECTION
+Session Management (Planned)
+Session Management
+
+The Session Manager will become a Core module.
+
+Responsibilities
+
+✔ Detect idle users
+
+✔ Automatic logout
+
+✔ Session timeout warning
+
+✔ Refresh Access Token
+
+✔ Refresh Token validation
+
+✔ Session expiration
+
+✔ Cross-module session monitoring
+
+Planned File
+
+wwwroot/js/core/session-manager.js
+
+Initialization
+
+Layout.initialize()
+
+↓
+
+SessionManager.initialize()
+
+↓
+
+Application Ready
+
+This module will protect every secured page automatically.
+Long-Term Vision
+
+Add
+
+Core Modules
+
+Configuration
+
+↓
+
+Storage
+
+↓
+
+Security
+
+↓
+
+API Client
+
+↓
+
+Component Loader
+
+↓
+
+Layout
+
+↓
+
+Session Manager
+
+↓
+
+Page Registry
+
+↓
+
+Application Modules
+
+These changes bring the guide up to date with everything we've built so far and document the planned SessionManager without prematurely marking it as complete.

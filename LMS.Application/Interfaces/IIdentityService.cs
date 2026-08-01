@@ -22,5 +22,6 @@ public interface IIdentityService
 
     Task<ApiResponse<CurrentUserDto>> GetCurrentUserAsync(
         string userId);
+    Task<ApiResponse<bool>> LogoutAsync(LogoutRequestDto request);
 
 }

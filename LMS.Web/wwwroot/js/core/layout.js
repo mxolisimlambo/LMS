@@ -236,16 +236,20 @@ window.Layout = (function () {
     // Logout
     // =====================================================
 
-    function logout() {
-        SecurityService.logout();
+    async function logout(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        await AccountService.logout();
     }
 
     // =====================================================
-    // Events
+    // Global Events
     // =====================================================
 
     function bindEvents() {
-        $('#btnLogout').on('click', logout);
+        $(document).off('click', '#btnLogout').on('click', '#btnLogout', logout);
     }
 
     // =====================================================

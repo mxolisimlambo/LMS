@@ -35,7 +35,25 @@ window.AccountService = (function () {
             throw error;
         }
     }
+    // =====================================================
+    // Logout
+    // =====================================================
 
+    async function logout() {
+        const user = StorageService.getCurrentUser();
+
+        if (user) {
+            try {
+                await AccountApi.logout({
+                    userId: user.userId,
+                });
+            } catch (e) {
+                console.warn('Logout API unavailable.');
+            }
+        }
+
+        SecurityService.logout();
+    }
     // =====================================================
     // Register
     // =====================================================

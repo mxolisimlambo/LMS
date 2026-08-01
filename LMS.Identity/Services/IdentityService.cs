@@ -68,7 +68,11 @@ public class IdentityService : IIdentityService
         var jWttoken = await _jwtTokenService.GenerateTokenAsync(
             user,
             roles);
-
+await _userManager.SetAuthenticationTokenAsync(
+    user,
+    "LMS",
+    "RefreshToken",
+    jWttoken.RefreshToken);
 
 
         var response = new LoginResponseDto
@@ -99,7 +103,25 @@ public class IdentityService : IIdentityService
                 "Login successful");
     }
 
+public async Task<ApiResponse<bool>> LogoutAsync(
+    LogoutRequestDto request)
+{
+    var user = await _userManager.FindByIdAsync(request.UserId);
 
+    if (user == null)
+    {
+        return ApiResponse<bool>.FailResult("User not found.");
+    }
+
+    await _userManager.RemoveAuthenticationTokenAsync(
+        user,
+        "LMS",
+        "RefreshToken");
+
+    return ApiResponse<bool>.SuccessResult(
+        true,
+        "Logout successful.");
+}
 
     public async Task<ApiResponse<bool>> RegisterAsync(
       RegisterRequestDto request)

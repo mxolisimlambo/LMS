@@ -59,10 +59,17 @@ window.AccountApi = (function () {
     }
 
     // =============================================
+    // Logout
+    // =============================================
+
+    async function logout(model) {
+        return await ApiClient.post('Auth/logout', model);
+    }
+    // =============================================
 
     return {
         login,
-
+        logout,
         register,
 
         forgotPassword,

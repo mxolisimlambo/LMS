@@ -63,6 +63,17 @@ window.AccountEvents = (function () {
             AccountUI.hideLoading('#btnLogin');
         }
     }
+    // =====================================================
+    // Logout
+    // =====================================================
+
+    async function logout(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        await AccountService.logout();
+    }
 
     // =====================================================
     // Register
@@ -334,7 +345,7 @@ window.AccountEvents = (function () {
         bindEvents,
 
         login,
-
+        logout,
         register,
 
         forgotPassword,

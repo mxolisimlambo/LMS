@@ -49,7 +49,21 @@ public class AuthController : ControllerBase
 
         return Ok(result);
     }
+// ============================================
+// LOGOUT
+// ============================================
 
+[HttpPost("logout")]
+[Authorize]
+public async Task<IActionResult> Logout(LogoutRequestDto model)
+{
+    var result = await _identityService.LogoutAsync(model);
+
+    if (!result.Success)
+        return BadRequest(result);
+
+    return Ok(result);
+}
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(
     ChangePasswordDto request)

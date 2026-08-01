@@ -20,33 +20,37 @@ window.ComponentLoader = (function () {
     // Exists
     // =====================================================
 
-    function exists(path) {
-        return cache.hasOwnProperty(path);
+    function exists(selector) {
+        return $(selector).length > 0;
+    }
+
+    function isCached(path) {
+        return Object.prototype.hasOwnProperty.call(cache, path);
     }
 
     // =====================================================
     // Load Component
     // =====================================================
 
-    async function load(selector, path) {
-        try {
-            let html;
+   async function load(selector, path) {
+       try {
+           let html;
 
-            if (exists(path)) {
-                html = cache[path];
-            } else {
-                html = await $.get(path);
+           if (isCached(path)) {
+               html = cache[path];
+           } else {
+               html = await $.get(path);
 
-                cache[path] = html;
-            }
+               cache[path] = html;
+           }
 
-            $(selector).html(html);
-        } catch (error) {
-            console.error(`Unable to load ${path}`);
+           $(selector).html(html);
+       } catch (error) {
+           console.error(`Unable to load ${path}`);
 
-            console.error(error);
-        }
-    }
+           console.error(error);
+       }
+   }
 
     // =====================================================
     // Reload Component
@@ -88,5 +92,6 @@ window.ComponentLoader = (function () {
         exists,
 
         clearCache,
+        isCached,
     };
 })();
