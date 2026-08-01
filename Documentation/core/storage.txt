@@ -96,74 +96,25 @@ window.StorageService = (function () {
 
     function clearAuthentication() {
         removeAccessToken();
+
         removeRefreshToken();
+
         removeCurrentUser();
-    }
-
-    // =====================================================
-    // Remember Me
-    // =====================================================
-
-    function setRememberMe(value) {
-        set('rememberMe', value);
-    }
-
-    function getRememberMe() {
-        return get('rememberMe');
-    }
-
-    // =====================================================
-    // Theme
-    // =====================================================
-
-    function setTheme(theme) {
-        set('theme', theme);
-    }
-
-    function getTheme() {
-        return get('theme');
-    }
-
-    // =====================================================
-    // Language
-    // =====================================================
-
-    function setLanguage(language) {
-        set('language', language);
-    }
-
-    function getLanguage() {
-        return get('language');
-    }
-
-    // =====================================================
-    // Last Page
-    // =====================================================
-
-    function setLastPage(page) {
-        set('lastPage', page);
-    }
-
-    function getLastPage() {
-        return get('lastPage');
     }
 
     // =====================================================
 
     return {
-        // Local Storage
         set,
         get,
         remove,
         clear,
 
-        // Session Storage
         setSession,
         getSession,
         removeSession,
         clearSession,
 
-        // Authentication
         setAccessToken,
         getAccessToken,
         removeAccessToken,
@@ -177,18 +128,5 @@ window.StorageService = (function () {
         removeCurrentUser,
 
         clearAuthentication,
-
-        // Preferences
-        setRememberMe,
-        getRememberMe,
-
-        setTheme,
-        getTheme,
-
-        setLanguage,
-        getLanguage,
-
-        setLastPage,
-        getLastPage,
     };
 })();

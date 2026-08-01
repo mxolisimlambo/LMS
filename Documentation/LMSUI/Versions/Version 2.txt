@@ -452,3 +452,407 @@ API integration
 Reusable dashboard components
 
 This update reflects everything we've built so far. From this point onward, every new module—Dashboard, Categories, Courses, Lessons, Students, Instructors, and the rest—will follow exactly the same architecture and development standards.
+
+
+
+
+
+
+Excellent. This is exactly the right time to refactor—not because the code is broken, but because we now know the architecture works.
+
+At this point we have proven:
+
+✅ Modular architecture works.
+✅ Layout.initialize() works.
+✅ PageRegistry works.
+✅ Dynamic HTML loading works.
+✅ API communication works.
+✅ CORS works.
+✅ Registration works.
+✅ Authentication architecture is in place.
+
+Now we should clean the foundation before building the Dashboard. This will save us hundreds of hours later.
+
+Refactoring Plan (Version 1.1)
+Phase 1 — Core (Highest Priority)
+1. ApiClient
+
+Current
+
+ApiClient
+    GET
+    POST
+
+We should upgrade it to support
+
+GET
+
+POST
+
+PUT
+
+DELETE
+
+PATCH
+
+UPLOAD
+
+DOWNLOAD
+
+Automatic Token
+
+Automatic Refresh Token
+
+Global Error Handler
+
+Unauthorized Redirect (401)
+
+Forbidden Handler (403)
+
+Server Error Handler (500)
+
+Every future module will use this.
+
+2. StorageService
+
+Current
+
+Access Token
+
+Refresh Token
+
+Current User
+
+Upgrade to
+
+Access Token
+
+Refresh Token
+
+Current User
+
+Clear All
+
+Remember Me
+
+Theme
+
+Language
+
+Last Page
+
+Shopping Cart
+
+Search History
+3. SecurityService
+
+Current
+
+isAuthenticated()
+
+logout()
+
+redirect()
+
+roles
+
+permissions
+
+Upgrade
+
+Login()
+
+Logout()
+
+RefreshUser()
+
+RefreshToken()
+
+HasRole()
+
+HasPermission()
+
+HasAnyRole()
+
+HasAnyPermission()
+
+RedirectToLogin()
+
+RedirectAfterLogin()
+
+RedirectIfAuthenticated()
+
+RedirectIfUnauthorized()
+4. ComponentLoader
+
+Current
+
+load()
+
+loadMany()
+
+Upgrade
+
+load()
+
+loadMany()
+
+reload()
+
+exists()
+
+cache()
+
+clearCache()
+
+No component will ever reload twice.
+
+5. Layout
+
+Current
+
+Authentication
+
+Authorization
+
+Header
+
+Footer
+
+Sidebar
+
+Split into smaller methods.
+
+Instead of
+
+initialize()
+
+call
+
+initializeComponents()
+
+initializeAuthentication()
+
+initializeAuthorization()
+
+initializeTheme()
+
+initializeNavigation()
+
+initializeHeader()
+
+initializeFooter()
+
+initializeSidebar()
+
+initializeSearch()
+
+initializeNotifications()
+
+initializeCart()
+
+bindEvents()
+
+This keeps every method under about 30 lines.
+
+6. PageRegistry
+
+Current
+
+register()
+
+initialize()
+
+Upgrade
+
+register()
+
+initialize()
+
+exists()
+
+current()
+
+destroy()
+
+Useful later when we build SPA-like behavior.
+
+Phase 2 — Account Module
+
+Now clean the Account feature.
+
+Current structure
+
+api.js
+
+service.js
+
+events.js
+
+validation.js
+
+ui.js
+
+login.js
+
+register.js
+
+forgot-password.js
+
+reset-password.js
+
+This is already good.
+
+We only improve consistency.
+
+Events
+
+Instead of
+
+bindEvents()
+
+we should have
+
+bindLoginEvents()
+
+bindRegisterEvents()
+
+bindForgotPasswordEvents()
+
+bindResetPasswordEvents()
+
+bindChangePasswordEvents()
+
+Each page binds only what it needs.
+
+Validation
+
+Instead of
+
+validateRegister()
+
+return
+
+{
+    valid,
+
+    errors,
+
+    firstInvalidControl
+}
+
+Then UI automatically focuses the first invalid field.
+
+UI
+
+Current
+
+showError()
+
+showSuccess()
+
+Upgrade
+
+showLoading()
+
+hideLoading()
+
+showSuccess()
+
+showError()
+
+showWarning()
+
+showInfo()
+
+clearValidation()
+
+showValidation()
+
+showApiErrors()
+
+focus()
+
+scrollTop()
+
+Every module can reuse it.
+
+Phase 3 — Global Notifications
+
+Instead of
+
+$('#validation-summary')
+
+later we will use
+
+Toast.success()
+
+Toast.error()
+
+Toast.warning()
+
+Toast.info()
+
+No duplicated HTML.
+
+Phase 4 — Dashboard Ready
+
+Once the foundation is cleaned we start
+
+Dashboard
+
+DashboardApi
+
+DashboardService
+
+DashboardEvents
+
+DashboardUI
+
+DashboardPage
+Folder Structure (Final)
+js/
+
+│
+├── core/
+│   ├── app.js
+│   ├── config.js
+│   ├── api-client.js
+│   ├── component-loader.js
+│   ├── layout.js
+│   ├── page-registry.js
+│   ├── security.js
+│   ├── storage.js
+│   └── helpers.js
+│
+├── shared/
+│   ├── toast.js
+│   ├── modal.js
+│   ├── loader.js
+│   └── validator.js
+│
+└── features/
+    ├── account/
+    ├── dashboard/
+    ├── category/
+    ├── course/
+    ├── lesson/
+    ├── quiz/
+    ├── assignment/
+    ├── instructor/
+    ├── student/
+    └── ...
+Recommended Order (Do Not Skip)
+✅ Refactor ApiClient
+✅ Refactor StorageService
+✅ Refactor SecurityService
+✅ Refactor Layout
+✅ Refactor ComponentLoader
+✅ Refactor Account
+✅ Test Login
+✅ Test Logout
+✅ Test Forgot Password
+✅ Test Change Password
+🚀 Begin Dashboard
+
+I recommend we do not start the Dashboard just yet. There are only a few core services left to strengthen. Once ApiClient, StorageService, and SecurityService are fully enterprise-ready, every remaining feature (Dashboard, Courses, Students, Instructors, etc.) will reuse those services without needing major rewrites. This will give you a much cleaner and more maintainable LMS frontend.

@@ -10,30 +10,81 @@
 window.PageRegistry = (function () {
     'use strict';
 
+    // =====================================================
+    // Variables
+    // =====================================================
+
     const pages = {};
 
+    let currentPage = null;
+
+    // =====================================================
+    // Register
+    // =====================================================
+
     function register(pageName, pageModule) {
-        console.log('Registering:', pageName);
         pages[pageName] = pageModule;
     }
+
+    // =====================================================
+    // Exists
+    // =====================================================
+
+    function exists(pageName) {
+        return Object.prototype.hasOwnProperty.call(pages, pageName);
+    }
+
+    // =====================================================
+    // Current Page
+    // =====================================================
+
+    function current() {
+        return currentPage;
+    }
+
+    // =====================================================
+    // Initialize
+    // =====================================================
 
     function initialize() {
         const page = $('body').data('page');
 
         if (!page) return;
 
-        const module = pages[page];
+        if (!exists(page)) {
+            console.warn(`Page '${page}' is not registered.`);
 
-        if (!module) return;
+            return;
+        }
+
+        currentPage = page;
+
+        const module = pages[page];
 
         if (typeof module.initialize === 'function') {
             module.initialize();
         }
     }
 
+    // =====================================================
+    // Destroy
+    // =====================================================
+
+    function destroy() {
+        currentPage = null;
+    }
+
+    // =====================================================
+
     return {
         register,
 
         initialize,
+
+        exists,
+
+        current,
+
+        destroy,
     };
 })();

@@ -1,0 +1,638 @@
+LMS.Web Frontend Development Guide
+Version 1.3
+
+Author: Mxolisi Goodman
+
+1. Project Overview
+
+The LMS.Web frontend now follows a fully modular, API-driven JavaScript architecture.
+
+The core framework has been completed and standardized before Dashboard development begins.
+
+Every feature in the application must follow the same architecture.
+
+The objective is to build an enterprise-grade frontend that is:
+
+Modular
+Reusable
+API Driven
+Permission Driven
+Secure
+Easy to Maintain
+Easy for New Developers to Understand
+2. Overall Architecture
+Browser
+    │
+    ▼
+app.js
+    │
+    ▼
+Layout.initialize()
+    │
+    ├── Load Shared Components
+    ├── Authentication
+    ├── Authorization
+    ├── Header
+    ├── Sidebar
+    ├── Footer
+    ├── Theme
+    ├── Search
+    ├── Notifications
+    ├── Shopping Cart
+    └── Global Events
+    │
+    ▼
+PageRegistry.initialize()
+    │
+    ▼
+CurrentPage.initialize()
+
+Only app.js starts the application.
+
+Pages never initialize themselves.
+
+3. Solution Structure
+LMS.API
+
+LMS.Application
+
+LMS.Persistence
+
+LMS.Identity
+
+LMS.Shared
+
+LMS.Web
+4. LMS.Web Structure
+Controllers
+
+Views
+
+    Shared
+    Home
+    Account
+    Dashboard
+    Category
+    Course
+    Lesson
+    Student
+    Instructor
+    Certificate
+    Checkout
+    Reports
+    Administration
+
+wwwroot
+
+    assets
+
+    html
+
+        shared
+        home
+        account
+        dashboard
+        course
+        category
+        lesson
+        student
+        instructor
+
+    js
+
+        core
+
+        features
+5. JavaScript Folder Structure
+js
+
+    core
+
+        app.js
+        config.js
+        api-client.js
+        storage.js
+        security.js
+        component-loader.js
+        layout.js
+        page-registry.js
+        utilities.js
+
+    features
+
+        account
+
+            api.js
+            service.js
+            events.js
+            validation.js
+            ui.js
+
+            login.js
+            register.js
+            forgot-password.js
+            reset-password.js
+            change-password.js
+
+        dashboard
+
+        category
+
+        course
+
+        lesson
+
+        instructor
+
+        student
+6. Feature Architecture
+
+Every feature always follows this order.
+
+api.js
+
+↓
+
+service.js
+
+↓
+
+events.js
+
+↓
+
+validation.js
+
+↓
+
+ui.js
+
+↓
+
+page.js
+
+This architecture never changes.
+
+7. Core Services
+AppConfig
+
+Responsible for global application configuration.
+
+AppConfig.appName
+
+AppConfig.api.baseUrl
+
+AppConfig.api.timeout
+ApiClient
+
+Responsible for all HTTP communication.
+
+Supported methods
+
+ApiClient.get()
+
+ApiClient.post()
+
+ApiClient.put()
+
+ApiClient.patch()
+
+ApiClient.delete()
+
+ApiClient.upload()
+
+ApiClient.download()
+
+Features
+
+Automatic JWT token attachment
+Global error handling
+401 detection
+403 detection
+404 detection
+500 detection
+File upload support
+File download support
+
+Business modules never use jQuery AJAX directly.
+
+StorageService
+
+Responsible for browser storage.
+
+Supported methods
+
+StorageService.set()
+
+StorageService.get()
+
+StorageService.remove()
+
+StorageService.clear()
+
+StorageService.setAccessToken()
+
+StorageService.getAccessToken()
+
+StorageService.removeAccessToken()
+
+StorageService.setRefreshToken()
+
+StorageService.getRefreshToken()
+
+StorageService.removeRefreshToken()
+
+StorageService.setCurrentUser()
+
+StorageService.getCurrentUser()
+
+StorageService.removeCurrentUser()
+
+StorageService.setRememberMe()
+
+StorageService.getRememberMe()
+
+StorageService.setTheme()
+
+StorageService.getTheme()
+
+StorageService.setLanguage()
+
+StorageService.getLanguage()
+
+StorageService.setLastPage()
+
+StorageService.getLastPage()
+
+StorageService.clearAuthentication()
+
+No module should access localStorage directly.
+
+SecurityService
+
+Responsible for authentication and authorization.
+
+Supported methods
+
+SecurityService.login()
+
+SecurityService.logout()
+
+SecurityService.isAuthenticated()
+
+SecurityService.getCurrentUser()
+
+SecurityService.refreshCurrentUser()
+
+SecurityService.hasRole()
+
+SecurityService.hasAnyRole()
+
+SecurityService.hasPermission()
+
+SecurityService.hasAnyPermission()
+
+SecurityService.redirectAfterLogin()
+
+SecurityService.redirectIfAuthenticated()
+
+SecurityService.redirectToLogin()
+
+SecurityService.redirectIfUnauthorized()
+
+Only SecurityService manages login state.
+
+No feature manipulates tokens directly.
+
+ComponentLoader
+
+Responsible for reusable HTML.
+
+Supported methods
+
+ComponentLoader.load()
+
+ComponentLoader.loadMany()
+
+ComponentLoader.reload()
+
+ComponentLoader.exists()
+
+ComponentLoader.clearCache()
+
+Components are cached after the first load to reduce unnecessary requests.
+
+Layout
+
+Responsible for global application initialization.
+
+Responsibilities
+
+Shared Components
+Authentication
+Authorization
+Header
+Sidebar
+Footer
+Search
+Notifications
+Shopping Cart
+Theme
+Global Events
+
+Layout never contains feature-specific logic.
+
+PageRegistry
+
+Responsible for page initialization.
+
+Supported methods
+
+PageRegistry.register()
+
+PageRegistry.initialize()
+
+PageRegistry.exists()
+
+PageRegistry.current()
+
+PageRegistry.destroy()
+
+MVC supplies the page name using:
+
+@{
+    ViewData["Page"] = "login";
+}
+
+Flow
+
+ViewData["Page"]
+
+↓
+
+body data-page
+
+↓
+
+PageRegistry
+
+↓
+
+CurrentPage.initialize()
+8. Authentication Flow
+Login Page
+
+↓
+
+AccountEvents
+
+↓
+
+Validation
+
+↓
+
+AccountService
+
+↓
+
+AccountApi
+
+↓
+
+LMS.API
+
+↓
+
+ApiResponse
+
+↓
+
+SecurityService.login()
+
+↓
+
+StorageService
+
+↓
+
+Layout Authorization Refresh
+
+↓
+
+Dashboard
+9. Authorization
+
+Supported HTML attributes
+
+data-auth
+
+data-anonymous
+
+data-role
+
+data-permission
+
+Layout automatically hides or removes unauthorized controls.
+
+10. Shared Components
+
+Loaded dynamically
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+
+No duplicated layout HTML is allowed.
+
+11. Application Startup
+$(function () {
+
+    Layout.initialize()
+
+        .then(function () {
+
+            PageRegistry.initialize();
+
+        });
+
+});
+
+Only app.js starts the application.
+
+Pages never call $(document).ready().
+
+12. Account Module
+
+Completed
+
+Login
+Register
+Forgot Password
+Reset Password
+Change Password
+
+Completed Layers
+
+API
+Service
+Events
+Validation
+UI
+Page Modules
+13. Infrastructure
+
+Completed
+
+Configuration
+ApiClient
+StorageService
+SecurityService
+ComponentLoader
+Layout
+PageRegistry
+Utilities
+Shared Layout
+Dynamic Components
+Authentication
+Authorization
+Role Security
+Permission Security
+Centralized Startup
+CORS Integration
+14. Development Rules
+Never call APIs directly from page files.
+Never manipulate HTML inside Service classes.
+Never access localStorage directly.
+Always use StorageService.
+Always use SecurityService for authentication.
+Always use ApiClient for HTTP communication.
+Always register pages with PageRegistry.
+Always initialize through app.js.
+Never use $(document).ready() inside page modules.
+Never duplicate shared HTML.
+15. Current Status
+
+✅ Core Framework Complete
+
+✅ Authentication Complete
+
+✅ Authorization Complete
+
+✅ Shared Components Complete
+
+✅ Dynamic Layout Complete
+
+✅ JavaScript Architecture Complete
+
+✅ Page Registration Complete
+
+✅ CORS Complete
+
+✅ Account Module Complete
+
+Frontend Status
+
+Version 1.3 – Enterprise Frontend Foundation Complete
+
+16. Next Development Phase
+
+Dashboard Module
+
+dashboard
+
+    api.js
+
+    service.js
+
+    events.js
+
+    validation.js
+
+    ui.js
+
+    dashboard.js
+
+Planned Features
+
+Dashboard Statistics
+User Profile Summary
+Recent Courses
+Recent Lessons
+Notifications
+Calendar
+Quick Actions
+Student Dashboard
+Instructor Dashboard
+Administrator Dashboard
+Permission-Based Widgets
+Dynamic Cards
+Charts
+API Integration
+17. Long-Term Vision
+
+Every remaining module will follow the same architecture.
+
+Dashboard
+
+↓
+
+Category
+
+↓
+
+Course
+
+↓
+
+Course Module
+
+↓
+
+Lesson
+
+↓
+
+Quiz
+
+↓
+
+Assignment
+
+↓
+
+Student
+
+↓
+
+Instructor
+
+↓
+
+Certificate
+
+↓
+
+Shopping Cart
+
+↓
+
+Checkout
+
+↓
+
+Reports
+
+↓
+
+Administration
+
+The architecture established in Version 1.3 is now the official development standard for the LMS.Web frontend. It serves as the foundation for all future modules and is intended to remain stable, ensuring consistency, maintainability, and scalability throughout the project.

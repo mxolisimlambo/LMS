@@ -1,0 +1,754 @@
+==========================================================
+LMS.Web Frontend Test Plan
+Version 1.0
+Author: Mxolisi Goodman
+==========================================================
+
+Purpose
+
+This document defines the minimum testing required before
+new modules (Dashboard, Courses, Students, etc.) are built.
+
+Every module developed in the future must pass these tests.
+
+==========================================================
+SECTION 1
+APPLICATION STARTUP
+==========================================================
+
+TEST 1.1
+Application Starts
+
+Steps
+
+1. Open LMS.Web
+2. Open Browser Console
+
+Expected Result
+
+✔ App Started
+✔ Before Layout
+✔ After Layout
+✔ Before PageRegistry
+✔ After PageRegistry
+
+PASS □
+FAIL □
+
+----------------------------------------------------------
+
+TEST 1.2
+Layout Loaded
+
+Verify
+
+Loader
+
+Topbar
+
+Header
+
+Sidebar
+
+Footer
+
+Modals
+
+Expected
+
+Every shared component appears.
+
+PASS □
+FAIL □
+
+----------------------------------------------------------
+
+TEST 1.3
+Page Registration
+
+Verify
+
+ViewData["Page"]
+
+matches
+
+PageRegistry.register()
+
+Example
+
+login
+
+↓
+
+LoginPage.initialize()
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 2
+CORE MODULES
+==========================================================
+
+--------------------------------
+AppConfig
+--------------------------------
+
+Verify
+
+AppConfig.appName
+
+AppConfig.version
+
+AppConfig.api.baseUrl
+
+AppConfig.api.timeout
+
+Console
+
+typeof AppConfig
+
+Expected
+
+object
+
+PASS □
+FAIL □
+
+--------------------------------
+StorageService
+--------------------------------
+
+Test
+
+StorageService.set()
+
+StorageService.get()
+
+StorageService.remove()
+
+StorageService.clear()
+
+PASS □
+FAIL □
+
+Authentication Storage
+
+StorageService.setAccessToken()
+
+StorageService.getAccessToken()
+
+StorageService.removeAccessToken()
+
+PASS □
+FAIL □
+
+Refresh Token
+
+PASS □
+FAIL □
+
+Current User
+
+PASS □
+FAIL □
+
+Remember Me
+
+PASS □
+FAIL □
+
+Theme
+
+PASS □
+FAIL □
+
+Language
+
+PASS □
+FAIL □
+
+Last Page
+
+PASS □
+FAIL □
+
+Clear Authentication
+
+PASS □
+FAIL □
+
+--------------------------------
+SecurityService
+--------------------------------
+
+Verify
+
+isAuthenticated()
+
+login()
+
+logout()
+
+redirectAfterLogin()
+
+redirectIfAuthenticated()
+
+redirectToLogin()
+
+redirectIfUnauthorized()
+
+PASS □
+FAIL □
+
+Role Tests
+
+Administrator
+
+Instructor
+
+Student
+
+Parent
+
+PASS □
+FAIL □
+
+Permission Tests
+
+hasPermission()
+
+hasAnyPermission()
+
+PASS □
+FAIL □
+
+--------------------------------
+ApiClient
+--------------------------------
+
+Verify
+
+GET
+
+POST
+
+PUT
+
+PATCH
+
+DELETE
+
+UPLOAD
+
+DOWNLOAD
+
+PASS □
+FAIL □
+
+Verify Authorization Header
+
+Bearer Token Added
+
+PASS □
+FAIL □
+
+Verify Error Handling
+
+401
+
+403
+
+404
+
+500
+
+PASS □
+FAIL □
+
+--------------------------------
+ComponentLoader
+--------------------------------
+
+Verify
+
+load()
+
+PASS □
+FAIL □
+
+loadMany()
+
+PASS □
+FAIL □
+
+reload()
+
+PASS □
+FAIL □
+
+exists()
+
+PASS □
+FAIL □
+
+clearCache()
+
+PASS □
+FAIL □
+
+Verify Components
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+
+PASS □
+FAIL □
+
+--------------------------------
+PageRegistry
+--------------------------------
+
+Verify
+
+register()
+
+initialize()
+
+exists()
+
+current()
+
+destroy()
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 3
+ACCOUNT MODULE
+==========================================================
+
+--------------------------------
+Login Page
+--------------------------------
+
+Verify
+
+Email textbox
+
+Password textbox
+
+Login button
+
+Remember Me
+
+Forgot Password Link
+
+PASS □
+FAIL □
+
+Validation
+
+Required Fields
+
+PASS □
+FAIL □
+
+Invalid Email
+
+PASS □
+FAIL □
+
+Wrong Password
+
+PASS □
+FAIL □
+
+Correct Login
+
+PASS □
+FAIL □
+
+Successful Login
+
+Verify
+
+Access Token Saved
+
+Refresh Token Saved
+
+Current User Saved
+
+Redirect
+
+PASS □
+FAIL □
+
+--------------------------------
+Register Page
+--------------------------------
+
+Verify
+
+First Name
+
+Last Name
+
+Email
+
+Password
+
+Confirm Password
+
+Register Button
+
+PASS □
+FAIL □
+
+Validation
+
+Required Fields
+
+PASS □
+FAIL □
+
+Password Match
+
+PASS □
+FAIL □
+
+Email Format
+
+PASS □
+FAIL □
+
+Duplicate Email
+
+PASS □
+FAIL □
+
+Successful Registration
+
+PASS □
+FAIL □
+
+--------------------------------
+Forgot Password
+
+Page Loads
+
+PASS □
+FAIL □
+
+Validation
+
+PASS □
+FAIL □
+
+API Call
+
+PASS □
+FAIL □
+
+--------------------------------
+Reset Password
+
+Page Loads
+
+PASS □
+FAIL □
+
+Validation
+
+PASS □
+FAIL □
+
+Password Reset
+
+PASS □
+FAIL □
+
+--------------------------------
+Change Password
+
+Page Loads
+
+PASS □
+FAIL □
+
+Validation
+
+PASS □
+FAIL □
+
+Password Changed
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 4
+LAYOUT TESTS
+==========================================================
+
+Header
+
+PASS □
+FAIL □
+
+Sidebar
+
+PASS □
+FAIL □
+
+Footer
+
+PASS □
+FAIL □
+
+Search
+
+PASS □
+FAIL □
+
+Notifications
+
+PASS □
+FAIL □
+
+Shopping Cart
+
+PASS □
+FAIL □
+
+Theme
+
+PASS □
+FAIL □
+
+Logout
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 5
+AUTHORIZATION
+==========================================================
+
+Verify
+
+data-auth
+
+PASS □
+FAIL □
+
+data-anonymous
+
+PASS □
+FAIL □
+
+data-role
+
+PASS □
+FAIL □
+
+data-permission
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 6
+API TESTS
+==========================================================
+
+Verify
+
+API Running
+
+PASS □
+FAIL □
+
+Swagger Available
+
+PASS □
+FAIL □
+
+HTTPS
+
+PASS □
+FAIL □
+
+CORS
+
+PASS □
+FAIL □
+
+JWT Header
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 7
+BROWSER TESTS
+==========================================================
+
+Console
+
+No Errors
+
+PASS □
+FAIL □
+
+Network
+
+No 404
+
+PASS □
+FAIL □
+
+No 500
+
+PASS □
+FAIL □
+
+No CORS Errors
+
+PASS □
+FAIL □
+
+No JavaScript Exceptions
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 8
+PERFORMANCE
+==========================================================
+
+Shared Components Loaded Once
+
+PASS □
+FAIL □
+
+Component Cache Working
+
+PASS □
+FAIL □
+
+No Duplicate API Calls
+
+PASS □
+FAIL □
+
+Application Startup Fast
+
+PASS □
+FAIL □
+
+==========================================================
+SECTION 9
+DEVELOPER CHECKLIST
+==========================================================
+
+□ New page added to MVC
+
+□ ViewData["Page"] assigned
+
+□ Page registered with PageRegistry
+
+□ Feature follows architecture
+
+API
+
+↓
+
+Service
+
+↓
+
+Events
+
+↓
+
+Validation
+
+↓
+
+UI
+
+↓
+
+Page
+
+□ No API calls in page file
+
+□ No HTML manipulation in Service
+
+□ No business logic in UI
+
+□ Uses ApiClient
+
+□ Uses StorageService
+
+□ Uses SecurityService
+
+□ Uses ComponentLoader
+
+□ Uses Layout
+
+==========================================================
+SECTION 10
+READY FOR NEXT MODULE
+==========================================================
+
+Foundation
+
+PASS □
+
+Core
+
+PASS □
+
+Authentication
+
+PASS □
+
+Authorization
+
+PASS □
+
+Account Module
+
+PASS □
+
+Layout
+
+PASS □
+
+API
+
+PASS □
+
+Shared Components
+
+PASS □
+
+Application Startup
+
+PASS □
+
+When every item above passes, the project is approved to begin the Dashboard module.

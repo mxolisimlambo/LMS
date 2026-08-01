@@ -11,28 +11,6 @@ window.SecurityService = (function () {
     'use strict';
 
     // =====================================================
-    // Login
-    // =====================================================
-
-    function login(data) {
-        StorageService.setAccessToken(data.accessToken);
-
-        StorageService.setRefreshToken(data.refreshToken);
-
-        StorageService.setCurrentUser(data.user);
-    }
-
-    // =====================================================
-    // Logout
-    // =====================================================
-
-    function logout() {
-        StorageService.clearAuthentication();
-
-        window.location.href = '/Account/Login';
-    }
-
-    // =====================================================
     // Authentication
     // =====================================================
 
@@ -48,17 +26,17 @@ window.SecurityService = (function () {
         return StorageService.getCurrentUser();
     }
 
-    function refreshCurrentUser(user) {
-        StorageService.setCurrentUser(user);
-    }
-
     // =====================================================
-    // Tokens
+    // Access Token
     // =====================================================
 
     function getAccessToken() {
         return StorageService.getAccessToken();
     }
+
+    // =====================================================
+    // Refresh Token
+    // =====================================================
 
     function getRefreshToken() {
         return StorageService.getRefreshToken();
@@ -69,15 +47,9 @@ window.SecurityService = (function () {
     // =====================================================
 
     function getRoles() {
-        return getCurrentUser()?.roles ?? [];
-    }
+        const user = getCurrentUser();
 
-    function hasRole(role) {
-        return getRoles().includes(role);
-    }
-
-    function hasAnyRole(roles) {
-        return roles.some((role) => hasRole(role));
+        return user?.roles ?? [];
     }
 
     // =====================================================
@@ -85,15 +57,25 @@ window.SecurityService = (function () {
     // =====================================================
 
     function getPermissions() {
-        return getCurrentUser()?.permissions ?? [];
+        const user = getCurrentUser();
+
+        return user?.permissions ?? [];
     }
+
+    // =====================================================
+    // Role Check
+    // =====================================================
+
+    function hasRole(role) {
+        return getRoles().includes(role);
+    }
+
+    // =====================================================
+    // Permission Check
+    // =====================================================
 
     function hasPermission(permission) {
         return getPermissions().includes(permission);
-    }
-
-    function hasAnyPermission(permissions) {
-        return permissions.some((permission) => hasPermission(permission));
     }
 
     // =====================================================
@@ -117,12 +99,12 @@ window.SecurityService = (function () {
     }
 
     // =====================================================
-    // Redirects
+    // Redirect After Login
     // =====================================================
 
     function redirectAfterLogin() {
         if (!isAuthenticated()) {
-            redirectToLogin();
+            window.location.href = '/Account/Login';
 
             return;
         }
@@ -154,34 +136,32 @@ window.SecurityService = (function () {
         window.location.href = '/';
     }
 
+    // =====================================================
+    // Redirect If Authenticated
+    // =====================================================
+
     function redirectIfAuthenticated() {
         if (isAuthenticated()) {
             redirectAfterLogin();
         }
     }
 
-    function redirectToLogin() {
-        window.location.href = '/Account/Login';
-    }
+    // =====================================================
+    // Logout
+    // =====================================================
 
-    function redirectIfUnauthorized() {
-        if (!isAuthenticated()) {
-            redirectToLogin();
-        }
+    function logout() {
+        StorageService.clearAuthentication();
+
+        window.location.href = '/Account/Login';
     }
 
     // =====================================================
 
     return {
-        login,
-
-        logout,
-
         isAuthenticated,
 
         getCurrentUser,
-
-        refreshCurrentUser,
 
         getAccessToken,
 
@@ -193,11 +173,7 @@ window.SecurityService = (function () {
 
         hasRole,
 
-        hasAnyRole,
-
         hasPermission,
-
-        hasAnyPermission,
 
         isAdministrator,
 
@@ -211,8 +187,6 @@ window.SecurityService = (function () {
 
         redirectIfAuthenticated,
 
-        redirectToLogin,
-
-        redirectIfUnauthorized,
+        logout,
     };
 })();

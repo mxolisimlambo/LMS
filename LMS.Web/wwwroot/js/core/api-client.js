@@ -10,35 +10,35 @@
 window.ApiClient = (function () {
     'use strict';
 
-    // ============================================
-    // Build Headers
-    // ============================================
+    // =====================================================
+    // Headers
+    // =====================================================
 
-    function getHeaders() {
-        const headers = {
-            'Content-Type': 'application/json',
-        };
+    function getHeaders(includeToken = true) {
+        const headers = {};
 
-        const token = StorageService.getAccessToken();
+        if (includeToken) {
+            const token = StorageService.getAccessToken();
 
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
+            if (token) {
+                headers.Authorization = `Bearer ${token}`;
+            }
         }
 
         return headers;
     }
 
-    // ============================================
-    // AJAX Request
-    // ============================================
+    // =====================================================
+    // Request
+    // =====================================================
 
-    function request(method, endpoint, data = null) {
+    function request(method, endpoint, data = null, includeToken = true) {
         return $.ajax({
             url: `${AppConfig.api.baseUrl}/${endpoint}`,
 
             type: method,
 
-            headers: getHeaders(),
+            headers: getHeaders(includeToken),
 
             contentType: 'application/json',
 
@@ -52,34 +52,100 @@ window.ApiClient = (function () {
         });
     }
 
-    // ============================================
-    // HTTP Methods
-    // ============================================
+    // =====================================================
+    // GET
+    // =====================================================
 
-    function get(endpoint) {
-        return request('GET', endpoint);
+    function get(endpoint, includeToken = true) {
+        return request('GET', endpoint, null, includeToken);
     }
 
-    function post(endpoint, data) {
-        return request('POST', endpoint, data);
+    // =====================================================
+    // POST
+    // =====================================================
+
+    function post(endpoint, data, includeToken = true) {
+        return request('POST', endpoint, data, includeToken);
     }
 
-    function put(endpoint, data) {
-        return request('PUT', endpoint, data);
+    // =====================================================
+    // PUT
+    // =====================================================
+
+    function put(endpoint, data, includeToken = true) {
+        return request('PUT', endpoint, data, includeToken);
     }
 
-    function del(endpoint) {
-        return request('DELETE', endpoint);
+    // =====================================================
+    // PATCH
+    // =====================================================
+
+    function patch(endpoint, data, includeToken = true) {
+        return request('PATCH', endpoint, data, includeToken);
     }
 
-    // ============================================
-    // Error Handling
-    // ============================================
+    // =====================================================
+    // DELETE
+    // =====================================================
+
+    function del(endpoint, includeToken = true) {
+        return request('DELETE', endpoint, null, includeToken);
+    }
+
+    // =====================================================
+    // Upload
+    // =====================================================
+
+    function upload(endpoint, formData, includeToken = true) {
+        return $.ajax({
+            url: `${AppConfig.api.baseUrl}/${endpoint}`,
+
+            type: 'POST',
+
+            headers: getHeaders(includeToken),
+
+            processData: false,
+
+            contentType: false,
+
+            timeout: AppConfig.api.timeout,
+
+            data: formData,
+        }).fail(function (xhr) {
+            handleError(xhr);
+        });
+    }
+
+    // =====================================================
+    // Download
+    // =====================================================
+
+    function download(endpoint, includeToken = true) {
+        return $.ajax({
+            url: `${AppConfig.api.baseUrl}/${endpoint}`,
+
+            type: 'GET',
+
+            headers: getHeaders(includeToken),
+
+            xhrFields: {
+                responseType: 'blob',
+            },
+        }).fail(function (xhr) {
+            handleError(xhr);
+        });
+    }
+
+    // =====================================================
+    // Error Handler
+    // =====================================================
 
     function handleError(xhr) {
         switch (xhr.status) {
             case 401:
                 console.warn('Unauthorized');
+
+                // SecurityService.redirectToLogin();
 
                 break;
 
@@ -89,7 +155,7 @@ window.ApiClient = (function () {
                 break;
 
             case 404:
-                console.warn('Not Found');
+                console.warn('Resource Not Found');
 
                 break;
 
@@ -105,7 +171,7 @@ window.ApiClient = (function () {
         }
     }
 
-    // ============================================
+    // =====================================================
 
     return {
         get,
@@ -114,6 +180,12 @@ window.ApiClient = (function () {
 
         put,
 
+        patch,
+
         delete: del,
+
+        upload,
+
+        download,
     };
 })();

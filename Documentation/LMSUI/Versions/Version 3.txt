@@ -1,0 +1,890 @@
+LMS.Web Frontend Development Guide
+Version 1.2
+
+Author: Mxolisi Goodman
+
+LMS.Web JavaScript Architecture
+Current Project Status
+
+The frontend foundation is now complete.
+
+The application has been refactored into a modular architecture where every responsibility has a dedicated layer.
+
+No feature is allowed to bypass this architecture.
+
+1. Overall Architecture
+Browser
+    │
+    ▼
+app.js
+    │
+    ▼
+Layout.initialize()
+    │
+    ├── Load Shared Components
+    ├── Authentication
+    ├── Authorization
+    ├── Header
+    ├── Sidebar
+    ├── Footer
+    ├── Theme
+    ├── Search
+    ├── Notifications
+    ├── Shopping Cart
+    └── Global Events
+    │
+    ▼
+PageRegistry.initialize()
+    │
+    ▼
+CurrentPage.initialize()
+
+Only app.js starts the application.
+
+No page initializes itself.
+
+2. Solution Structure
+LMS.API
+
+LMS.Application
+
+LMS.Persistence
+
+LMS.Identity
+
+LMS.Shared
+
+LMS.Web
+3. LMS.Web Structure
+Controllers
+
+Views
+
+Shared
+
+Home
+
+Account
+
+Dashboard
+
+Category
+
+Course
+
+Lesson
+
+Instructor
+
+Student
+
+Certificate
+
+Checkout
+
+Reports
+
+Administration
+
+wwwroot
+
+assets
+
+html
+
+shared
+
+home
+
+dashboard
+
+account
+
+course
+
+lesson
+
+category
+
+student
+
+instructor
+
+js
+
+core
+
+features
+4. JavaScript Folder Structure
+wwwroot
+
+js
+
+core
+
+app.js
+
+config.js
+
+storage.js
+
+security.js
+
+layout.js
+
+page-registry.js
+
+component-loader.js
+
+api-client.js
+
+utilities.js
+
+features
+
+account
+
+api.js
+
+service.js
+
+events.js
+
+validation.js
+
+ui.js
+
+login.js
+
+register.js
+
+forgot-password.js
+
+reset-password.js
+
+change-password.js
+
+dashboard
+
+category
+
+course
+
+lesson
+
+student
+
+instructor
+
+Every feature follows this exact pattern.
+
+5. Feature Architecture
+
+Every feature consists of six logical layers.
+
+api.js
+
+↓
+
+service.js
+
+↓
+
+events.js
+
+↓
+
+validation.js
+
+↓
+
+ui.js
+
+↓
+
+page.js
+
+This pattern will never change.
+
+6. Responsibilities
+api.js
+
+Only communicates with LMS.API.
+
+Examples
+
+login()
+
+register()
+
+forgotPassword()
+
+resetPassword()
+
+changePassword()
+
+currentUser()
+
+Never contains:
+
+Business Logic
+
+Validation
+
+HTML
+
+service.js
+
+Contains business logic.
+
+Responsible for
+
+Calling APIs
+
+Processing responses
+
+Saving Access Token
+
+Saving Refresh Token
+
+Saving Current User
+
+Refreshing Current User
+
+Logout
+
+Never manipulates HTML.
+
+events.js
+
+Responsible for every event.
+
+Examples
+
+Login
+
+Register
+
+Forgot Password
+
+Reset Password
+
+Change Password
+
+Button Clicks
+
+Form Submission
+
+Keyboard Events
+
+Events call Services.
+
+validation.js
+
+Responsible only for validation.
+
+Returns
+
+{
+    valid,
+    errors
+}
+
+Validation occurs before Service is called.
+
+ui.js
+
+Responsible only for UI.
+
+Loading
+
+Success
+
+Errors
+
+Validation
+
+Focus
+
+Clear Forms
+
+Never calls APIs.
+
+Page Module
+
+Example
+
+window.LoginPage = (function () {
+
+    function initialize() {
+
+    }
+
+    return {
+
+        initialize
+
+    };
+
+})();
+
+PageRegistry.register("login", LoginPage);
+
+Page modules
+
+Initialize controls
+
+Bind events
+
+Focus controls
+
+Register themselves
+
+Nothing else.
+
+7. Page Registration
+
+Every page registers itself.
+
+Example
+
+PageRegistry.register("login", LoginPage);
+
+PageRegistry.register("register", RegisterPage);
+
+PageRegistry.register("forgot-password", ForgotPasswordPage);
+
+PageRegistry.register("reset-password", ResetPasswordPage);
+
+PageRegistry.register("change-password", ChangePasswordPage);
+
+PageRegistry.register("dashboard", DashboardPage);
+
+MVC must provide
+
+@{
+    ViewData["Page"] = "login";
+}
+
+Flow
+
+ViewData["Page"]
+
+↓
+
+body data-page
+
+↓
+
+PageRegistry
+
+↓
+
+LoginPage.initialize()
+8. Shared Layout
+
+Every page now uses one layout.
+
+_Layout.cshtml
+
+Layout contains
+
+Loader
+
+Topbar
+
+Header
+
+Sidebar
+
+RenderBody()
+
+Footer
+
+Modals
+
+Shared HTML is loaded dynamically.
+
+/html/shared
+
+Components
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+9. Layout Responsibilities
+
+Layout initializes only global functionality.
+
+Responsibilities
+
+Load Shared Components
+
+Authentication
+
+Authorization
+
+Current User
+
+Header
+
+Sidebar
+
+Footer
+
+Search
+
+Notifications
+
+Shopping Cart
+
+Theme
+
+Logout
+
+Global Events
+
+Layout never contains feature code.
+
+10. Authentication
+
+Authentication flow
+
+Login Page
+
+↓
+
+AccountEvents
+
+↓
+
+Validation
+
+↓
+
+AccountService
+
+↓
+
+AccountApi
+
+↓
+
+LMS.API
+
+↓
+
+ApiResponse
+
+↓
+
+StorageService
+
+↓
+
+SecurityService
+
+↓
+
+Layout Refresh
+
+↓
+
+Dashboard
+
+Storage
+
+Access Token
+
+Refresh Token
+
+Current User
+11. Authorization
+
+Authorization is attribute-driven.
+
+Supported attributes
+
+data-auth
+
+data-anonymous
+
+data-role
+
+data-permission
+
+Examples
+
+<div data-auth>
+
+<div data-anonymous>
+
+<li data-role="Administrator">
+
+<button data-permission="Course.Create">
+
+Layout automatically
+
+Shows
+
+Hides
+
+Removes
+
+Unauthorized controls.
+
+12. Component Loader
+
+Shared HTML is loaded dynamically.
+
+Example
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+
+Pages never duplicate HTML.
+
+13. Application Startup
+
+Application starts only here.
+
+$(function () {
+
+    Layout.initialize()
+
+        .then(function () {
+
+            PageRegistry.initialize();
+
+        });
+
+});
+
+Only app.js starts the application.
+
+No page should use
+
+$(document).ready()
+
+$(function())
+
+to initialize itself.
+
+14. Account Module Status
+
+Completed
+
+✅ Login
+
+✅ Register
+
+✅ Forgot Password
+
+✅ Reset Password
+
+✅ Change Password
+
+Completed Layers
+
+✅ API
+
+✅ Service
+
+✅ Events
+
+✅ Validation
+
+✅ UI
+
+✅ Individual Page Modules
+
+15. Infrastructure Completed
+
+Core
+
+✅ Configuration
+
+✅ Storage Service
+
+✅ Security Service
+
+✅ API Client
+
+✅ Component Loader
+
+✅ Layout Manager
+
+✅ Page Registry
+
+✅ Utilities
+
+Frontend
+
+✅ Shared Layout
+
+✅ Dynamic Components
+
+✅ Authentication
+
+✅ Authorization
+
+✅ Role Security
+
+✅ Permission Security
+
+✅ Centralized Startup
+
+16. CORS Integration
+
+LMS.API now allows LMS.Web to communicate correctly.
+
+Policy
+
+LMSPolicy
+
+Allowed Origins
+
+http://localhost:5181
+
+https://localhost:5181
+
+https://localhost:7036
+
+Middleware Order
+
+UseRouting()
+
+↓
+
+UseCors("LMSPolicy")
+
+↓
+
+UseAuthentication()
+
+↓
+
+UseAuthorization()
+
+↓
+
+MapControllers()
+
+This resolves browser CORS restrictions between LMS.Web and LMS.API.
+
+17. Lessons Learned
+
+During development we established several permanent standards.
+
+Always verify JavaScript file paths.
+
+Always export public methods from modules.
+
+Always load config.js before dependent modules.
+
+Always load app.js after every module.
+
+Always match ViewData["Page"] with PageRegistry.
+
+Never initialize pages manually.
+
+Always use browser Network and Console tabs before changing code.
+
+Always confirm module loading with:
+
+typeof Layout
+
+typeof PageRegistry
+
+typeof LoginPage
+
+typeof AppConfig
+
+Always ensure Layout returns
+
+initialize
+
+from its public interface.
+
+When using async startup, prefer:
+
+Layout.initialize()
+
+.then(...)
+
+.catch(...)
+
+This proved more reliable across browsers than awaiting directly inside the jQuery ready callback.
+
+18. Current Progress
+
+Foundation
+
+✅ Complete
+
+Authentication
+
+✅ Complete
+
+Authorization
+
+✅ Complete
+
+Shared Components
+
+✅ Complete
+
+JavaScript Architecture
+
+✅ Complete
+
+Page Registration
+
+✅ Complete
+
+Application Startup
+
+✅ Complete
+
+Dynamic Layout
+
+✅ Complete
+
+Account Module
+
+✅ Complete
+
+API Communication
+
+✅ Complete
+
+CORS Integration
+
+✅ Complete
+
+Frontend Status
+
+Version 1.2 Foundation Complete
+
+19. Next Development Phase
+
+The next module is the Dashboard.
+
+We will follow exactly the same architecture.
+
+Dashboard
+
+api.js
+
+service.js
+
+events.js
+
+validation.js
+
+ui.js
+
+dashboard.js
+
+Planned features
+
+Dashboard statistics
+Current user profile summary
+Recent courses
+Recent lessons
+Notifications
+Calendar
+Quick actions
+Student dashboard
+Instructor dashboard
+Administrator dashboard
+Permission-based widgets
+Dynamic dashboard cards
+API integration
+Reusable dashboard components
+20. Long-Term Vision
+
+Every future module will follow the same architecture.
+
+Dashboard
+
+↓
+
+Category
+
+↓
+
+Course
+
+↓
+
+Course Module
+
+↓
+
+Lessons
+
+↓
+
+Quizzes
+
+↓
+
+Assignments
+
+↓
+
+Students
+
+↓
+
+Instructors
+
+↓
+
+Certificates
+
+↓
+
+Shopping Cart
+
+↓
+
+Checkout
+
+↓
+
+Reports
+
+↓
+
+Administration
+
+The objective is to build an enterprise-grade Learning Management System frontend that is:
+
+Modular
+API-driven
+Permission-driven
+Secure
+Reusable
+Easy to maintain
+Easy for new developers to understand and extend
+
+This document becomes the official development standard for the LMS.Web frontend going forward.

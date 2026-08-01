@@ -10,13 +10,35 @@
 window.ComponentLoader = (function () {
     'use strict';
 
-    // ============================================
+    // =====================================================
+    // Cache
+    // =====================================================
+
+    const cache = {};
+
+    // =====================================================
+    // Exists
+    // =====================================================
+
+    function exists(path) {
+        return cache.hasOwnProperty(path);
+    }
+
+    // =====================================================
     // Load Component
-    // ============================================
+    // =====================================================
 
     async function load(selector, path) {
         try {
-            const html = await $.get(path);
+            let html;
+
+            if (exists(path)) {
+                html = cache[path];
+            } else {
+                html = await $.get(path);
+
+                cache[path] = html;
+            }
 
             $(selector).html(html);
         } catch (error) {
@@ -26,9 +48,19 @@ window.ComponentLoader = (function () {
         }
     }
 
-    // ============================================
-    // Load Multiple Components
-    // ============================================
+    // =====================================================
+    // Reload Component
+    // =====================================================
+
+    async function reload(selector, path) {
+        delete cache[path];
+
+        await load(selector, path);
+    }
+
+    // =====================================================
+    // Load Multiple
+    // =====================================================
 
     async function loadMany(components) {
         for (const component of components) {
@@ -36,11 +68,25 @@ window.ComponentLoader = (function () {
         }
     }
 
-    // ============================================
+    // =====================================================
+    // Clear Cache
+    // =====================================================
+
+    function clearCache() {
+        Object.keys(cache).forEach((key) => delete cache[key]);
+    }
+
+    // =====================================================
 
     return {
         load,
 
         loadMany,
+
+        reload,
+
+        exists,
+
+        clearCache,
     };
 })();
