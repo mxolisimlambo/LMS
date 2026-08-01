@@ -2,6 +2,7 @@ using LMS.Application.Interfaces.Payments;
 using LMS.Domain.Entities.Payments;
 using LMS.Persistence.Context;
 using LMS.Shared.DTOs.Payments.Invoice;
+using LMS.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Persistence.Services.Payments;

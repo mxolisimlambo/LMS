@@ -1,7 +1,9 @@
 using LMS.Application.Interfaces.Commerce;
+using LMS.Application.Interfaces.Common;
 using LMS.Domain.Entities.Commerce.Orders;
 using LMS.Persistence.Context;
 using LMS.Shared.DTOs.Commerce.Orders.Order;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Persistence.Services.Commerce;
@@ -9,11 +11,15 @@ namespace LMS.Persistence.Services.Commerce;
 public class OrderService : IOrderService
 {
     private readonly ApplicationDbContext _context;
+    private readonly INumberGeneratorService _numberGenerator;
 
     public OrderService(
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+         INumberGeneratorService numberGenerator)
     {
         _context = context;
+        _numberGenerator = numberGenerator;
+       
     }
 
     // ======================================================
@@ -34,7 +40,9 @@ var order = new Order
 {
 StudentProfileId = studentProfileId,
 
-    OrderNumber = GenerateOrderNumber(),
+  OrderNumber =
+    await _numberGenerator
+        .GenerateOrderNumberAsync(),
 
     SubTotalAmount = subTotalAmount,
 
@@ -456,15 +464,5 @@ return order;
                 !x.IsDeleted);
     }
 
-    // ======================================================
-    // GENERATE ORDER NUMBER
-    // ======================================================
-
-    private static string
-        GenerateOrderNumber()
-    {
-        return
-            $"ORD-{DateTime.UtcNow:yyyyMMddHHmmssfff}-" +
-            $"{Guid.NewGuid().ToString("N")[..6].ToUpper()}";
-    }
+   
 }

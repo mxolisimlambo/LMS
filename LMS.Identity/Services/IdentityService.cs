@@ -41,7 +41,7 @@ public class IdentityService : IIdentityService
         if (user == null)
         {
             return ApiResponse<LoginResponseDto>
-                .Fail("Invalid email or password");
+                .FailResult("Invalid email or password");
         }
 
 
@@ -56,7 +56,7 @@ public class IdentityService : IIdentityService
         if (!result.Succeeded)
         {
             return ApiResponse<LoginResponseDto>
-                .Fail("Invalid email or password");
+                .FailResult("Invalid email or password");
         }
 
 
@@ -82,7 +82,7 @@ public class IdentityService : IIdentityService
 
 
         return ApiResponse<LoginResponseDto>
-            .Success(
+            .SuccessResult(
                 response,
                 "Login successful");
     }
@@ -97,7 +97,7 @@ public class IdentityService : IIdentityService
 
         if (existingUser != null)
         {
-            return ApiResponse<bool>.Fail("Email address already exists.");
+            return ApiResponse<bool>.FailResult("Email address already exists.");
         }
 
         // Create user
@@ -116,7 +116,7 @@ public class IdentityService : IIdentityService
 
         if (!result.Succeeded)
         {
-            return ApiResponse<bool>.Fail(
+            return ApiResponse<bool>.FailResult(
                 string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
@@ -126,7 +126,7 @@ public class IdentityService : IIdentityService
             await _userManager.AddToRoleAsync(user, "Student");
         }
 
-        return ApiResponse<bool>.Success(true, "Registration successful.");
+        return ApiResponse<bool>.SuccessResult(true, "Registration successful.");
     }
 
 
@@ -137,7 +137,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            return ApiResponse<bool>.Fail("User not found.");
+            return ApiResponse<bool>.FailResult("User not found.");
         }
 
         var result = await _userManager.ChangePasswordAsync(
@@ -147,11 +147,11 @@ public class IdentityService : IIdentityService
 
         if (!result.Succeeded)
         {
-            return ApiResponse<bool>.Fail(
+            return ApiResponse<bool>.FailResult(
                 string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        return ApiResponse<bool>.Success(
+        return ApiResponse<bool>.SuccessResult(
             true,
             "Password changed successfully.");
     }
@@ -163,7 +163,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            return ApiResponse<ForgotPasswordResponseDto>.Fail(
+            return ApiResponse<ForgotPasswordResponseDto>.FailResult(
                 "User not found.");
         }
 
@@ -175,7 +175,7 @@ public class IdentityService : IIdentityService
             ResetToken = token
         };
 
-        return ApiResponse<ForgotPasswordResponseDto>.Success(
+        return ApiResponse<ForgotPasswordResponseDto>.SuccessResult(
             response,
             "Password reset token generated successfully.");
     }
@@ -188,7 +188,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            return ApiResponse<bool>.Fail("User not found.");
+            return ApiResponse<bool>.FailResult("User not found.");
         }
 
         var result = await _userManager.ResetPasswordAsync(
@@ -198,11 +198,11 @@ public class IdentityService : IIdentityService
 
         if (!result.Succeeded)
         {
-            return ApiResponse<bool>.Fail(
+            return ApiResponse<bool>.FailResult(
                 string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        return ApiResponse<bool>.Success(
+        return ApiResponse<bool>.SuccessResult(
             true,
             "Password reset successfully.");
     }
@@ -214,7 +214,7 @@ public class IdentityService : IIdentityService
 
         if (user == null)
         {
-            return ApiResponse<CurrentUserDto>.Fail("User not found.");
+            return ApiResponse<CurrentUserDto>.FailResult("User not found.");
         }
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -227,7 +227,7 @@ public class IdentityService : IIdentityService
             Roles = roles.ToList()
         };
 
-        return ApiResponse<CurrentUserDto>.Success(
+        return ApiResponse<CurrentUserDto>.SuccessResult(
             dto,
             "User retrieved successfully.");
     }

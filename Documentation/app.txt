@@ -1,0 +1,46 @@
+/**
+ * ==========================================================
+ * Module : Core
+ * File   : app.js
+ * Purpose: Application Startup
+ * Author : Mxolisi Goodman
+ * ==========================================================
+ */
+
+$(async function () {
+    console.log(`${AppConfig.appName} ${AppConfig.version} Starting...`);
+
+    // ============================================
+    // Load Shared Components
+    // ============================================
+
+    await ComponentLoader.loadMany([
+        {
+            selector: '#loader-container',
+
+            path: '/html/shared/loader.html',
+        },
+
+        {
+            selector: '#header-container',
+
+            path: '/html/shared/header.html',
+        },
+
+        {
+            selector: '#footer-container',
+
+            path: '/html/shared/footer.html',
+        },
+    ]);
+
+    // ============================================
+    // Initialize Current Page
+    // ============================================
+
+    if (window.Router) {
+        Router.initialize();
+    }
+
+    console.log('Application Ready');
+});

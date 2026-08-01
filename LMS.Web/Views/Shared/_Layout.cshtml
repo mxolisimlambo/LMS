@@ -1,49 +1,85 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LMS.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LMS.Web.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LMS.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>404 Page - Online Courses & Education Bootstrap5 Template</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LMS.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png" />
+
+        <!-- CSS
+	============================================ -->
+        <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/assets/css/vendor/slick.css" />
+        <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css" />
+        <link rel="stylesheet" href="~/assets/css/plugins/sal.css" />
+        <link rel="stylesheet" href="~/assets/css/plugins/feather.css" />
+
+
+        <link rel="stylesheet" href="~/assets/css/styles.css" />
+    </head>
+
+<body data-page="@ViewData["Page"]">
+    nnnnnnnnnnnnhgggggyyyyyf
+
+    <div id="loader"></div>
+
+    <div id="topbar"></div>
+
+    <div id="header"></div>
+
+    <div id="sidebar"></div>
+
+    <main id="main-content">
+        @RenderBody()
+    </main>
+
+    <div id="footer"></div>
+
+    <div id="modals"></div>
+
+       <!-- JS
+============================================ -->
+        <!-- Modernizer JS -->
+          
+        <script src="~/assets/js/vendor/modernizr.min.js"></script>
+        <!-- jQuery JS -->
+        <script src="~/assets/js/vendor/jquery.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="~/assets/js/vendor/bootstrap.min.js"></script>
+
+
+        <script src="~/assets/js/vendor/wow.js"></script>
+      
+<script src="~/js/core/config.js"></script>
+
+<!-- Core -->
+<script src="~/js/core/storage.js"></script>
+<script src="~/js/core/security.js"></script>
+<script src="~/js/core/component-loader.js"></script>
+<script src="~/js/core/page-registry.js"></script>
+<script src="~/js/core/layout.js"></script>
+
+<!-- Shared -->
+<script src="~/js/core/api-client.js"></script>
+
+<!-- Account Modules -->
+<script src="~/js/features/account/api.js"></script>
+<script src="~/js/features/account/service.js"></script>
+<script src="~/js/features/account/ui.js"></script>
+<script src="~/js/features/account/validation.js"></script>
+<script src="~/js/features/account/events.js"></script>
+
+
+
+
+    @RenderSection("Scripts", required: false)
+    <!-- App -->
+<script src="~/js/core/app.js"></script>
+
 </body>
 </html>

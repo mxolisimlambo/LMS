@@ -2,6 +2,7 @@ using LMS.Application.Interfaces.Enrollments;
 using LMS.Domain.Entities.Enrollments;
 using LMS.Persistence.Context;
 using LMS.Shared.DTOs.Enrollments.Enrollment;
+using LMS.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Persistence.Services.Enrollments;

@@ -1,0 +1,517 @@
+# LMS.Web Frontend Architecture Manual
+
+## Phase 1 - Core Frontend Framework
+
+---
+
+# Project Goal
+
+The ASP.NET Core API is the application's backend and contains:
+
+* Authentication
+* Authorization
+* Business Logic
+* Services
+* Entity Framework
+* SQL Server
+* Validation
+* File Management
+
+The ASP.NET Core MVC project is the frontend presentation layer responsible for:
+
+* Routing
+* Views
+* Layout
+* HTML Components
+* JavaScript
+* API Communication
+
+No business logic should exist in the MVC project.
+
+---
+
+# Overall Architecture
+
+```text
+Browser
+    ↓
+ASP.NET Core MVC
+    ↓
+Razor View
+    ↓
+Core JavaScript Framework
+    ↓
+Feature JavaScript
+    ↓
+ASP.NET Core API
+    ↓
+Application Layer
+    ↓
+Infrastructure
+    ↓
+SQL Server
+```
+
+---
+
+# Folder Structure
+
+```text
+Controllers
+
+Views
+    Shared
+    Home
+    Course
+    Category
+    CourseModule
+    Lesson
+    Quiz
+    Assignment
+    Student
+    Instructor
+    Dashboard
+    Account
+    Cart
+    Checkout
+    Certificate
+    Notification
+    Search
+
+wwwroot
+    assets
+    html
+    js
+    uploads
+```
+
+---
+
+# JavaScript Structure
+
+```text
+js
+
+core
+shared
+features
+```
+
+---
+
+# Core Framework
+
+The following files are created once and used by the entire application.
+
+---
+
+## config.js
+
+Purpose
+
+* Application configuration
+* API Base URL
+* Environment
+* Version
+* Token Keys
+* Pagination
+* UI Configuration
+
+Responsibility
+
+Central configuration file.
+
+No hardcoded URLs anywhere else.
+
+---
+
+## storage.js
+
+Purpose
+
+Manages
+
+* Local Storage
+* Session Storage
+* Access Token
+* Refresh Token
+* Current User
+
+Responsibility
+
+No other JavaScript file communicates directly with LocalStorage.
+
+---
+
+## api-client.js
+
+Purpose
+
+Central HTTP client.
+
+Handles
+
+* GET
+* POST
+* PUT
+* DELETE
+
+Automatically handles
+
+* Authorization Header
+* JSON
+* Timeout
+* Common Error Handling
+
+Responsibility
+
+Every API request passes through this file.
+
+No feature uses $.ajax() directly.
+
+---
+
+## auth.js
+
+Purpose
+
+Authentication management.
+
+Uses
+
+* ApiClient
+* StorageService
+
+Handles
+
+* Login
+* Register
+* Forgot Password
+* Reset Password
+* Change Password
+* Current User
+* Logout
+
+Responsibility
+
+Central authentication service.
+
+---
+
+## component-loader.js
+
+Purpose
+
+Loads reusable HTML components dynamically.
+
+Examples
+
+* Header
+* Footer
+* Sidebar
+* Loader
+* Topbar
+* Breadcrumb
+* Modals
+
+Responsibility
+
+Keeps Razor Views clean.
+
+---
+
+## utilities.js
+
+Purpose
+
+Reusable helper methods.
+
+Examples
+
+* Loader
+* Notifications
+* Date Formatting
+* Currency Formatting
+* Validation Helpers
+
+Responsibility
+
+Shared utility library.
+
+---
+
+## page-registry.js
+
+Purpose
+
+Registers page modules dynamically.
+
+Responsibility
+
+Replaces traditional routing logic.
+
+Each page registers itself.
+
+No switch statements.
+
+No central router maintenance.
+
+---
+
+## app.js
+
+Purpose
+
+Application startup.
+
+Responsibilities
+
+* Load shared components
+* Initialize application
+* Start current page
+
+Entry point of the frontend.
+
+---
+
+# Shared JavaScript
+
+```text
+shared
+
+header.js
+footer.js
+sidebar.js
+topbar.js
+breadcrumb.js
+modal.js
+search.js
+```
+
+Each shared HTML component has its own JavaScript.
+
+---
+
+# Feature Structure
+
+Every feature follows exactly the same structure.
+
+```text
+features
+
+account
+course
+student
+instructor
+lesson
+quiz
+assignment
+dashboard
+certificate
+checkout
+cart
+notification
+```
+
+Each feature contains:
+
+```text
+api.js
+service.js
+ui.js
+events.js
+index.js
+```
+
+---
+
+# File Responsibilities
+
+## api.js
+
+Communicates with ASP.NET Core API only.
+
+No UI logic.
+
+---
+
+## service.js
+
+Processes data.
+
+Examples
+
+* Filtering
+* Sorting
+* Mapping
+* Business formatting
+
+No DOM manipulation.
+
+---
+
+## ui.js
+
+Responsible for rendering HTML.
+
+Examples
+
+* Cards
+* Tables
+* Forms
+* Modals
+
+No API communication.
+
+---
+
+## events.js
+
+Handles
+
+* Button Clicks
+* Search
+* Filters
+* Pagination
+* Keyboard Events
+
+Only event handling.
+
+---
+
+## index.js
+
+Feature entry point.
+
+Responsible for
+
+* Initializing the page
+* Registering events
+* Loading initial data
+
+---
+
+# Views
+
+Views are lightweight page shells.
+
+Responsibilities
+
+* Render Layout
+* RenderBody
+* Load Feature Scripts
+* Set current page identifier
+
+Views do not contain
+
+* API Calls
+* Business Logic
+* Large HTML Templates
+
+---
+
+# HTML Components
+
+Stored inside
+
+```text
+wwwroot/html
+```
+
+Organized into
+
+* shared
+* home
+* course
+* student
+* instructor
+* dashboard
+* account
+
+Purpose
+
+Reusable HTML only.
+
+No JavaScript.
+
+---
+
+# Data Flow
+
+```text
+User
+    ↓
+events.js
+    ↓
+api.js
+    ↓
+ApiClient
+    ↓
+ASP.NET Core API
+    ↓
+JSON Response
+    ↓
+service.js
+    ↓
+ui.js
+    ↓
+HTML Component
+    ↓
+Browser
+```
+
+---
+
+# Development Rules
+
+* MVC never contains business logic.
+* API remains the single source of truth.
+* All HTTP requests use api-client.js.
+* Authentication uses auth.js.
+* Storage uses storage.js.
+* Configuration uses config.js.
+* Shared HTML loads through component-loader.js.
+* Shared functions belong in utilities.js.
+* Every page registers itself using page-registry.js.
+* Every feature follows the same folder structure.
+* No duplicated code.
+* No direct AJAX calls.
+* No direct LocalStorage access.
+* No hardcoded API URLs.
+
+---
+
+# Standard Development Process
+
+For every new module:
+
+1. Create MVC Controller.
+2. Create View.
+3. Create HTML Components.
+4. Create Feature Folder.
+5. Create api.js.
+6. Create service.js.
+7. Create ui.js.
+8. Create events.js.
+9. Create index.js.
+10. Register the page.
+11. Connect to ASP.NET Core API.
+
+---
+
+# Current Framework Status
+
+Core Framework
+
+* config.js ✔
+* storage.js ✔
+* api-client.js ✔
+* auth.js ✔
+* component-loader.js ✔
+* utilities.js ✔
+* page-registry.js ✔
+* app.js ✔
+
+The frontend foundation is complete.
+
+Future development will focus on implementing business modules using this architecture rather than changing the framework itself.

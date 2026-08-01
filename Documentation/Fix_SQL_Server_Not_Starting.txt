@@ -1,0 +1,146 @@
+===========================================================
+FIX SQL SERVER AFTER ENDING TASK IN TASK MANAGER
+===========================================================
+
+STEP 1 - Open Windows Services
+
+Press:
+
+    Win + R
+
+Type:
+
+    services.msc
+
+Press Enter.
+
+===========================================================
+STEP 2 - Find SQL Server Service
+===========================================================
+
+Look for one of these services:
+
+    SQL Server (MSSQLSERVER)
+    SQL Server (SQLEXPRESS)
+    SQL Server (GOODMAN)
+    SQL Server (MSSQLLocalDB)
+
+If the service is Stopped:
+
+    Right Click
+    Start
+
+Also start:
+
+    SQL Server Browser
+
+===========================================================
+STEP 3 - Restart Using CMD (Run as Administrator)
+===========================================================
+
+Default SQL Server
+
+    net stop MSSQLSERVER
+    net start MSSQLSERVER
+
+SQL Express
+
+    net stop MSSQL$SQLEXPRESS
+    net start MSSQL$SQLEXPRESS
+
+===========================================================
+STEP 4 - Check Installed SQL Services
+===========================================================
+
+Run:
+
+    sc query type= service | findstr SQL
+
+===========================================================
+STEP 5 - Check SQL LocalDB
+===========================================================
+
+Run:
+
+    sqllocaldb info
+
+If you see:
+
+    MSSQLLocalDB
+
+Start it:
+
+    sqllocaldb start MSSQLLocalDB
+
+===========================================================
+STEP 6 - List SQL Instances
+===========================================================
+
+Run:
+
+    sqlcmd -L
+
+===========================================================
+STEP 7 - Restart Windows
+===========================================================
+
+If SQL Server still does not start:
+
+Restart your computer.
+
+===========================================================
+STEP 8 - Check SQL Server Configuration Manager
+===========================================================
+
+Press:
+
+    Win + R
+
+Try one of these:
+
+    SQLServerManager16.msc
+    SQLServerManager15.msc
+    SQLServerManager14.msc
+
+Go to:
+
+    SQL Server Services
+
+Verify:
+
+    SQL Server (...) = Running
+    SQL Server Browser = Running
+
+===========================================================
+STEP 9 - Verify Your Connection String
+===========================================================
+
+Default Instance
+
+    Server=GOODMAN;
+
+SQL Express
+
+    Server=GOODMAN\SQLEXPRESS;
+
+LocalDB
+
+    Server=(localdb)\MSSQLLocalDB;
+
+===========================================================
+STEP 10 - If It Still Doesn't Work
+===========================================================
+
+Run:
+
+    sc query type= service | findstr SQL
+
+Copy and paste the output.
+
+Also run:
+
+    sqlcmd -L
+
+Copy and paste the output.
+
+===========================================================

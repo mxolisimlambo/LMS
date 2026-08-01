@@ -1,0 +1,126 @@
+@{
+    Layout="~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Page"]="register";
+}
+
+<div class="container">
+
+    <!-- Register Form -->
+    <div class="col-lg-6">
+   
+
+        <h3 class="title">Create Account</h3>
+
+        <div id="validation-summary" class="mb-3"></div>
+
+        <form id="RegisterForm"
+              class="max-width-auto"
+              autocomplete="off">
+
+            <div class="form-group">
+
+                <input id="FirstName"
+                       name="FirstName"
+                       type="text"
+                       required />
+
+                <label>First Name *</label>
+
+                <span class="focus-border"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <input id="LastName"
+                       name="LastName"
+                       type="text"
+                       required />
+
+                <label>Last Name *</label>
+
+                <span class="focus-border"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <input id="Email"
+                       name="Email"
+                       type="email"
+                       autocomplete="email"
+                       required />
+
+                <label>Email Address *</label>
+
+                <span class="focus-border"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <input id="Password"
+                       name="Password"
+                       type="password"
+                       autocomplete="new-password"
+                       required />
+
+                <label>Password *</label>
+
+                <span class="focus-border"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <input id="ConfirmPassword"
+                       name="ConfirmPassword"
+                       type="password"
+                       autocomplete="new-password"
+                       required />
+
+                <label>Confirm Password *</label>
+
+                <span class="focus-border"></span>
+
+            </div>
+
+            <div class="form-submit-group">
+
+                <button id="btnRegister"
+                        type="submit"
+                        class="rbt-btn btn-md btn-gradient hover-icon-reverse w-100">
+
+                    <span class="icon-reverse-wrapper">
+
+                        <span class="btn-text">
+                            Register
+                        </span>
+
+                        <span class="btn-icon">
+                            <i class="feather-arrow-right"></i>
+                        </span>
+
+                        <span class="btn-icon">
+                            <i class="feather-arrow-right"></i>
+                        </span>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+   
+</div>
+
+</div>
+
+@section Scripts{
+
+<script src="~/js/features/account/register.js"></script>
+
+}

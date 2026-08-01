@@ -1,0 +1,197 @@
+/**
+ * ==========================================================
+ * Module : Core
+ * File   : permission-constants.js
+ * Purpose: Application Permission Constants
+ * Author : Mxolisi Goodman
+ * ==========================================================
+ */
+
+window.PermissionConstants = {
+    // =====================================================
+    // Users
+    // =====================================================
+
+    Users: {
+        View: 'Users.View',
+
+        Create: 'Users.Create',
+
+        Edit: 'Users.Edit',
+
+        Delete: 'Users.Delete',
+    },
+
+    // =====================================================
+    // Roles
+    // =====================================================
+
+    Roles: {
+        View: 'Roles.View',
+
+        Create: 'Roles.Create',
+
+        Edit: 'Roles.Edit',
+
+        Delete: 'Roles.Delete',
+    },
+
+    // =====================================================
+    // Students
+    // =====================================================
+
+    Student: {
+        View: 'Student.View',
+
+        Create: 'Student.Create',
+
+        Edit: 'Student.Edit',
+
+        Delete: 'Student.Delete',
+
+        Approve: 'Student.Approve',
+    },
+
+    // =====================================================
+    // Instructors
+    // =====================================================
+
+    Instructor: {
+        View: 'Instructor.View',
+
+        Create: 'Instructor.Create',
+
+        Edit: 'Instructor.Edit',
+
+        Delete: 'Instructor.Delete',
+
+        Approve: 'Instructor.Approve',
+    },
+
+    // =====================================================
+    // Courses
+    // =====================================================
+
+    Course: {
+        View: 'Course.View',
+
+        Create: 'Course.Create',
+
+        Edit: 'Course.Edit',
+
+        Delete: 'Course.Delete',
+
+        Publish: 'Course.Publish',
+
+        Approve: 'Course.Approve',
+    },
+
+    // =====================================================
+    // Categories
+    // =====================================================
+
+    Category: {
+        View: 'Category.View',
+
+        Create: 'Category.Create',
+
+        Edit: 'Category.Edit',
+
+        Delete: 'Category.Delete',
+    },
+
+    // =====================================================
+    // Course Modules
+    // =====================================================
+
+    CourseModule: {
+        View: 'CourseModule.View',
+
+        Create: 'CourseModule.Create',
+
+        Edit: 'CourseModule.Edit',
+
+        Delete: 'CourseModule.Delete',
+    },
+
+    // =====================================================
+    // Lessons
+    // =====================================================
+
+    Lesson: {
+        View: 'Lesson.View',
+
+        Create: 'Lesson.Create',
+
+        Edit: 'Lesson.Edit',
+
+        Delete: 'Lesson.Delete',
+    },
+
+    // =====================================================
+    // Quizzes
+    // =====================================================
+
+    Quiz: {
+        View: 'Quiz.View',
+
+        Create: 'Quiz.Create',
+
+        Edit: 'Quiz.Edit',
+
+        Delete: 'Quiz.Delete',
+    },
+
+    // =====================================================
+    // Assignments
+    // =====================================================
+
+    Assignment: {
+        View: 'Assignment.View',
+
+        Create: 'Assignment.Create',
+
+        Edit: 'Assignment.Edit',
+
+        Delete: 'Assignment.Delete',
+    },
+
+    // =====================================================
+    // Certificates
+    // =====================================================
+
+    Certificate: {
+        View: 'Certificate.View',
+
+        Generate: 'Certificate.Generate',
+    },
+
+    // =====================================================
+    // Dashboard
+    // =====================================================
+
+    Dashboard: {
+        View: 'Dashboard.View',
+    },
+};
+
+
+Then update security.js so that you never hardcode permission strings.
+
+Instead of:
+
+SecurityService.hasPermission("Course.Create")
+
+you'll write:
+
+SecurityService.hasPermission(
+    PermissionConstants.Course.Create
+);
+
+or
+
+if (SecurityService.hasPermission(PermissionConstants.Student.View)) {
+
+    // ...
+
+}

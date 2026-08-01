@@ -1,0 +1,90 @@
+:: ============================================
+:: Controllers
+:: ============================================
+mkdir Controllers
+
+:: ============================================
+:: Views
+:: ============================================
+mkdir Views
+
+mkdir Views\Shared
+mkdir Views\Home
+mkdir Views\Course
+mkdir Views\Category
+mkdir Views\CourseModule
+mkdir Views\Lesson
+mkdir Views\Quiz
+mkdir Views\Assignment
+mkdir Views\Student
+mkdir Views\Instructor
+mkdir Views\Dashboard
+mkdir Views\Account
+mkdir Views\Cart
+mkdir Views\Checkout
+mkdir Views\Certificate
+mkdir Views\Notification
+mkdir Views\Search
+
+:: ============================================
+:: wwwroot
+:: ============================================
+
+mkdir wwwroot\html
+mkdir wwwroot\html\shared
+mkdir wwwroot\html\home
+mkdir wwwroot\html\course
+mkdir wwwroot\html\category
+mkdir wwwroot\html\module
+mkdir wwwroot\html\lesson
+mkdir wwwroot\html\quiz
+mkdir wwwroot\html\assignment
+mkdir wwwroot\html\student
+mkdir wwwroot\html\instructor
+mkdir wwwroot\html\dashboard
+mkdir wwwroot\html\account
+mkdir wwwroot\html\checkout
+mkdir wwwroot\html\cart
+mkdir wwwroot\html\certificate
+
+:: ============================================
+:: JavaScript
+:: ============================================
+
+mkdir wwwroot\js
+mkdir wwwroot\js\core
+mkdir wwwroot\js\shared
+mkdir wwwroot\js\features
+
+mkdir wwwroot\js\features\home
+mkdir wwwroot\js\features\course
+mkdir wwwroot\js\features\category
+mkdir wwwroot\js\features\module
+mkdir wwwroot\js\features\lesson
+mkdir wwwroot\js\features\quiz
+mkdir wwwroot\js\features\assignment
+mkdir wwwroot\js\features\student
+mkdir wwwroot\js\features\instructor
+mkdir wwwroot\js\features\dashboard
+mkdir wwwroot\js\features\account
+mkdir wwwroot\js\features\checkout
+mkdir wwwroot\js\features\cart
+mkdir wwwroot\js\features\certificate
+mkdir wwwroot\js\features\notification
+
+:: ============================================
+:: Assets
+:: ============================================
+
+mkdir wwwroot\assets
+mkdir wwwroot\assets\css
+mkdir wwwroot\assets\fonts
+mkdir wwwroot\assets\images
+mkdir wwwroot\assets\plugins
+mkdir wwwroot\assets\vendors
+
+:: ============================================
+:: Uploads
+:: ============================================
+
+mkdir wwwroot\uploads

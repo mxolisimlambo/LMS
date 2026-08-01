@@ -1,0 +1,727 @@
+# LMS.Web Frontend Architecture Guide
+
+## Version 1.0
+
+---
+
+# Project Vision
+
+The ASP.NET Core API is the heart of the system.
+
+It already contains:
+
+* Authentication
+* Authorization
+* Business Logic
+* Validation
+* Services
+* Repositories
+* Entity Framework
+* SQL Server
+
+The MVC project **must never duplicate this logic.**
+
+The MVC project is only responsible for displaying data and interacting with the API.
+
+---
+
+# Architecture
+
+```text
+Browser
+
+      │
+      ▼
+
+ASP.NET Core MVC
+
+      │
+      ▼
+
+Razor View (Shell)
+
+      │
+      ▼
+
+Core JavaScript Framework
+
+      │
+      ▼
+
+Feature JavaScript
+
+      │
+      ▼
+
+ASP.NET Core Web API
+
+      │
+      ▼
+
+Application Layer
+
+      │
+      ▼
+
+Infrastructure
+
+      │
+      ▼
+
+SQL Server
+```
+
+---
+
+# Responsibilities
+
+## API Project
+
+Responsible for
+
+* Authentication
+* Authorization
+* CRUD
+* Validation
+* Business Rules
+* SQL Server
+* File Uploads
+* Emails
+* Notifications
+* Payments
+
+Nothing from the API should be rewritten inside MVC.
+
+---
+
+## MVC Project
+
+Responsible for
+
+* Routing
+* Layout
+* Loading Pages
+* Loading HTML Components
+* Loading JavaScript
+
+Nothing more.
+
+---
+
+## JavaScript
+
+Responsible for
+
+* Calling APIs
+* Rendering HTML
+* Handling Events
+* Form Validation
+* Dynamic Updates
+* Notifications
+* Loading Components
+
+---
+
+# Current Folder Structure
+
+```
+Controllers
+
+Views
+
+wwwroot
+
+    assets
+
+    html
+
+    js
+
+    uploads
+```
+
+---
+
+# Controllers
+
+Controllers only return Views.
+
+Example
+
+```csharp
+public IActionResult Index()
+{
+    return View();
+}
+```
+
+Controllers never call SQL Server.
+
+Controllers never contain business logic.
+
+---
+
+# Views
+
+Views are only shells.
+
+Example
+
+```html
+<div id="page-content"></div>
+
+@section Scripts{
+
+<script src="~/js/features/course/index.js"></script>
+
+}
+```
+
+Views never contain large HTML templates.
+
+Views never call APIs.
+
+Views never contain JavaScript logic.
+
+---
+
+# HTML Components
+
+The Histudy template becomes reusable HTML components.
+
+Example
+
+```
+html
+
+shared
+
+    header.html
+
+    footer.html
+
+    sidebar.html
+
+    topbar.html
+
+    loader.html
+
+    breadcrumb.html
+
+home
+
+course
+
+student
+
+instructor
+
+dashboard
+
+account
+```
+
+Each component should remain independent.
+
+---
+
+# JavaScript Framework
+
+The JavaScript folder is divided into three areas.
+
+```
+js
+
+core
+
+shared
+
+features
+```
+
+---
+
+# Core Folder
+
+```
+core
+
+app.js
+
+config.js
+
+api-client.js
+
+component-loader.js
+
+auth.js
+
+storage.js
+
+utilities.js
+
+router.js
+```
+
+These files are written once and reused throughout the application.
+
+---
+
+## app.js
+
+Application entry point.
+
+Responsible for
+
+* Starting the application
+* Initializing shared components
+* Loading page modules
+
+---
+
+## config.js
+
+Contains global configuration.
+
+Example
+
+* API URL
+* Version
+* Environment
+* Timeouts
+
+No hard-coded URLs anywhere else.
+
+---
+
+## api-client.js
+
+One place for every HTTP request.
+
+Instead of calling
+
+$.ajax()
+
+throughout the application,
+
+every request goes through
+
+* get()
+* post()
+* put()
+* delete()
+
+This gives one consistent API client.
+
+---
+
+## component-loader.js
+
+Responsible for loading reusable HTML.
+
+Example
+
+Header
+
+Footer
+
+Sidebar
+
+Topbar
+
+Breadcrumb
+
+Modals
+
+No duplicated loading logic.
+
+---
+
+## auth.js
+
+Responsible for
+
+* Login
+* Logout
+* JWT
+* Refresh Token
+* Authorization Header
+
+Authentication logic exists only here.
+
+---
+
+## storage.js
+
+Responsible for
+
+* Local Storage
+* Session Storage
+* Current User
+* Remember Me
+
+No direct localStorage usage anywhere else.
+
+---
+
+## utilities.js
+
+Contains helper methods.
+
+Examples
+
+* Date Formatting
+* Currency Formatting
+* Validation
+* Loading Spinner
+* Toast Notifications
+
+Shared by the entire application.
+
+---
+
+## router.js
+
+Responsible for page initialization.
+
+Determines which feature script should start.
+
+---
+
+# Shared Components
+
+```
+shared
+
+header.html
+
+footer.html
+
+sidebar.html
+
+topbar.html
+
+loader.html
+
+search.html
+
+modal.html
+```
+
+Shared components appear throughout the application.
+
+---
+
+# Shared JavaScript
+
+```
+shared
+
+header.js
+
+footer.js
+
+sidebar.js
+
+search.js
+
+breadcrumb.js
+
+modal.js
+```
+
+Every shared HTML component has its own JavaScript.
+
+---
+
+# Feature Structure
+
+Every feature follows exactly the same structure.
+
+Example
+
+```
+course
+
+api.js
+
+service.js
+
+ui.js
+
+events.js
+
+index.js
+```
+
+Every future module must follow this structure.
+
+Examples
+
+Student
+
+Instructor
+
+Lesson
+
+Quiz
+
+Assignment
+
+Certificate
+
+Dashboard
+
+Wishlist
+
+Enrollment
+
+Payment
+
+Review
+
+Forum
+
+Announcement
+
+---
+
+# Feature Responsibilities
+
+## api.js
+
+Only communicates with ASP.NET Core API.
+
+No HTML.
+
+No DOM manipulation.
+
+---
+
+## service.js
+
+Processes data.
+
+Examples
+
+* Filtering
+* Sorting
+* Mapping
+* Calculations
+
+No UI logic.
+
+---
+
+## ui.js
+
+Responsible for
+
+* Rendering HTML
+* Updating DOM
+* Showing Cards
+* Showing Tables
+* Showing Modals
+
+No API calls.
+
+---
+
+## events.js
+
+Responsible for
+
+* Button Clicks
+* Search
+* Pagination
+* Filters
+* Keyboard Events
+
+Only event handling.
+
+---
+
+## index.js
+
+Feature entry point.
+
+Responsible for
+
+* Initializing page
+* Registering events
+* Loading initial data
+
+---
+
+# HTML Strategy
+
+Never create large HTML strings inside JavaScript.
+
+Instead use HTML components.
+
+Example
+
+```
+course
+
+course-card.html
+
+course-detail.html
+
+review.html
+
+curriculum.html
+```
+
+JavaScript only fills the data.
+
+HTML remains clean.
+
+---
+
+# Layout Strategy
+
+The Layout page contains only placeholders.
+
+Example
+
+```
+Header
+
+RenderBody()
+
+Footer
+
+Scripts
+```
+
+The actual HTML is loaded dynamically by the Component Loader.
+
+---
+
+# Data Flow
+
+```
+User
+
+↓
+
+events.js
+
+↓
+
+api.js
+
+↓
+
+ASP.NET Core API
+
+↓
+
+JSON
+
+↓
+
+service.js
+
+↓
+
+ui.js
+
+↓
+
+HTML Component
+
+↓
+
+Browser
+```
+
+Every feature follows this exact flow.
+
+---
+
+# Development Rules
+
+Every new module must have
+
+* MVC Controller
+* MVC View
+* HTML Components
+* api.js
+* service.js
+* ui.js
+* events.js
+* index.js
+
+No exceptions.
+
+---
+
+# Benefits
+
+* One API
+* One Frontend Framework
+* Reusable Components
+* Small Razor Views
+* Clean JavaScript
+* Easy Maintenance
+* Easy Testing
+* Easy Scaling
+* Consistent Architecture
+* Future Mobile App Support
+
+---
+
+# Development Roadmap
+
+Phase 1
+
+Build the Core Framework
+
+* config.js
+* api-client.js
+* component-loader.js
+* app.js
+* auth.js
+* storage.js
+* utilities.js
+* router.js
+
+Phase 2
+
+Convert Histudy Shared Components
+
+* Header
+* Footer
+* Sidebar
+* Topbar
+* Loader
+* Search
+* Modal
+
+Phase 3
+
+Integrate Home Page
+
+Phase 4
+
+Integrate Course Module
+
+Phase 5
+
+Integrate Student Module
+
+Phase 6
+
+Integrate Instructor Module
+
+Phase 7
+
+Integrate Dashboard
+
+Phase 8
+
+Integrate Remaining LMS Modules
+
+Once the Core Framework is complete, every future page in the LMS will follow the same pattern, making the application consistent, scalable, and easy to maintain.

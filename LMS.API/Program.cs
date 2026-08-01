@@ -6,7 +6,7 @@ using LMS.Identity.Extensions;
 using LMS.Identity.Models;
 using LMS.Identity.Permissions;
 using LMS.Identity.Roles;
-using LMS.Persistence.Context;
+using LMS.API.Extensions;
 using LMS.Persistence.Extensions;
 using LMS.Shared.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -103,6 +103,22 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 
 // Identity Layer
 builder.Services.AddIdentityServices(builder.Configuration);
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LMSPolicy", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5181",
+                "https://localhost:5181",
+                "https://localhost:7036"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // =======================================
 // BUILD APPLICATION
@@ -137,10 +153,11 @@ if (app.Environment.IsDevelopment())
     //app.UseSwaggerUI();
     app.UseSwaggerDocumentation();
 }
-
+app.UseGlobalExceptionMiddleware();
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseCors("LMSPolicy");
 
 // Authentication MUST come first
 app.UseAuthentication();

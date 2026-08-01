@@ -1,0 +1,454 @@
+LMS.Web Frontend Development Guide
+Version 1.1
+New Architecture (Completed)
+4. JavaScript Feature Structure
+
+Every feature now follows this exact structure.
+
+Feature
+
+api.js
+service.js
+events.js
+validation.js
+ui.js
+
+login.js
+register.js
+forgot-password.js
+reset-password.js
+change-password.js
+
+Every page is independent but follows the same architecture.
+
+5. Page Module Pattern
+
+Every page must expose only one public method.
+
+window.LoginPage = (function () {
+
+    function initialize() {
+
+    }
+
+    return {
+
+        initialize
+
+    };
+
+})();
+
+PageRegistry.register("login", LoginPage);
+
+Page files never contain business logic.
+
+Page files never call APIs.
+
+Page files never contain validation.
+
+They only:
+
+Initialize the page
+Focus controls
+Register events
+Register themselves with PageRegistry
+6. Application Startup
+
+Application startup is now centralized.
+
+Browser
+
+↓
+
+app.js
+
+↓
+
+Layout.initialize()
+
+↓
+
+ComponentLoader
+
+↓
+
+Authentication
+
+↓
+
+Authorization
+
+↓
+
+Header
+
+↓
+
+Sidebar
+
+↓
+
+Footer
+
+↓
+
+Search
+
+↓
+
+Theme
+
+↓
+
+Events
+
+↓
+
+PageRegistry.initialize()
+
+↓
+
+Current Page.initialize()
+
+Only app.js starts the application.
+
+No page should call itself.
+
+7. Shared Layout
+
+Every page now uses the shared layout.
+
+_Layout.cshtml
+
+Loader
+
+Topbar
+
+Header
+
+Sidebar
+
+RenderBody()
+
+Footer
+
+Modals
+
+Shared HTML is loaded dynamically.
+
+/html/shared/
+
+Current shared components
+
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+8. Page Registration
+
+Every page must register itself.
+
+Example
+
+PageRegistry.register("login", LoginPage);
+
+PageRegistry.register("register", RegisterPage);
+
+PageRegistry.register("forgot-password", ForgotPasswordPage);
+
+PageRegistry.register("reset-password", ResetPasswordPage);
+
+PageRegistry.register("change-password", ChangePasswordPage);
+
+PageRegistry.register("dashboard", DashboardPage);
+
+The page name must match the value supplied by MVC.
+
+Example
+
+ViewData["Page"] = "login";
+login
+↓
+
+PageRegistry
+
+↓
+
+LoginPage.initialize()
+9. MVC Page Requirement
+
+Every MVC view must define the page identifier.
+
+Example
+
+@{
+    ViewData["Page"] = "login";
+}
+
+This allows PageRegistry to determine which page module to initialize.
+
+10. Layout Responsibilities
+
+Layout is now responsible for application-wide initialization.
+
+It performs the following tasks:
+
+Load Shared Components
+
+Authentication
+
+Authorization
+
+Current User
+
+Header
+
+Sidebar
+
+Footer
+
+Search
+
+Notifications
+
+Shopping Cart
+
+Theme
+
+Logout
+
+Global Events
+
+Layout never contains feature-specific code.
+
+11. Authorization Attributes
+
+Every HTML element can now use authorization attributes.
+
+data-auth
+
+data-anonymous
+
+data-role
+
+data-permission
+
+Examples
+
+<div data-auth>
+
+<div data-anonymous>
+
+<li data-role="Administrator">
+
+<button data-permission="Course.Create">
+
+Layout automatically hides or removes unauthorized controls.
+
+No manual checks are required throughout the application.
+
+12. Authentication Flow
+Login Page
+
+↓
+
+AccountEvents
+
+↓
+
+Validation
+
+↓
+
+AccountService
+
+↓
+
+AccountApi
+
+↓
+
+LMS.API
+
+↓
+
+ApiResponse
+
+↓
+
+StorageService
+
+↓
+
+SecurityService
+
+↓
+
+Layout Authorization Refresh
+
+↓
+
+Dashboard
+13. Current Folder Structure
+wwwroot
+
+js
+
+    core
+
+        app.js
+        config.js
+        storage.js
+        security.js
+        layout.js
+        page-registry.js
+        component-loader.js
+        api-client.js
+        utilities.js
+
+    features
+
+        account
+
+            api.js
+            service.js
+            events.js
+            validation.js
+            ui.js
+
+            login.js
+            register.js
+            forgot-password.js
+            reset-password.js
+            change-password.js
+
+        dashboard
+
+        category
+
+        course
+
+        lesson
+
+        instructor
+
+        student
+14. Startup Rules
+
+Only these files may initialize the application.
+
+app.js
+
+↓
+
+Layout.initialize()
+
+↓
+
+PageRegistry.initialize()
+
+↓
+
+CurrentPage.initialize()
+
+Page files must never execute automatically using:
+
+$(document).ready(...)
+
+or
+
+$(function () { ... })
+
+Initialization must always occur through PageRegistry.
+
+15. Debugging Lessons Learned
+
+During development, the following standards were established:
+
+Always verify JavaScript file paths in the browser.
+Ensure config.js loads before any module that depends on AppConfig.
+Export every public method from JavaScript modules (for example, initialize from Layout).
+Use the browser console (typeof ModuleName) to verify modules are loaded.
+Register every page before calling PageRegistry.initialize().
+Load app.js after all core and feature scripts.
+Match ViewData["Page"] exactly with the registered page name.
+
+These practices help quickly isolate startup and initialization issues.
+
+16. Current Progress
+Core Framework
+✅ Configuration
+✅ Storage Service
+✅ Security Service
+✅ API Client
+✅ Component Loader
+✅ Layout Manager
+✅ Page Registry
+✅ Utilities
+✅ Authentication
+✅ Authorization
+✅ Dynamic Shared Components
+Account Module
+✅ Login
+✅ Register
+✅ Forgot Password
+✅ Reset Password
+✅ Change Password
+✅ API Layer
+✅ Service Layer
+✅ Event Layer
+✅ Validation Layer
+✅ UI Layer
+✅ Individual Page Modules
+Infrastructure
+✅ Dynamic HTML Loading
+✅ Shared Layout
+✅ Role-Based Authorization
+✅ Permission-Based Authorization
+✅ Page Registration Framework
+✅ Centralized Application Startup
+17. Next Development Phase
+Dashboard Module
+
+We will now build the Dashboard using the same architecture.
+
+Dashboard
+
+dashboard-api.js
+
+dashboard-service.js
+
+dashboard-events.js
+
+dashboard-validation.js
+
+dashboard-ui.js
+
+dashboard.js
+
+Features to implement:
+
+Dashboard statistics
+User profile summary
+Recent courses
+Recent lessons
+Notifications
+Calendar
+Quick actions
+Charts
+Student dashboard
+Instructor dashboard
+Administrator dashboard
+Permission-based dashboard widgets
+API integration
+Reusable dashboard components
+
+This update reflects everything we've built so far. From this point onward, every new module—Dashboard, Categories, Courses, Lessons, Students, Instructors, and the rest—will follow exactly the same architecture and development standards.

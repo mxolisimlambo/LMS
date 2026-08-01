@@ -1,0 +1,195 @@
+public async Task<ApiResponse<Order>> CreateOrderAsync(
+    long studentProfileId,
+    decimal subTotalAmount,
+    decimal discountAmount,
+    decimal totalAmount,
+    string currency)
+{
+    try
+    {
+        // Validation
+
+        // Create Order
+
+        // Save
+
+        return ApiResponse<Order>
+            .SuccessResult(
+                order,
+                "Order created successfully.");
+    }
+    catch (Exception ex)
+    {
+        return ApiResponse<Order>
+            .FailResult(ex.Message);
+    }
+}
+
+
+public async Task<ApiResponse<bool>> MethodAsync(...)
+{
+    try
+    {
+        ...
+
+        return ApiResponse<bool>.SuccessResult(
+            true,
+            "Operation completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        return ApiResponse<bool>.FailResult(
+            ex.Message);
+    }
+}
+
+public async Task<ApiResponse<T>> MethodAsync(...)
+{
+    try
+    {
+        // Validation
+
+        // Business Rules
+
+        // Database Operations
+
+        // Save Changes
+
+        return ApiResponse<T>.SuccessResult(
+            result,
+            "Success message.");
+    }
+    catch (Exception ex)
+    {
+        return ApiResponse<T>.FailResult(
+            ex.Message);
+    }
+}
+Step 3 — CheckoutController
+
+Replace
+
+var result =
+    await _checkoutService
+        .CheckoutAsync(dto);
+
+return Ok(result);
+
+with
+
+var result =
+    await _checkoutService
+        .CheckoutAsync(dto);
+
+if (!result.Success)
+{
+    return BadRequest(result);
+}
+
+
+Step 2 — CheckoutService
+
+Change
+
+public async Task<CheckoutResultDto> CheckoutAsync(
+    CheckoutDto dto)
+
+to
+
+public async Task<ApiResponse<CheckoutResultDto>> CheckoutAsync(
+    CheckoutDto dto)
+
+Replace every
+
+return new CheckoutResultDto
+{
+    Success = false,
+    Message = "..."
+};
+
+with
+
+return ApiResponse<CheckoutResultDto>
+    .FailResult("...");
+
+Replace the success return
+
+return new CheckoutResultDto
+{
+    Success = true,
+
+    Message = "Checkout completed successfully.",
+
+    OrderId = order.OrderId,
+
+    OrderNumber = order.OrderNumber,
+
+    PaymentId = payment.PaymentId,
+
+    PaymentStatus = payment.PaymentStatus,
+
+    TotalAmount = payment.TotalAmount,
+
+    Currency = payment.Currency
+};
+
+with
+
+var result = new CheckoutResultDto
+{
+    OrderId = order.OrderId,
+
+    OrderNumber = order.OrderNumber,
+
+    PaymentId = payment.PaymentId,
+
+    PaymentStatus = payment.PaymentStatus,
+
+    TotalAmount = payment.TotalAmount,
+
+    Currency = payment.Currency
+};
+
+return ApiResponse<CheckoutResultDto>
+    .SuccessResult(
+        result,
+        "Checkout completed successfully.");
+
+Replace
+
+catch
+{
+    await transaction.RollbackAsync();
+
+    return new CheckoutResultDto
+    {
+        Success = false,
+        Message = "Checkout failed."
+    };
+}
+
+with
+
+catch (Exception ex)
+{
+    await transaction.RollbackAsync();
+
+    return ApiResponse<CheckoutResultDto>
+        .FailResult(ex.Message);
+}
+
+Good. We now standardize everything on ApiResponse<T>.
+
+Step 1 — Refactor CheckoutService Interface
+
+Replace
+
+Task<CheckoutResultDto> CheckoutAsync(
+    CheckoutDto dto);
+
+with
+
+using LMS.Shared.Responses;
+
+Task<ApiResponse<CheckoutResultDto>> CheckoutAsync(
+    CheckoutDto dto);

@@ -1,0 +1,636 @@
+# Online Learning Management System (LMS)
+
+## MVC Frontend Architecture Plan
+
+### Project Goal
+
+The backend (ASP.NET Core Web API) is already complete and contains all business logic.
+
+The MVC project **will not contain business logic**. It will act as a Presentation Layer that:
+
+* Hosts the HTML template
+* Loads JavaScript
+* Calls the ASP.NET Core API
+* Renders data returned by the API
+
+The MVC project becomes a lightweight UI application.
+
+---
+
+# Overall Architecture
+
+```text
+Browser
+
+        │
+        ▼
+
+ASP.NET Core MVC
+
+        │
+        ▼
+
+Razor View (Shell Only)
+
+        │
+        ▼
+
+JavaScript (Feature Modules)
+
+        │
+        ▼
+
+API Wrappers
+
+        │
+        ▼
+
+ASP.NET Core Web API
+
+        │
+        ▼
+
+Application Services
+
+        │
+        ▼
+
+Repositories
+
+        │
+        ▼
+
+SQL Server
+```
+
+---
+
+# Responsibilities
+
+## ASP.NET Core API
+
+Responsible for:
+
+* Authentication
+* Authorization
+* CRUD Operations
+* Validation
+* Business Rules
+* Database Access
+* File Uploads
+* Payments
+* Reports
+
+The API is the only source of business logic.
+
+---
+
+## ASP.NET Core MVC
+
+Responsible for:
+
+* Routing
+* Authentication Cookies (if applicable)
+* Loading Views
+* Serving Static Files
+* Loading JavaScript
+* Loading HTML Components
+
+No database access.
+
+No repositories.
+
+No services.
+
+No Entity Framework.
+
+No business logic.
+
+---
+
+## JavaScript
+
+Responsible for:
+
+* Calling APIs
+* Rendering HTML
+* Handling Events
+* Validation
+* UI Updates
+* Dynamic Components
+
+---
+
+# MVC Project Structure
+
+```text
+OnlineLearning.UI
+
+Controllers
+│
+├── HomeController
+├── CourseController
+├── CategoryController
+├── LessonController
+├── ModuleController
+├── StudentController
+├── InstructorController
+├── EnrollmentController
+├── DashboardController
+├── WishlistController
+├── CartController
+├── CheckoutController
+├── ReviewController
+├── CertificateController
+├── AccountController
+└── ErrorController
+
+Views
+│
+├── Shared
+│      _Layout.cshtml
+│      _ValidationScriptsPartial.cshtml
+│
+├── Home
+│      Index.cshtml
+│
+├── Course
+│      Index.cshtml
+│      Details.cshtml
+│
+├── Category
+│
+├── Student
+│
+├── Instructor
+│
+├── Dashboard
+│
+└── Account
+```
+
+Every controller should simply return a View.
+
+Example:
+
+```csharp
+public IActionResult Index()
+{
+    return View();
+}
+```
+
+---
+
+# Razor View Philosophy
+
+Every page should remain small.
+
+Example:
+
+```html
+<div id="page-content"></div>
+
+@section Scripts{
+
+<script src="~/js/features/course/index.js"></script>
+
+}
+```
+
+No large HTML.
+
+No business logic.
+
+Only placeholders.
+
+---
+
+# wwwroot Structure
+
+```text
+wwwroot
+
+assets
+│
+├── css
+├── fonts
+├── images
+├── plugins
+└── vendors
+
+html
+│
+├── shared
+│
+│      header.html
+│      footer.html
+│      sidebar.html
+│      topbar.html
+│      loader.html
+│      modals.html
+│
+├── home
+│
+│      banner.html
+│      featured-courses.html
+│      categories.html
+│      instructors.html
+│
+├── course
+│
+│      course-card.html
+│      course-list.html
+│      course-filter.html
+│      course-detail.html
+│      curriculum.html
+│      reviews.html
+│
+├── student
+│
+├── instructor
+│
+├── dashboard
+│
+└── account
+
+js
+│
+├── core
+├── features
+├── shared
+└── utils
+```
+
+---
+
+# JavaScript Architecture
+
+Instead of one large JavaScript folder, organize by feature.
+
+```text
+js
+
+core
+
+    app.js
+    api.js
+    auth.js
+    config.js
+    template.js
+    router.js
+
+shared
+
+    modal.js
+    loading.js
+    notification.js
+    pagination.js
+    validation.js
+
+features
+
+    home
+
+    course
+
+    category
+
+    module
+
+    lesson
+
+    quiz
+
+    student
+
+    instructor
+
+    dashboard
+
+    enrollment
+
+    wishlist
+
+    cart
+
+    checkout
+
+    account
+```
+
+---
+
+# Feature Folder Structure
+
+Example:
+
+```text
+course
+
+api.js
+
+service.js
+
+ui.js
+
+events.js
+
+index.js
+```
+
+Each file has one responsibility.
+
+---
+
+## api.js
+
+Responsible for communicating with the backend.
+
+Example methods:
+
+* getAll()
+* getById()
+* create()
+* update()
+* delete()
+* search()
+
+No HTML.
+
+No DOM manipulation.
+
+---
+
+## service.js
+
+Responsible for preparing API data.
+
+Example:
+
+* sorting
+* filtering
+* mapping
+* formatting
+
+No HTML.
+
+---
+
+## ui.js
+
+Responsible for:
+
+* Rendering HTML
+* Updating DOM
+* Showing Modals
+* Showing Notifications
+
+Only UI logic.
+
+---
+
+## events.js
+
+Responsible for:
+
+* Button Clicks
+* Search
+* Filters
+* Pagination
+* Keyboard Events
+
+Only event handling.
+
+---
+
+## index.js
+
+Responsible for initializing the page.
+
+Example:
+
+* Load Components
+* Register Events
+* Load Initial Data
+
+---
+
+# HTML Components
+
+Never build long HTML strings inside JavaScript.
+
+Instead use reusable HTML templates.
+
+Example:
+
+```text
+html
+
+course
+
+course-card.html
+
+course-filter.html
+
+course-detail.html
+
+review.html
+```
+
+JavaScript loads the template.
+
+Populates it.
+
+Displays it.
+
+---
+
+# Shared Components
+
+```text
+shared
+
+header.html
+
+footer.html
+
+sidebar.html
+
+topbar.html
+
+loader.html
+
+modal.html
+```
+
+These components are reused throughout the application.
+
+---
+
+# Component Loader
+
+Create one reusable loader responsible for loading HTML components.
+
+Responsibilities:
+
+* Load HTML
+* Insert HTML
+* Initialize Components
+
+Every page should use the same loader.
+
+---
+
+# API Communication
+
+JavaScript never calls $.ajax() directly throughout the project.
+
+Instead every API is wrapped.
+
+Example:
+
+Course API
+
+↓
+
+Course Service
+
+↓
+
+Course UI
+
+↓
+
+Course Events
+
+↓
+
+Course Page
+
+This keeps responsibilities separated.
+
+---
+
+# Naming Convention
+
+Controllers
+
+CourseController
+
+StudentController
+
+InstructorController
+
+DashboardController
+
+Views
+
+Index.cshtml
+
+Details.cshtml
+
+Create.cshtml
+
+Edit.cshtml
+
+JavaScript
+
+api.js
+
+service.js
+
+ui.js
+
+events.js
+
+index.js
+
+HTML
+
+course-card.html
+
+course-detail.html
+
+review.html
+
+lesson.html
+
+---
+
+# Data Flow
+
+```text
+User Clicks Button
+
+        │
+        ▼
+
+events.js
+
+        │
+        ▼
+
+api.js
+
+        │
+        ▼
+
+ASP.NET Core API
+
+        │
+        ▼
+
+Returns JSON
+
+        │
+        ▼
+
+service.js
+
+        │
+        ▼
+
+ui.js
+
+        │
+        ▼
+
+HTML Updated
+```
+
+---
+
+# Advantages
+
+* Single source of business logic (API)
+* Lightweight MVC project
+* Reusable HTML components
+* Small Razor Views
+* Feature-based JavaScript
+* Easier maintenance
+* Easier testing
+* Easier scaling
+* Mobile applications can reuse the same API
+* Cleaner separation of concerns
+
+---
+
+# Development Strategy
+
+For every new module, follow the same pattern.
+
+Example: Course Module
+
+1. Create MVC Controller.
+2. Create Razor View (Shell).
+3. Create HTML Components.
+4. Create Feature JavaScript Folder.
+5. Create API Wrapper.
+6. Create Service.
+7. Create UI Renderer.
+8. Create Event Handlers.
+9. Initialize from index.js.
+10. Connect to ASP.NET Core API.
+
+Every module in the LMS (Courses, Students, Instructors, Lessons, Quizzes, Payments, Certificates, Reviews, Enrollments, Dashboard, etc.) should follow this identical structure to keep the frontend consistent, scalable, and easy to maintain.

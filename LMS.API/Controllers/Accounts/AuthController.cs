@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.API.Controllers.Accounts;
-[Authorize(Policy = PermissionConstants.Users.Create)]
+//[Authorize(Policy = PermissionConstants.Users.Create)]
 [ApiExplorerSettings(GroupName = "identity")]
 [ApiController]
 [Route("api/[controller]")]
@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
     {
         var result = await _identityService.RegisterAsync(model);
 
-        if (!result.success)
+        if (!result.Success)
             return BadRequest(result);
 
         return Ok(result);
@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
     {
         var result = await _identityService.LoginAsync(model);
 
-        if (!result.success)
+        if (!result.Success)
             return Unauthorized(result);
 
         return Ok(result);
@@ -56,7 +56,7 @@ public class AuthController : ControllerBase
     {
         var response = await _identityService.ChangePasswordAsync(request);
 
-        if (!response.success)
+        if (!response.Success)
             return BadRequest(response);
 
         return Ok(response);
@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
         var response =
             await _identityService.ForgotPasswordAsync(request);
 
-        if (!response.success)
+        if (!response.Success)
             return BadRequest(response);
 
         return Ok(response);

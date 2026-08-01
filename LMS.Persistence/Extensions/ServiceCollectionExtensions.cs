@@ -4,6 +4,7 @@ using LMS.Application.Interfaces.Courses;
 using LMS.Application.Interfaces.Payments;
 using LMS.Application.Interfaces.Enrollments;
 using LMS.Application.Interfaces.Commerce.Checkout;
+using LMS.Application.Interfaces.Common;
 using LMS.Persistence.Context;
 using LMS.Persistence.Services;
 using LMS.Persistence.Services.Commerce;
@@ -11,6 +12,7 @@ using LMS.Persistence.Services.Courses;
 using LMS.Persistence.Services.Payments;
 using LMS.Persistence.Services.Enrollments;
 using LMS.Persistence.Services.Commerce.Checkout;
+using LMS.Persistence.Services.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,6 +71,7 @@ services.AddScoped<IInvoiceService, InvoiceService>();
 services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
 
 services.AddScoped<IRefundService, RefundService>();
+services.AddScoped<INumberGeneratorService, NumberGeneratorService>();
 
         // ======================================================
 // ENROLLMENT SERVICES
@@ -77,5 +80,8 @@ services.AddScoped<IRefundService, RefundService>();
 
 services.AddScoped<ICheckoutService, CheckoutService>();
         return services;
+        services.AddScoped<
+    INumberGeneratorService,
+    NumberGeneratorService>();
     }
 }
