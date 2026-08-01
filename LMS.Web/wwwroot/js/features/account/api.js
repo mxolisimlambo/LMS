@@ -15,7 +15,7 @@ window.AccountApi = (function () {
     // =============================================
 
     async function login(model) {
-        return await ApiClient.post('Auth/login', model);
+        return await ApiClient.post('Auth/login', model, false);
     }
 
     // =============================================
@@ -23,7 +23,7 @@ window.AccountApi = (function () {
     // =============================================
 
     async function register(model) {
-        return await ApiClient.post('Auth/register', model);
+        return await ApiClient.post('Auth/register', model, false);
     }
 
     // =============================================
@@ -31,7 +31,7 @@ window.AccountApi = (function () {
     // =============================================
 
     async function forgotPassword(model) {
-        return await ApiClient.post('Auth/forgot-password', model);
+        return await ApiClient.post('Auth/forgot-password', model, false);
     }
 
     // =============================================
@@ -39,7 +39,7 @@ window.AccountApi = (function () {
     // =============================================
 
     async function resetPassword(model) {
-        return await ApiClient.post('Auth/reset-password', model);
+        return await ApiClient.post('Auth/reset-password', model, false);
     }
 
     // =============================================

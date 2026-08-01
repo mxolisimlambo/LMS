@@ -141,34 +141,16 @@ window.ApiClient = (function () {
     // =====================================================
 
     function handleError(xhr) {
-        switch (xhr.status) {
-            case 401:
-                console.warn('Unauthorized');
+        console.group('========== API ERROR ==========');
 
-                // SecurityService.redirectToLogin();
+        console.log('Status:', xhr.status);
+        console.log('StatusText:', xhr.statusText);
+        console.log('ResponseJSON:', xhr.responseJSON);
+        console.log('ResponseText:', xhr.responseText);
+        console.log('ReadyState:', xhr.readyState);
+        console.log('XHR:', xhr);
 
-                break;
-
-            case 403:
-                console.warn('Forbidden');
-
-                break;
-
-            case 404:
-                console.warn('Resource Not Found');
-
-                break;
-
-            case 500:
-                console.error('Internal Server Error');
-
-                break;
-
-            default:
-                console.error(xhr);
-
-                break;
-        }
+        console.groupEnd();
     }
 
     // =====================================================

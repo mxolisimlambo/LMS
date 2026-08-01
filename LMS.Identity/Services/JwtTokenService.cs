@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using LMS.Identity.Data;
 using LMS.Identity.Models;
+using LMS.Shared.DTOs.Auth;
 using LMS.Shared.JWT;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -15,49 +16,47 @@ public class JwtTokenService
     private readonly JwtSettings _jwtSettings;
     private readonly ApplicationIdentityDbContext _context;
 
-
     public JwtTokenService(
-    IOptions<JwtSettings> jwtSettings,
-    ApplicationIdentityDbContext context)
+        IOptions<JwtSettings> jwtSettings,
+        ApplicationIdentityDbContext context)
     {
         _jwtSettings = jwtSettings.Value;
         _context = context;
     }
 
-    public async Task<string> GenerateTokenAsync(
-       ApplicationUser user,
-       IList<string> roles)
+    public async Task<JwtTokenDto> GenerateTokenAsync(
+        ApplicationUser user,
+        IList<string> roles)
     {
-        // Load permissions assigned to the user's roles
-        var permissions = await
-        (
-            from rp in _context.RolePermissions
-            join role in _context.Roles
-                on rp.RoleId equals role.Id
-            join permission in _context.Permissions
-                on rp.PermissionId equals permission.Id
-            where roles.Contains(role.Name!)
-            select permission.Name
-        )
-        .Distinct()
-        .ToListAsync();
+        var permissions =
+            await
+            (
+                from rp in _context.RolePermissions
+                join role in _context.Roles
+                    on rp.RoleId equals role.Id
+                join permission in _context.Permissions
+                    on rp.PermissionId equals permission.Id
+                where roles.Contains(role.Name!)
+                select permission.Name
+            )
+            .Distinct()
+            .ToListAsync();
 
         var claims = new List<Claim>
-    {
-        new Claim(
-            JwtRegisteredClaimNames.Sub,
-            user.Id),
+        {
+            new Claim(
+                JwtRegisteredClaimNames.Sub,
+                user.Id),
 
-        new Claim(
-            JwtRegisteredClaimNames.Email,
-            user.Email ?? ""),
+            new Claim(
+                JwtRegisteredClaimNames.Email,
+                user.Email ?? string.Empty),
 
-        new Claim(
-            JwtRegisteredClaimNames.Jti,
-            Guid.NewGuid().ToString())
-    };
+            new Claim(
+                JwtRegisteredClaimNames.Jti,
+                Guid.NewGuid().ToString())
+        };
 
-        // Add Role Claims
         foreach (var role in roles)
         {
             claims.Add(
@@ -66,7 +65,6 @@ public class JwtTokenService
                     role));
         }
 
-        // Add Permission Claims
         foreach (var permission in permissions)
         {
             claims.Add(
@@ -75,9 +73,14 @@ public class JwtTokenService
                     permission));
         }
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(
-                _jwtSettings.SecretKey));
+        var expires =
+            DateTime.UtcNow.AddMinutes(
+                _jwtSettings.ExpiryInMinutes);
+
+        var key =
+            new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _jwtSettings.SecretKey));
 
         var credentials =
             new SigningCredentials(
@@ -89,11 +92,23 @@ public class JwtTokenService
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    _jwtSettings.ExpiryInMinutes),
+                expires: expires,
                 signingCredentials: credentials);
 
-        return new JwtSecurityTokenHandler()
-            .WriteToken(token);
+        return new JwtTokenDto
+        {
+            AccessToken =
+                new JwtSecurityTokenHandler()
+                    .WriteToken(token),
+
+            RefreshToken =
+                Guid.NewGuid().ToString("N"),
+
+            Expires =
+                expires,
+
+            Permissions =
+                permissions
+        };
     }
 }

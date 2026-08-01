@@ -65,21 +65,33 @@ public class IdentityService : IIdentityService
             .GetRolesAsync(user);
 
 
-        var token = await _jwtTokenService.GenerateTokenAsync(
+        var jWttoken = await _jwtTokenService.GenerateTokenAsync(
             user,
             roles);
 
 
 
-        var response =
-            new LoginResponseDto
-            {
-                Token = token,
-                UserId = user.Id,
-                Email = user.Email ?? "",
-                Roles = roles.ToList()
-            };
+        var response = new LoginResponseDto
+        {
+            AccessToken = jWttoken.AccessToken,
 
+            RefreshToken = jWttoken.RefreshToken,
+
+            Expires = jWttoken.Expires,
+
+            User = new LoginUserDto
+            {
+                UserId = user.Id,
+
+                FullName = $"{user.FirstName} {user.LastName}".Trim(),
+
+                Email = user.Email ?? string.Empty,
+
+                Roles = roles.ToList(),
+
+                Permissions = jWttoken.Permissions.ToList()
+            }
+        };
 
         return ApiResponse<LoginResponseDto>
             .SuccessResult(

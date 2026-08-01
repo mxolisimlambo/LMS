@@ -1,8 +1,6 @@
-using LMS.Shared.DTOs;
 
 namespace LMS.Shared.DTOs.Auth;
-
-public class LoginResponseDto
+public class JwtTokenDto
 {
     public string AccessToken { get; set; } = string.Empty;
 
@@ -10,7 +8,5 @@ public class LoginResponseDto
 
     public DateTime Expires { get; set; }
 
-    public LoginUserDto User { get; set; } = new();
-
-
+    public List<string> Permissions { get; set; } = new();
 }

@@ -295,9 +295,25 @@ window.AccountEvents = (function () {
     // =====================================================
 
     function bindEvents() {
+        // Login
         $('#btnLogin').on('click', login);
-
         $('#LoginForm').on('submit', login);
+
+        // Register
+        $('#btnRegister').on('click', register);
+        $('#RegisterForm').on('submit', register);
+
+        // Forgot Password
+        $('#btnForgotPassword').on('click', forgotPassword);
+        $('#ForgotPasswordForm').on('submit', forgotPassword);
+
+        // Reset Password
+        $('#btnResetPassword').on('click', resetPassword);
+        $('#ResetPasswordForm').on('submit', resetPassword);
+
+        // Change Password
+        $('#btnChangePassword').on('click', changePassword);
+        $('#ChangePasswordForm').on('submit', changePassword);
     }
 
     // =====================================================
