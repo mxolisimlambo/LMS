@@ -1,0 +1,737 @@
+# LEARNING MANAGEMENT SYSTEM (LMS)
+
+## Frontend Technical Documentation
+
+# PART III
+
+# LAYOUT, PAGE REGISTRY, AUTHENTICATION & ACCOUNT MODULE
+
+---
+
+# Chapter 13
+
+# Layout Manager
+
+## Overview
+
+The Layout Manager is the central controller of the LMS frontend.
+
+Every page in the system uses one shared layout.
+
+Instead of placing JavaScript inside each page, the Layout Manager initializes all global functionality before the current page is loaded.
+
+File Location
+
+```text
+wwwroot/js/core/layout.js
+```
+
+The Layout Manager is responsible only for application-wide functionality.
+
+Feature-specific logic is never placed inside Layout.
+
+---
+
+# Layout Responsibilities
+
+The Layout Manager currently performs the following tasks:
+
+* Load shared HTML components
+* Initialize authentication
+* Initialize authorization
+* Display current user information
+* Configure the header
+* Configure the sidebar
+* Configure the footer
+* Configure notifications
+* Configure search
+* Configure shopping cart
+* Configure theme
+* Configure logout
+* Bind global events
+
+This keeps every page lightweight.
+
+---
+
+# Layout Initialization Flow
+
+```text
+Layout.initialize()
+
+↓
+
+Load Shared Components
+
+↓
+
+Initialize Authentication
+
+↓
+
+Initialize Authorization
+
+↓
+
+Load Current User
+
+↓
+
+Update Layout
+
+↓
+
+Bind Global Events
+
+↓
+
+Return Control
+
+↓
+
+PageRegistry.initialize()
+```
+
+Every page follows this same initialization sequence.
+
+---
+
+# Global Events
+
+Only application-wide events belong in Layout.
+
+Examples include:
+
+```text
+Logout
+
+Global Search
+
+Theme Switching
+
+Window Resize
+
+Sidebar Toggle
+
+Notifications
+```
+
+Feature events such as Login or Register belong inside their respective modules.
+
+---
+
+# Chapter 14
+
+# Shared Components
+
+The LMS uses reusable HTML components.
+
+These components are loaded dynamically.
+
+Current shared components include:
+
+```text
+loader.html
+
+header.html
+
+topbar.html
+
+sidebar.html
+
+footer.html
+
+modals.html
+```
+
+Instead of duplicating HTML across multiple pages, the application loads these files dynamically.
+
+Advantages include:
+
+* Reduced duplication
+* Easier maintenance
+* Faster updates
+* Consistent appearance
+* Reusable layout
+
+---
+
+# Shared Layout Structure
+
+```text
+_Layout.cshtml
+
+│
+
+├── Loader
+
+├── Topbar
+
+├── Header
+
+├── Sidebar
+
+├── RenderBody()
+
+├── Footer
+
+└── Modals
+```
+
+Every MVC page shares this layout.
+
+---
+
+# Dynamic User Interface
+
+The layout automatically updates according to the user's authentication state.
+
+Anonymous users see:
+
+* Login
+* Register
+
+Authenticated users see:
+
+* Logout
+* Current User Name
+* Authorized Navigation
+
+This behavior is controlled through authentication attributes.
+
+---
+
+# Authentication Attributes
+
+The LMS frontend uses HTML attributes to control visibility.
+
+Supported attributes include:
+
+```html
+data-auth
+
+data-anonymous
+
+data-role
+
+data-permission
+```
+
+Examples
+
+Authenticated content
+
+```html
+<div data-auth>
+```
+
+Anonymous content
+
+```html
+<div data-anonymous>
+```
+
+Role-based navigation
+
+```html
+<li data-role="Administrator">
+```
+
+Permission-based buttons
+
+```html
+<button data-permission="Course.Create">
+```
+
+The Layout Manager automatically evaluates these attributes after authentication is initialized.
+
+---
+
+# Chapter 15
+
+# Page Registry
+
+## Overview
+
+One of the major architectural improvements was introducing a centralized Page Registry.
+
+Instead of every page calling its own JavaScript, pages register themselves.
+
+File Location
+
+```text
+wwwroot/js/core/page-registry.js
+```
+
+---
+
+# Responsibilities
+
+The Page Registry is responsible for:
+
+* Registering pages
+* Initializing the current page
+* Returning the current page
+* Checking whether a page exists
+* Destroying page instances
+
+Supported methods
+
+```text
+register()
+
+initialize()
+
+exists()
+
+current()
+
+destroy()
+```
+
+---
+
+# Registration Process
+
+Each page registers itself.
+
+Example
+
+```javascript
+PageRegistry.register("login", LoginPage);
+```
+
+Another example
+
+```javascript
+PageRegistry.register("dashboard", DashboardPage);
+```
+
+This allows the registry to initialize only the active page.
+
+---
+
+# MVC Integration
+
+Every MVC View specifies its page name.
+
+Example
+
+```csharp
+@{
+    ViewData["Page"] = "login";
+}
+```
+
+The layout copies this value to the body element.
+
+```html
+<body data-page="login">
+```
+
+The Page Registry reads this value.
+
+Flow
+
+```text
+ViewData["Page"]
+
+↓
+
+Body data-page
+
+↓
+
+PageRegistry
+
+↓
+
+LoginPage.initialize()
+```
+
+This eliminates manual page initialization.
+
+---
+
+# Benefits
+
+The Page Registry provides several advantages.
+
+* One startup process
+* No duplicate initialization
+* Cleaner pages
+* Easier debugging
+* Better scalability
+
+---
+
+# Chapter 16
+
+# Authentication
+
+Authentication was implemented using JWT.
+
+The frontend communicates with the backend through the Authentication API.
+
+Current endpoints include:
+
+```text
+POST /Auth/login
+
+POST /Auth/register
+
+POST /Auth/change-password
+
+POST /Auth/forgot-password
+
+POST /Auth/reset-password
+
+GET /Auth/current-user/{id}
+```
+
+Future endpoints include:
+
+```text
+POST /Auth/logout
+
+POST /Auth/refresh-token
+```
+
+---
+
+# Login Flow
+
+The complete login process is shown below.
+
+```text
+User
+
+↓
+
+Login Form
+
+↓
+
+Validation
+
+↓
+
+Account Events
+
+↓
+
+Account Service
+
+↓
+
+Account API
+
+↓
+
+LMS.API
+
+↓
+
+JWT Generated
+
+↓
+
+API Response
+
+↓
+
+Storage Service
+
+↓
+
+Security Service
+
+↓
+
+Layout Refresh
+
+↓
+
+Dashboard
+```
+
+This architecture separates every responsibility.
+
+---
+
+# Login Response Standard
+
+The login API returns a standardized response.
+
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "accessToken": "...",
+    "refreshToken": "...",
+    "expires": "...",
+    "user": {
+      "userId": "...",
+      "fullName": "...",
+      "email": "...",
+      "roles": [],
+      "permissions": []
+    }
+  },
+  "errors": []
+}
+```
+
+This response format became the project standard.
+
+---
+
+# Storage After Login
+
+When authentication succeeds:
+
+StorageService saves:
+
+```text
+Access Token
+
+Refresh Token
+
+Current User
+```
+
+SecurityService then recognizes the user as authenticated.
+
+---
+
+# Logout
+
+The current logout implementation performs the following steps:
+
+```text
+Logout Button
+
+↓
+
+Account Events
+
+↓
+
+Account Service
+
+↓
+
+Security Service
+
+↓
+
+Storage Service
+
+↓
+
+Redirect Login
+```
+
+The browser immediately removes:
+
+* Access Token
+* Refresh Token
+* Current User
+
+The layout refreshes automatically.
+
+Future versions will invalidate the refresh token on the server.
+
+---
+
+# Chapter 17
+
+# Authorization
+
+The LMS uses two authorization mechanisms.
+
+Role-Based Authorization
+
+Permission-Based Authorization
+
+---
+
+# Roles
+
+Current roles include:
+
+```text
+Administrator
+
+Instructor
+
+Student
+
+Parent
+```
+
+Roles determine broad access to the application.
+
+---
+
+# Permissions
+
+Permissions provide fine-grained control.
+
+Examples include:
+
+```text
+Dashboard.View
+
+Courses.View
+
+Course.Create
+
+Course.Edit
+
+Lessons.View
+
+Assignments.View
+
+Certificates.Download
+```
+
+Permissions allow features to be enabled without creating additional roles.
+
+---
+
+# Security Service Methods
+
+Current authorization methods include:
+
+```text
+hasRole()
+
+hasAnyRole()
+
+hasPermission()
+
+hasAnyPermission()
+```
+
+These methods are used throughout the application to determine access.
+
+---
+
+# Automatic UI Authorization
+
+The Layout Manager automatically evaluates:
+
+```html
+data-role
+
+data-permission
+```
+
+Unauthorized controls are hidden without requiring page-specific JavaScript.
+
+This keeps authorization centralized and consistent.
+
+---
+
+# Chapter 18
+
+# Account Module
+
+The Account module was the first complete feature implemented using the new architecture.
+
+It serves as the reference implementation for all future modules.
+
+Folder Structure
+
+```text
+features/account
+
+api.js
+
+service.js
+
+events.js
+
+validation.js
+
+ui.js
+
+login.js
+
+register.js
+
+forgot-password.js
+
+reset-password.js
+
+change-password.js
+```
+
+Every future feature module must follow this exact structure.
+
+---
+
+# Module Responsibilities
+
+**api.js**
+
+* API communication only
+
+**service.js**
+
+* Business logic
+* Response processing
+* Storage updates
+
+**events.js**
+
+* Event handling
+* Form submission
+* Button clicks
+
+**validation.js**
+
+* Client-side validation
+
+**ui.js**
+
+* Loading indicators
+* Success messages
+* Error messages
+* Form management
+
+**page.js**
+
+* Initialize controls
+* Bind events
+* Register page
+
+---
+
+# Account Features Completed
+
+The following features are fully implemented.
+
+✅ Login
+
+✅ Register
+
+✅ Forgot Password
+
+✅ Reset Password
+
+✅ Change Password
+
+✅ Current User
+
+✅ Logout (Frontend)
+
+The module now serves as the architectural template for all future development.
+
+---
+
+**End of Part III**
+
+**Next Part:** Testing, Debugging Journey, Standards Established, Lessons Learned, Git Workflow, and Dashboard Planning.
